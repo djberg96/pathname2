@@ -2,27 +2,15 @@
    A drop-in replacement for the current Pathname class.
 
 == Prerequisites
-   * Ruby 1.8.0 or later
-   * facade 1.0.0 or later (available on the RAA and as a gem)
-   * windows-pr 0.5.1 or later (available on the RAA and as a gem)
+   * facade 1.0.0 or later
+   * windows-pr 0.5.1 or later (Windows only)
    
-   The windows-pr library is only required on MS Windows.
-   
-== Installation, pure Ruby
-=== Manual Installation
-   rake test (optional)
-   rake install
-   
-=== Gem Installation
-   rake test (optional)
-   gem install pathname2-<version>.gem
-   
-== Installation, C extension
-   rake test_c (optional)
-   rake install_c
+== Installation
+
+   gem install pathname2
 
 == Synopsis
-   require "pathname2"
+   require 'pathname2'
 
    # Unix
    path1 = "/foo/bar/baz"
@@ -97,7 +85,7 @@
    Artistic 2.0
    
 == Copyright
-   (C) 2003-2009 Daniel J. Berger
+   (C) 2003-2010 Daniel J. Berger
    All rights reserved.
 
 == Warranty
