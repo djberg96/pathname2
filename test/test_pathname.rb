@@ -95,7 +95,7 @@ class TC_Pathname < Test::Unit::TestCase
       case CONFIG['host_os']
          when /linux/i
             path1 = '/dev/stdin'
-            assert_equal('/dev/pts/0', Pathname.new(path1).realpath)
+            assert_true(['/dev/pts/0', '/dev/proc/self/fd/0'].include?(Pathname.new(path1).realpath))
          when /sunos|solaris/i
             path1 = '/dev/null'
             path2 = '/dev/stdin'
