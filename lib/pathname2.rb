@@ -48,7 +48,7 @@ if File::PATH_SEPARATOR == ';' # MS Windows
 end
 
 # You're mine now.
-Object.send(:remove_const, :Pathname) if defined?(:Pathname)
+Object.send(:remove_const, :Pathname) if defined?(Pathname)
 
 class Pathname < String
   class Error < StandardError; end
