@@ -555,7 +555,7 @@ class Pathname < String
   #    Pathname.new("C:\\foo").drive_number # => 2
   #
   def drive_number
-     unless @win
+    unless @win
       raise NotImplementedError, "not supported on this platform"
     end
 
