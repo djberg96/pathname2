@@ -1,5 +1,5 @@
 ##############################################################################
-# tc_pathname.rb
+# test_pathname.rb
 #
 # Test suite for the pathname package (Unix). This test suite should be run
 # via the Rake tasks, i.e. 'rake test_pr' to test the pure Ruby version, or
@@ -42,7 +42,7 @@ class TC_Pathname < Test::Unit::TestCase
       assert_equal('/usr/local/bin', @abs_path)
       assert_equal('usr/local/bin', @rel_path)
    end
-   
+
    # Convenience method for test_plus
    def assert_pathname_plus(a, b, c)
       a = Pathname.new(a)
@@ -72,7 +72,7 @@ class TC_Pathname < Test::Unit::TestCase
    end
 
    def test_version
-      assert_equal('1.6.3', Pathname::VERSION)
+      assert_equal('1.6.4', Pathname::VERSION)
    end
 
    def test_file_url_path
@@ -223,7 +223,7 @@ class TC_Pathname < Test::Unit::TestCase
       assert_respond_to(@cur_path, :children)
       assert_nothing_raised{ @cur_path.children }
       assert_kind_of(Array, @cur_path.children)
-      
+
       children = @cur_path.children.sort.reject{ |f| f.include?('CVS') }
       assert_equal(
          [
@@ -233,10 +233,10 @@ class TC_Pathname < Test::Unit::TestCase
          children.sort
       )
    end
-   
+
    def test_children_without_directory
       assert_nothing_raised{ @cur_path.children(false) }
-         
+
       children = @cur_path.children(false).reject{ |f| f.include?('CVS') }
       assert_equal(['test_pathname.rb', 'test_pathname_windows.rb'], children.sort)
    end
@@ -248,7 +248,7 @@ class TC_Pathname < Test::Unit::TestCase
    def test_enumerable
       assert_respond_to(@abs_path, :each)
    end
-   
+
    def test_root
       assert_respond_to(@abs_path, :root)
       assert_nothing_raised{ @abs_path.root }
@@ -304,7 +304,7 @@ class TC_Pathname < Test::Unit::TestCase
 
       assert_non_destructive
    end
-   
+
    def test_to_a
       assert_respond_to(@abs_path, :to_a)
       assert_nothing_raised{ @abs_path.to_a }
@@ -454,13 +454,13 @@ class TC_Pathname < Test::Unit::TestCase
       assert_kind_of(Pathname, pn{'/foo'})
       assert_equal('/foo', pn{'/foo'})
    end
-   
+
    def test_pwd_singleton_method
       assert_respond_to(Pathname, :pwd)
       assert_kind_of(String, Pathname.pwd)
-      assert_equal(@@pwd, Pathname.pwd)      
+      assert_equal(@@pwd, Pathname.pwd)
    end
-   
+
    def teardown
       @abs_path = nil
       @rel_path = nil

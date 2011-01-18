@@ -31,27 +31,27 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
 
       @url_path = Pathname.new("file:///C:/Documents%20and%20Settings")
       @cur_path = Pathname.new(Dir.pwd)
-      
+
       @mypath = MyPathname.new("C:\\Program Files")
-      
+
       @abs_array = []
       @rel_array = []
       @unc_array = []
    end
-   
+
    def test_aref_with_range
       assert_equal("C:\\Program Files", @fpath[0..1])
       assert_equal("C:\\Program Files\\Windows NT", @fpath[0..2])
       assert_equal("Program Files\\Windows NT", @fpath[1..2])
       assert_equal(@fpath, @fpath[0..-1])
    end
-   
+
    def test_aref_with_index_and_length
       assert_equal("C:", @fpath[0,1])
       assert_equal("C:\\Program Files", @fpath[0,2])
       assert_equal("Program Files\\Windows NT", @fpath[1,2])
    end
-   
+
    def test_aref_with_index
       assert_equal("C:", @fpath[0])
       assert_equal("Program Files", @fpath[1])
@@ -60,7 +60,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
    end
 
    def test_version
-      assert_equal('1.6.3', Pathname::VERSION)
+      assert_equal('1.6.4', Pathname::VERSION)
    end
 
    # Convenience method for test_plus
@@ -78,7 +78,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       result = p1 <=> p2
       assert_equal(int, result)
    end
-   
+
    # Convenience method for test_relative_path_from
    def assert_relpath(result, dest, base)
       assert_equal(result, Pathname.new(dest).relative_path_from(base))
@@ -90,7 +90,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
          Pathname.new(to).relative_path_from(from)
       }
    end
-   
+
    def test_file_urls
       assert_equal("C:\\Documents and Settings", @url_path)
       assert_raises(Pathname::Error){ Pathname.new('http://rubyforge.org') }
@@ -101,7 +101,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal(@cur_path, Pathname.new('.').realpath)
       assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
    end
-   
+
    def test_relative_path_from
       assert_relpath("..\\a", "a", "b")
       assert_relpath("..\\a", "a", "b\\")
@@ -111,7 +111,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_relpath("..\\a", "c:\\a", "c:\\b\\")
       assert_relpath("..\\a", "c:\\a\\", "c:\\b")
       assert_relpath("..\\a", "c:\\a\\", "c:\\b\\")
-      
+
       assert_relpath("..\\b", "a\\b", "a\\c")
       assert_relpath("..\\a", "..\\a", "..\\b")
 
@@ -145,10 +145,10 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_relative_path_error("C:\\Temp", "D:\\Temp")
       assert_relative_path_error("\\\\Server\\Temp", "D:\\Temp")
    end
-   
+
    # Convenience method to verify that the receiver was not modified
    # except perhaps slashes
-   def assert_non_destructive      
+   def assert_non_destructive
       assert_equal("C:\\Program Files\\Windows NT\\Accessories", @fpath)
       assert_equal("C:\\Program Files\\Windows NT\\Accessories", @bpath)
       assert_equal("C:\\Program Files\\File[5].txt", @dpath)
@@ -170,35 +170,35 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal("foo\\bar", @npath.parent)
       assert_equal("Z:\\", @rpath.parent)
    end
-   
+
    def test_short_path
       assert_respond_to(@bpath, :short_path)
-      assert_nothing_raised{ @bpath.short_path }      
+      assert_nothing_raised{ @bpath.short_path }
       assert_kind_of(Pathname, @bpath.short_path)
       assert_equal("C:\\PROGRA~1\\WINDOW~1\\ACCESS~1", @bpath.short_path)
-      
+
       assert_equal("C:\\Program Files\\Windows NT\\Accessories", @bpath)
    end
-   
+
    def test_long_path
       assert_respond_to(@spath, :long_path)
-      assert_nothing_raised{ @spath.long_path }     
+      assert_nothing_raised{ @spath.long_path }
       assert_kind_of(Pathname, @spath.long_path)
-      
+
       assert_equal(
          "C:\\Program Files\\Windows NT\\Accessories",
          @spath.long_path
       )
-      
+
       assert_equal("C:\\PROGRA~1\\WINDOW~1\\ACCESS~1", @spath)
    end
-   
+
    def test_undecorate
       assert_respond_to(@dpath, :undecorate)
       assert_nothing_raised{ @dpath.undecorate }
       assert_kind_of(Pathname, @dpath.undecorate)
-      
-      assert_equal('C:\Program Files\File.txt', @dpath.undecorate)    
+
+      assert_equal('C:\Program Files\File.txt', @dpath.undecorate)
       assert_equal('C:\Path\File', Pathname.new('C:\Path\File').undecorate)
       assert_equal('C:\Path\File', Pathname.new('C:\Path\File[12]').undecorate)
       assert_equal('C:\Path\[3].txt',
@@ -207,16 +207,16 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal('\\foo\bar.txt',Pathname.new('\\foo\bar[5].txt').undecorate)
       assert_equal('\\foo\bar', Pathname.new('\\foo\bar[5]').undecorate)
       assert_equal('\\foo\bar', Pathname.new('\\foo\bar').undecorate)
-      
+
       assert_equal("C:\\Program Files\\File[5].txt", @dpath)
    end
-   
+
    def test_undecorate_bang
       assert_respond_to(@dpath, :undecorate!)
       assert_nothing_raised{ @dpath.undecorate! }
       assert_kind_of(Pathname, @dpath.undecorate!)
-      
-      assert_equal('C:\Program Files\File.txt', @dpath.undecorate!)    
+
+      assert_equal('C:\Program Files\File.txt', @dpath.undecorate!)
       assert_equal('C:\Path\File', Pathname.new('C:\Path\File').undecorate!)
       assert_equal('C:\Path\File', Pathname.new('C:\Path\File[12]').undecorate!)
       assert_equal('C:\Path\[3].txt',
@@ -225,14 +225,14 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal('\\foo\bar.txt',Pathname.new('\\foo\bar[5].txt').undecorate!)
       assert_equal('\\foo\bar', Pathname.new('\\foo\bar[5]').undecorate!)
       assert_equal('\\foo\bar', Pathname.new('\\foo\bar').undecorate!)
-      
+
       assert_equal('C:\Program Files\File.txt', @dpath)
    end
-   
+
    def test_unc
       assert_respond_to(@upath, :unc?)
       assert_nothing_raised{ @upath.unc? }
-      
+
       assert_equal(true, @upath.unc?)
       assert_equal(true, @xpath.unc?)
       assert_equal(true, @ypath.unc?)
@@ -246,10 +246,10 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       # Arguably a bug in the PathIsUNC() function since drive letters
       # are, in fact, a legal part of a UNC path (for historical reasons).
       assert_equal(false, Pathname.new("C:\\\\foo\\bar\\baz").unc?)
-      
+
       assert_non_destructive
    end
-   
+
    def test_pstrip
       assert_respond_to(@ppath, :pstrip)
       assert_nothing_raised{ @ppath.pstrip }
@@ -259,10 +259,10 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal('C:\foo', Pathname.new("C:\\foo\\").pstrip)
       assert_equal('C:\foo', Pathname.new("C:\\foo").pstrip)
       assert_equal("", Pathname.new("").pstrip)
-      
+
       assert_equal("C:\\foo\\bar\\", @ppath)
    end
-   
+
    def test_pstrip_bang
       assert_respond_to(@ppath, :pstrip!)
       assert_nothing_raised{ @ppath.pstrip! }
@@ -272,81 +272,81 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal('C:\foo', Pathname.new("C:\\foo\\").pstrip!)
       assert_equal('C:\foo', Pathname.new("C:\\foo").pstrip!)
       assert_equal("", Pathname.new("").pstrip!)
-      
+
       assert_equal("C:\\foo\\bar", @ppath)
    end
-   
+
    def test_exists
       assert_respond_to(@fpath, :exists?)
       assert_nothing_raised{ @fpath.exists? }
       assert_equal(true, Pathname.new("C:\\").exists?)
       assert_equal(false, Pathname.new("X:\\foo\\bar\\baz").exists?)
    end
- 
+
    def test_each
       array = []
-      
+
       assert_respond_to(@fpath, :each)
       assert_nothing_raised{ @fpath.each{ |e| array.push(e) } }
       assert_equal(["C:", "Program Files", "Windows NT", "Accessories"], array)
    end
-  
+
    def test_descend
       assert_respond_to(@bpath, :descend)
       assert_nothing_raised{ @bpath.descend{} }
-      
+
       @bpath.descend{ |path| @abs_array.push(path) }
       @npath.descend{ |path| @rel_array.push(path) }
       @upath.descend{ |path| @unc_array.push(path) }
-      
+
       assert_equal("C:", @abs_array[0])
       assert_equal("C:\\Program Files", @abs_array[1])
       assert_equal("C:\\Program Files\\Windows NT", @abs_array[2])
       assert_equal("C:\\Program Files\\Windows NT\\Accessories", @abs_array[3])
-      
+
       assert_equal("foo", @rel_array[0])
       assert_equal("foo\\bar", @rel_array[1])
       assert_equal("foo\\bar\\baz", @rel_array[2])
-      
+
       assert_equal("\\\\foo\\bar", @unc_array[0])
       assert_equal("\\\\foo\\bar\\baz", @unc_array[1])
-      
-      assert_non_destructive      
+
+      assert_non_destructive
    end
-    
+
    def test_ascend
       assert_respond_to(@bpath, :ascend)
       assert_nothing_raised{ @bpath.ascend{} }
-      
+
       @bpath.ascend{ |path| @abs_array.push(path) }
       @npath.ascend{ |path| @rel_array.push(path) }
       @upath.ascend{ |path| @unc_array.push(path) }
-      
+
       assert_equal("C:\\Program Files\\Windows NT\\Accessories", @abs_array[0])
       assert_equal("C:\\Program Files\\Windows NT", @abs_array[1])
       assert_equal("C:\\Program Files", @abs_array[2])
       assert_equal("C:", @abs_array[3])
       assert_equal(4, @abs_array.length)
-      
+
       assert_equal("foo\\bar\\baz", @rel_array[0])
-      assert_equal("foo\\bar", @rel_array[1])     
+      assert_equal("foo\\bar", @rel_array[1])
       assert_equal("foo", @rel_array[2])
       assert_equal(3, @rel_array.length)
-      
+
       assert_equal("\\\\foo\\bar\\baz", @unc_array[0])
       assert_equal("\\\\foo\\bar", @unc_array[1])
       assert_equal(2, @unc_array.length)
-      
-      assert_non_destructive     
+
+      assert_non_destructive
    end
-  
+
    def test_immutability
       path = "C:\\Program Files\\foo\\bar".freeze
       assert_equal(true, path.frozen?)
       assert_nothing_raised{ Pathname.new(path) }
       assert_nothing_raised{ Pathname.new(path).root }
    end
-   
+
    def test_plus_operator
       # Standard stuff
       assert_pathname_plus("C:\\a\\b", "C:\\a", "b")
@@ -355,7 +355,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_pathname_plus("C:\\b", "C:\\a", "..\\b")
       assert_pathname_plus("C:\\a\\b", "C:\\a\\.", "\\b")
       assert_pathname_plus("C:\\a\\b.txt", "C:\\a", "b.txt")
-      
+
       # UNC paths
       assert_pathname_plus("\\\\foo\\bar", "\\\\foo", "bar")
       assert_pathname_plus("\\\\foo", "\\\\", "foo")
@@ -374,7 +374,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal('C:\foo\bar', @tpath)
       assert_equal('foo\bar\baz', @npath)
    end
-  
+
    def test_clean
       assert_respond_to(@cpath, :clean)
       assert_nothing_raised{ @cpath.clean }
@@ -400,7 +400,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal("C:\\a", Pathname.new("C:\\a\\.").clean)
       assert_equal("C:\\d", Pathname.new("C:\\..\\..\\..\\d").clean)
       assert_equal("C:\\a\\", Pathname.new("C:\\a\\").clean)
-      
+
       # Edge cases
       assert_equal("\\", Pathname.new(".").clean)
       assert_equal("\\", Pathname.new("..").clean)
@@ -433,7 +433,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal("C:\\a", Pathname.new("C:\\a\\.").clean!)
       assert_equal("C:\\d", Pathname.new("C:\\..\\..\\..\\d").clean!)
       assert_equal("C:\\a\\", Pathname.new("C:\\a\\").clean!)
-      
+
       # Edge cases
       assert_equal("\\", Pathname.new(".").clean!)
       assert_equal("\\", Pathname.new("..").clean!)
@@ -451,10 +451,10 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal(true, @ypath.absolute?)
       assert_equal(true, @zpath.absolute?)
       assert_equal(false, @epath.absolute?)
-      
+
       assert_non_destructive
    end
-   
+
    def test_relative
       assert_equal(false, @fpath.relative?)
       assert_equal(false, @bpath.relative?)
@@ -465,12 +465,12 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal(false, @ypath.relative?)
       assert_equal(false, @zpath.relative?)
       assert_equal(true, @epath.relative?)
-      
+
       assert_non_destructive
    end
-   
+
    def test_root
-      assert_equal("C:\\", @fpath.root)     
+      assert_equal("C:\\", @fpath.root)
       assert_equal("C:\\", @bpath.root)
       assert_equal("\\\\foo\\bar", @upath.root)
       assert_equal(".", @npath.root)
@@ -479,14 +479,14 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal("\\\\foo", @ypath.root)
       assert_equal("\\\\", @zpath.root)
       assert_equal(".", @epath.root)
-      
+
       # Edge cases
       assert_equal(".", Pathname.new("..").root)
       assert_equal(".", Pathname.new(".").root)
-      
+
       assert_non_destructive
    end
-   
+
    def test_drive_number
       assert_equal(2, @fpath.drive_number)
       assert_equal(2, @bpath.drive_number)
@@ -497,14 +497,14 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal(nil, @ypath.drive_number)
       assert_equal(nil, @zpath.drive_number)
       assert_equal(nil, @epath.drive_number)
-      
+
       # Edge cases
       assert_equal(nil, Pathname.new("..").drive_number)
       assert_equal(nil, Pathname.new(".").drive_number)
-      
+
       assert_non_destructive
    end
-        
+
    def test_to_a
       expected = ["C:", "Program Files", "Windows NT", "Accessories"]
       assert_equal(expected, @fpath.to_a)
@@ -517,10 +517,10 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal([], @zpath.to_a)
       assert_equal([], @epath.to_a)
       assert_equal(["C:", "foo", "bar"], @ppath.to_a)
-      
+
       assert_non_destructive
    end
- 
+
    def test_is_root
       assert_equal(false, @fpath.root?)
       assert_equal(false, @bpath.root?)
@@ -532,10 +532,10 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_equal(true, @zpath.root?)
       assert_equal(false, @epath.root?)
       assert_equal(false, @ppath.root?)
-      
+
       assert_non_destructive
    end
-  
+
    # These are the methods from IO we have to explicitly define since
    # they aren't handled by Facade.
    def test_facade_io
@@ -556,7 +556,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
          assert_respond_to(@fpath, method.to_sym)
       }
    end
-   
+
    def test_facade_fileutils
       methods = FileUtils.public_instance_methods
       methods -= File.methods(false)
@@ -569,7 +569,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
          assert_respond_to(@fpath, method.to_sym)
       }
    end
-   
+
    def test_facade_find
       assert_respond_to(@fpath, :find)
       assert_nothing_raised{ @fpath.find{} }
@@ -613,7 +613,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       children.delete(".cvsignore")
       children.delete(".project")
       children.delete(".loadpath")
-      
+
       assert_equal(
          [
             "benchmarks", "CHANGES", "examples", "lib", "MANIFEST",
@@ -640,7 +640,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       assert_kind_of(Pathname, pn{'c:\foo'})
       assert_equal('c:\foo', pn{'c:\foo'})
    end
-  
+
    def teardown
       @fpath = nil
       @bpath = nil
@@ -658,7 +658,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
       @tpath = nil
 
       @cur_path = nil
-      
+
       @abs_array.clear
       @rel_array.clear
       @unc_array.clear
