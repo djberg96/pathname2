@@ -125,11 +125,11 @@ class Pathname < String
     @sep = File::ALT_SEPARATOR || File::SEPARATOR
     @win = File::PATH_SEPARATOR == ';'
 
-    # Handle File URL's. The separate methods for Windows are necessary
+    # Handle File URL's. The separate approach for Windows is necessary
     # because Ruby's URI class does not (currently) parse absolute file URL's
     # properly when they include a drive letter.
     if @win
-      if PathIsURL(path.dup) # Dup to avoid frozen string issues
+      if PathIsURL(path)
         buf = 0.chr * MAXPATH
         len = [buf.length].pack("l")
         if PathCreateFromUrl(path, buf, len, 0) == S_OK
@@ -143,11 +143,11 @@ class Pathname < String
         require 'uri'
         path = URI.decode(URI.parse(path).path)
       end
-   end
+    end
 
-   # Convert forward slashes to backslashes on Windows
-   path = path.tr("/", @sep) if @win
-   super(path)
+    # Convert forward slashes to backslashes on Windows
+    path = path.tr("/", @sep) if @win
+    super(path)
   end
 
   # Returns a real (absolute) pathname of +self+ in the actual filesystem.
