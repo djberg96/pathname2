@@ -141,7 +141,11 @@ class Pathname < String
     else
       if path.index('file:///', 0)
         require 'uri'
-        path = URI.decode(URI.parse(path).path)
+        if RUBY_VERSION.to_f >= 1.9
+          path = URI::Parser.new.unescape(path)[7..-1] # Blech
+        else
+          path = URI.decode(URI.parse(path).path)
+        end
       end
     end
 
