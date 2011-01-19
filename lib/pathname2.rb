@@ -40,7 +40,7 @@
 require 'facade'
 require 'fileutils'
 
-if File::PATH_SEPARATOR == ';' # MS Windows
+if File::ALT_SEPARATOR
   require 'windows/path'
   require 'windows/file'
   require 'windows/error'
@@ -72,7 +72,7 @@ class Pathname < String
 
   alias :_plus_ :+ # Used to prevent infinite loops in some cases
 
-  if File::PATH_SEPARATOR == ';' # MS Windows
+  if File::ALT_SEPARATOR
     include Windows::Path
     include Windows::File
     include Windows::Error
@@ -123,7 +123,7 @@ class Pathname < String
     end
 
     @sep = File::ALT_SEPARATOR || File::SEPARATOR
-    @win = File::PATH_SEPARATOR == ';'
+    @win = File::ALT_SEPARATOR
 
     # Handle File URL's. The separate approach for Windows is necessary
     # because Ruby's URI class does not (currently) parse absolute file URL's
@@ -1108,5 +1108,17 @@ module Kernel
   #
   def pn
     instance_eval{ Pathname.new(yield) }
+  end
+
+  begin
+    remove_method(:Pathname)
+  rescue NoMethodError, NameError
+    # Do nothing, not defined.
+  end
+
+  # Synonym for Pathname.new
+  #
+  def Pathname(path)
+    Pathname.new(path)
   end
 end
