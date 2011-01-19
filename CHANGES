@@ -2,6 +2,8 @@
 * Explicitly remove the Pathname const if it is already defined in order
   to avoid a superclass mismatch error. This library assumes that if you
   require pathname2, you want my version of the Pathname class.
+* Updated URI handling for Ruby 1.9.x.
+* Added the Pathname() method, a synonym for Pathname.new.
 * Some Rakefile and gemspec tweaks.
 
 == 1.6.3 - 2-Oct-2009
