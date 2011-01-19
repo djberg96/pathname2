@@ -56,16 +56,12 @@ class Pathname < String
 
   facade File, File.methods(false).map{ |m| m.to_sym } - [
     :chmod, :lchmod, :chown, :lchown, :dirname, :fnmatch, :fnmatch?,
-    :link, :open, :rename, :symlink, :truncate, :utime, :basename,
-    :expand_path, :join
+    :link, :open, :realpath, :rename, :symlink, :truncate, :utime,
+    :basename, :expand_path, :join
   ]
 
   facade Dir, Dir.methods(false).map{ |m| m.to_sym } - [
-    :chdir,
-    :glob,
-    :foreach,
-    :mkdir,
-    :open
+    :chdir, :entries, :glob, :foreach, :mkdir, :open
   ]
 
   private
