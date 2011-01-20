@@ -12,19 +12,19 @@ Gem::Specification.new do |spec|
   spec.files       = Dir['**/*'].reject{ |f| f.include?('git') }
 
   spec.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
-  spec.rubyforge_project = 'shards' 
+  spec.rubyforge_project = 'shards'
 
   spec.add_dependency('facade', '>= 1.0.4')
   spec.add_development_dependency('test-unit', '>= 2.1.2')
-   
-  if File::PATH_SEPARATOR == ';'
+
+  if File::ALT_SEPARATOR
     spec.test_file = 'test/test_pathname_windows.rb'
-    spec.add_dependency('windows-pr', '>= 1.1.2')
+    spec.add_dependency('windows-pr', '>= 1.1.3')
     spec.platform = Gem::Platform::CURRENT
   else
     spec.test_file = 'test/test_pathname.rb'
   end
-   
+
   spec.description = <<-EOF
     The pathname2 library provides an implementation of the Pathname
     class different from the one that ships as part of the Ruby standard
