@@ -177,7 +177,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_respond_to(@bpath, :short_path)
     assert_nothing_raised{ @bpath.short_path }
     assert_kind_of(Pathname, @bpath.short_path)
-    assert_equal("C:\\PROGRA~1\\WINDOW~1\\ACCESS~1", @bpath.short_path)
+    assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/, @bpath.short_path)
     assert_equal("C:\\Program Files\\Windows NT\\Accessories", @bpath)
   end
 
@@ -186,7 +186,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_nothing_raised{ @spath.long_path }
     assert_kind_of(Pathname, @spath.long_path)
     assert_equal("C:\\Program Files\\Windows NT\\Accessories", @spath.long_path)
-    assert_equal("C:\\PROGRA~1\\WINDOW~1\\ACCESS~1", @spath)
+    assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/, @spath)
   end
 
   test "undecorate basic functionality" do
