@@ -11,10 +11,13 @@ gem 'test-unit'
 require 'facade'
 require 'pathname2'
 require 'test/unit'
+require 'windows/system_info'
 
 class MyPathname < Pathname; end
 
 class TC_Pathname_MSWin < Test::Unit::TestCase
+  include Windows::SystemInfo
+
   def setup
     @fpath = Pathname.new("C:/Program Files/Windows NT/Accessories")
     @bpath = Pathname.new("C:\\Program Files\\Windows NT\\Accessories")
@@ -181,12 +184,22 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal("C:\\Program Files\\Windows NT\\Accessories", @bpath)
   end
 
-  def test_long_path
+  test "long_path basic functionality" do
     assert_respond_to(@spath, :long_path)
     assert_nothing_raised{ @spath.long_path }
     assert_kind_of(Pathname, @spath.long_path)
-    assert_equal("C:\\Program Files\\Windows NT\\Accessories", @spath.long_path)
-    assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/, @spath)
+  end
+
+  test "long_path returns expected result" do
+    if windows_7?
+      spath = Pathname.new("C:\\PROGRA~1\\Window~2\\ACCESS~1")
+      lpath = "C:\\Program Files\\Windows NT\\Accessories"
+      assert_equal("C:\\Program Files\\Windows NT\\Accessories", spath.long_path)
+      assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/i, spath)
+    else
+      assert_equal("C:\\Program Files\\Windows NT\\Accessories", @spath.long_path)
+      assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/i, @spath)
+    end
   end
 
   test "undecorate basic functionality" do
