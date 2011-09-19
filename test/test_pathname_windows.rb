@@ -65,7 +65,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
   end
 
   def test_version
-    assert_equal('1.6.4', Pathname::VERSION)
+    assert_equal('1.6.5', Pathname::VERSION)
   end
 
   # Convenience method for test_plus
