@@ -72,7 +72,7 @@ class TC_Pathname < Test::Unit::TestCase
   end
 
   def test_version
-    assert_equal('1.6.4', Pathname::VERSION)
+    assert_equal('1.6.5', Pathname::VERSION)
   end
 
   def test_file_url_path
@@ -457,6 +457,13 @@ class TC_Pathname < Test::Unit::TestCase
     assert_respond_to(Pathname, :pwd)
     assert_kind_of(String, Pathname.pwd)
     assert_equal(@@pwd, Pathname.pwd)
+  end
+
+  test "String#to_path instance method is implemented" do
+    string = "/usr/local/bin"
+    assert_respond_to(string, :to_path)
+    assert_nothing_raised{ string.to_path }
+    assert_kind_of(Pathname, string.to_path)
   end
 
   def teardown

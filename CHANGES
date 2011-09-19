@@ -1,3 +1,9 @@
+== 1.6.5 - 19-Sep-2011
+* Added the String#to_path instance method. This returns a Pathname
+  object.
+* The architecture for the Windows gem is now "universal", and some
+  gemspec dependencies were simplified.
+
 == 1.6.4 - 20-Jan-2011
 * Explicitly remove the Pathname const if it is already defined in order
   to avoid a superclass mismatch error. This library assumes that if you

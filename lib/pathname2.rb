@@ -78,7 +78,7 @@ class Pathname < String
   public
 
   # The version of the pathname2 library
-  VERSION = '1.6.4'
+  VERSION = '1.6.5'
 
   # The maximum length of a path
   MAXPATH = 1024 unless defined? MAXPATH # Yes, I willfully violate POSIX
@@ -107,7 +107,7 @@ class Pathname < String
   #
   # Examples:
   #
-  #   Pathname.new("/foo/bar/baz"
+  #   Pathname.new("/foo/bar/baz")
   #   Pathname.new("foo")
   #   Pathname.new("file:///foo/bar/baz")
   #   Pathname.new("C:\\Documents and Settings\\snoopy")
@@ -1120,5 +1120,12 @@ module Kernel
   #
   def Pathname(path)
     Pathname.new(path)
+  end
+end
+
+class String
+  # Convert a string directly into a Pathname object.
+  def to_path
+    Pathname.new(self)
   end
 end

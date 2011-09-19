@@ -2,25 +2,27 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name        = 'pathname2'
-  spec.version     = '1.6.4'
+  spec.version     = '1.6.5'
   spec.author      = 'Daniel J. Berger'
   spec.license     = 'Artistic 2.0'
   spec.email       = 'djberg96@gmail.com'
   spec.homepage    = 'http://www.rubyforge.org/projects/shards'
   spec.summary     = 'An alternate implementation of the Pathname class'
-  spec.has_rdoc    = true
   spec.files       = Dir['**/*'].reject{ |f| f.include?('git') }
 
   spec.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
   spec.rubyforge_project = 'shards'
 
-  spec.add_dependency('facade', '>= 1.0.4')
-  spec.add_development_dependency('test-unit', '>= 2.1.2')
+  spec.add_dependency('facade')
+  spec.add_development_dependency('test-unit')
 
   if File::ALT_SEPARATOR
     spec.test_file = 'test/test_pathname_windows.rb'
-    spec.add_dependency('windows-pr', '>= 1.1.3')
+    spec.add_dependency('windows-pr')
     spec.platform = Gem::Platform::CURRENT
+    spec.platform.cpu = 'universal'
+    spec.platform.version = nil
+    spec.original_platform = spec.platform # See rubygems issue #147
   else
     spec.test_file = 'test/test_pathname.rb'
   end
