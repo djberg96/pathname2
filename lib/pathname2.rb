@@ -41,10 +41,17 @@ require 'facade'
 require 'fileutils'
 
 if File::ALT_SEPARATOR
-  require 'windows/path'
-  require 'windows/file'
-  require 'windows/error'
-  require 'windows/limits'
+  require 'ffi'
+  class String
+    # Convenience method for converting strings to UTF-16LE for wide character
+    # functions that require it.
+    def wincode
+      if self.encoding.name != 'UTF-16LE'
+        temp = self.dup
+        (temp.tr(File::SEPARATOR, File::ALT_SEPARATOR) << 0.chr).encode('UTF-16LE')
+      end
+    end
+  end
 end
 
 # You're mine now.
@@ -69,16 +76,27 @@ class Pathname < String
   alias :_plus_ :+ # Used to prevent infinite loops in some cases
 
   if File::ALT_SEPARATOR
-    include Windows::Path
-    include Windows::File
-    include Windows::Error
-    include Windows::Limits
+    extend FFI::Library
+    ffi_lib :shlwapi
+
+    attach_function :PathAppendW, [:buffer_in, :buffer_in], :bool
+    attach_function :PathCreateFromUrlW, [:buffer_in, :pointer, :pointer, :ulong], :long
+    attach_function :PathIsRelativeW, [:buffer_in], :bool
+    attach_function :PathIsRootW, [:buffer_in], :bool
+    attach_function :PathIsURLW, [:buffer_in], :bool
+    attach_function :PathRemoveBackslashW, [:buffer_in], :pointer
+    attach_function :PathUndecorateW, [:buffer_in], :void
+
+    ffi_lib :kernel32
+
+    attach_function :GetLongPathNameW, [:buffer_in, :buffer_out, :ulong], :ulong
+    attach_function :GetShortPathNameW, [:buffer_in, :buffer_out, :ulong], :ulong
   end
 
   public
 
   # The version of the pathname2 library
-  VERSION = '1.6.5'
+  VERSION = '1.7.0'
 
   # The maximum length of a path
   MAXPATH = 1024 unless defined? MAXPATH # Yes, I willfully violate POSIX
@@ -125,11 +143,15 @@ class Pathname < String
     # because Ruby's URI class does not (currently) parse absolute file URL's
     # properly when they include a drive letter.
     if @win
-      if PathIsURL(path)
-        buf = 0.chr * MAXPATH
-        len = [buf.length].pack("l")
-        if PathCreateFromUrl(path, buf, len, 0) == S_OK
-          path = buf.strip
+      wpath = path.wincode
+
+      if PathIsURLW(wpath)
+        buf = FFI::MemoryPointer.new(:char, MAXPATH)
+        len = FFI::MemoryPointer.new(:ulong)
+        len.write_ulong(buf.size)
+
+        if PathCreateFromUrlW(wpath, buf, len, 0) == 0
+          path = buf.read_string(path.size * 2).tr(0.chr, '')
         else
           raise Error, "invalid file url: #{path}"
         end
@@ -146,7 +168,6 @@ class Pathname < String
     end
 
     # Convert forward slashes to backslashes on Windows
-    path = path.tr("/", @sep) if @win
     super(path)
   end
 
@@ -220,10 +241,13 @@ class Pathname < String
     unless @win
       raise NotImplementedError, "not supported on this platform"
     end
+
     buf = 0.chr * MAXPATH
     buf[0..self.length-1] = self
-    PathUndecorate(buf)
-    self.class.new(buf.split(0.chr).first)
+    buf = buf.wincode
+
+    PathUndecorateW(buf)
+    self.class.new(buf.encode('US-ASCII')[ /^[^\0]*/ ])
   end
 
   # Windows only
@@ -236,8 +260,11 @@ class Pathname < String
     end
     buf = 0.chr * MAXPATH
     buf[0..self.length-1] = self
-    PathUndecorate(buf)
-    replace(buf.split(0.chr).first)
+    buf = buf.wincode
+
+    PathUndecorateW(buf)
+    replace(buf.encode('US-ASCII')[ /^[^\0]*/ ])
+
     self
   end
 
@@ -254,10 +281,15 @@ class Pathname < String
     unless @win
       raise NotImplementedError, "not supported on this platform"
     end
-    buf = 0.chr * MAXPATH
-    buf[0..self.length-1] = self
-    GetShortPathName(self, buf, buf.length)
-    self.class.new(buf.split(0.chr).first)
+
+    buf  = (0.chr * MAXPATH).wincode
+    long = (self.dup << 0.chr).encode('UTF-16LE')
+
+    if GetShortPathNameW(long, buf, buf.length) == 0
+      raise SystemCallError.new('GetShortPathName', FFI.errno)
+    end
+
+    self.class.new(buf.strip)
   end
 
   # Windows only
@@ -273,10 +305,15 @@ class Pathname < String
     unless @win
       raise NotImplementedError, "not supported on this platform"
     end
-    buf = 0.chr * MAXPATH
-    buf[0..self.length-1] = self
-    GetLongPathName(self, buf, buf.length)
-    self.class.new(buf.split(0.chr).first)
+
+    buf   = (0.chr * MAXPATH).wincode
+    short = (self.dup << 0.chr).encode('UTF-16LE')
+
+    if GetLongPathNameW(short, buf, buf.length) == 0
+      raise SystemCallError.new('GetLongPathName', FFI.errno)
+    end
+
+    self.class.new(buf.strip)
   end
 
   # Removes trailing slash, if present.  Non-destructive.
@@ -287,9 +324,9 @@ class Pathname < String
   #    path.pstrip # => '/usr/local'
   #
   def pstrip
-    str = self.dup
     if @win
-      PathRemoveBackslash(str)
+      str = self.wincode
+      PathRemoveBackslashW(str)
       str.strip!
     else
       if str.to_s[-1].chr == @sep
@@ -297,6 +334,7 @@ class Pathname < String
         str.chop!
       end
     end
+
     self.class.new(str)
   end
 
@@ -304,14 +342,16 @@ class Pathname < String
   #
   def pstrip!
     if @win
-      PathRemoveBackslash(self)
-      strip!
+      str = self.wincode
+      PathRemoveBackslashW(str)
+      replace(str.strip)
     else
       if self.to_s[-1].chr == @sep
         strip!
         chop!
       end
     end
+
     self
   end
 
@@ -521,7 +561,7 @@ class Pathname < String
   #
   def root?
     if @win
-      PathIsRoot(self)
+      PathIsRootW(self.wincode)
     else
       self == root
     end
@@ -542,7 +582,7 @@ class Pathname < String
       raise NotImplementedError, "not supported on this platform"
     end
 
-    PathIsUNC(self)
+    PathIsUNCW(self.wincode)
   end
 
   # MS Windows only
@@ -559,7 +599,7 @@ class Pathname < String
       raise NotImplementedError, "not supported on this platform"
     end
 
-    num = PathGetDriveNumber(self)
+    num = PathGetDriveNumberW(self.wincode)
     num >= 0 ? num : nil
   end
 
@@ -682,8 +722,12 @@ class Pathname < String
     if @win
       buf = 0.chr * MAXPATH
       buf[0..self.length-1] = self
-      PathAppend(buf, string)
-      buf = buf.split("\0").first
+      buf = buf.wincode
+
+      PathAppendW(buf, string)
+
+      buf = buf.encode('US-ASCII').split("\0").first
+
       return self.class.new(buf) # PathAppend cleans automatically
     end
 
@@ -723,7 +767,7 @@ class Pathname < String
   #
   def relative?
     if @win
-      PathIsRelative(self)
+      PathIsRelativeW(self.wincode)
     else
       root == "."
     end
