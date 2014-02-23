@@ -477,24 +477,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_non_destructive
   end
 
-  def test_root
-    assert_equal("C:\\", @fpath.root)
-    assert_equal("C:\\", @bpath.root)
-    assert_equal("\\\\foo\\bar", @upath.root)
-    assert_equal(".", @npath.root)
-    assert_equal("Z:\\", @rpath.root)
-    assert_equal("\\\\foo\\bar", @xpath.root)
-    assert_equal("\\\\foo", @ypath.root)
-    assert_equal("\\\\", @zpath.root)
-    assert_equal(".", @epath.root)
-
-    # Edge cases
-    assert_equal(".", Pathname.new("..").root)
-    assert_equal(".", Pathname.new(".").root)
-
-    assert_non_destructive
-  end
-
   def test_drive_number
     assert_equal(2, @fpath.drive_number)
     assert_equal(2, @bpath.drive_number)
