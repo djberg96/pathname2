@@ -6,7 +6,7 @@
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_Root < Test::Unit::TestCase
+class TC_Pathname_DriveNumber < Test::Unit::TestCase
   def setup
     @abs_path = Pathname.new("C:\\Program Files")
     @unc_path = Pathname.new("\\\\foo\\bar\\baz")
