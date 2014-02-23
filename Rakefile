@@ -23,7 +23,7 @@ Rake::TestTask.new('test') do |t|
   t.warning = true
   t.verbose = true
    
-  if Config::CONFIG['host_os'] =~ /mswin|win32|dos|cygwin|mingw/i
+  if File::ALT_SEPARATOR
     t.test_files = FileList['test/test_pathname_windows.rb']
   else
     t.test_files = FileList['test/test_pathname.rb']
