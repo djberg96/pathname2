@@ -76,6 +76,7 @@ class Pathname < String
     attach_function :PathIsUNCW, [:buffer_in], :bool
     attach_function :PathIsURLW, [:buffer_in], :bool
     attach_function :PathRemoveBackslashW, [:buffer_in], :pointer
+    attach_function :PathStripToRootW, [:pointer], :bool
     attach_function :PathUndecorateW, [:buffer_in], :void
 
     ffi_lib :kernel32
@@ -526,11 +527,9 @@ class Pathname < String
     dir = "."
 
     if @win
-      buf = 0.chr * MAXPATH
-      buf[0..self.length-1] = self
-
-      if PathStripToRoot(buf)
-        dir = buf.split(0.chr).first
+      wpath = FFI::MemoryPointer.from_string(self.wincode)
+      if PathStripToRootW(wpath)
+        dir = wpath.read_string(wpath.size).split("\000\000").first.tr(0.chr, '')
       end
     else
       dir = "/" if self =~ /^\//
