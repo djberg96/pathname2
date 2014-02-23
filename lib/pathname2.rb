@@ -27,16 +27,6 @@
 # path1 + path2 # "C:\\foo\\bar\\zap"
 # path1.exists? # Does the path exist?
 #
-# == Author
-#
-# Daniel J. Berger
-# djberg96 at gmail dot com
-# imperator on IRC (irc.freenode.net)
-#
-# == Copyright
-# Copyright (c) 2005-2011 Daniel J. Berger.
-# Licensed under the same terms as Ruby itself.
-#
 require 'facade'
 require 'fileutils'
 
@@ -83,6 +73,7 @@ class Pathname < String
     attach_function :PathCreateFromUrlW, [:buffer_in, :pointer, :pointer, :ulong], :long
     attach_function :PathIsRelativeW, [:buffer_in], :bool
     attach_function :PathIsRootW, [:buffer_in], :bool
+    attach_function :PathIsUNCW, [:buffer_in], :bool
     attach_function :PathIsURLW, [:buffer_in], :bool
     attach_function :PathRemoveBackslashW, [:buffer_in], :pointer
     attach_function :PathUndecorateW, [:buffer_in], :void
@@ -159,11 +150,7 @@ class Pathname < String
     else
       if path.index('file:///', 0)
         require 'uri'
-        if RUBY_VERSION.to_f >= 1.9
-          path = URI::Parser.new.unescape(path)[7..-1] # Blech
-        else
-          path = URI.decode(URI.parse(path).path)
-        end
+        path = URI::Parser.new.unescape(path)[7..-1]
       end
     end
 
@@ -676,7 +663,7 @@ class Pathname < String
     dest_arr.delete('.')
     base_arr.delete('.')
 
-    diff_arr = dest_arr - base_arr
+    # diff_arr = dest_arr - base_arr
 
     while !base_arr.empty? && !dest_arr.empty? && base_arr[0] == dest_arr[0]
       base_arr.shift
