@@ -78,7 +78,7 @@ class Pathname < String
     attach_function :PathIsURLW, [:buffer_in], :bool
     attach_function :PathRemoveBackslashW, [:buffer_in], :pointer
     attach_function :PathStripToRootW, [:pointer], :bool
-    attach_function :PathUndecorateW, [:buffer_in], :void
+    attach_function :PathUndecorateW, [:pointer], :void
 
     ffi_lib :kernel32
 
@@ -231,12 +231,11 @@ class Pathname < String
       raise NotImplementedError, "not supported on this platform"
     end
 
-    buf = 0.chr * MAXPATH
-    buf[0..self.length-1] = self
-    buf = buf.wincode
+    wpath = FFI::MemoryPointer.from_string(self.wincode)
 
-    PathUndecorateW(buf)
-    self.class.new(buf.encode('US-ASCII')[ /^[^\0]*/ ])
+    PathUndecorateW(wpath)
+
+    self.class.new(wpath.read_string(wpath.size).split("\000\000").first.tr(0.chr, ''))
   end
 
   # Windows only
