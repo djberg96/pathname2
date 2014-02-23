@@ -46,10 +46,9 @@ class TC_Pathname_Root < Test::Unit::TestCase
   end
 
   test "root method is not destructive" do
-    assert_nothing_raised{ @abs_path.root }
-    assert_nothing_raised{ @unc_path.root }
-    assert_equal("C:\\Program Files", @abs_path)
-    assert_equal("\\\\foo\\bar\\baz", @unc_path)
+    str = 'C:/Program Files'
+    assert_nothing_raised{ Pathname.new(str).root }
+    assert_equal('C:/Program Files', str)
   end
 
   def teardown
