@@ -243,17 +243,7 @@ class Pathname < String
   # Performs the substitution of Pathname#undecorate in place.
   #
   def undecorate!
-    unless @win
-      raise NotImplementedError, "not supported on this platform"
-    end
-    buf = 0.chr * MAXPATH
-    buf[0..self.length-1] = self
-    buf = buf.wincode
-
-    PathUndecorateW(buf)
-    replace(buf.encode('US-ASCII')[ /^[^\0]*/ ])
-
-    self
+    self.replace(undecorate)
   end
 
   # Windows only
