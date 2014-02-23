@@ -202,23 +202,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     end
   end
 
-  test "undecorate basic functionality" do
-    assert_respond_to(@dpath, :undecorate)
-    assert_nothing_raised{ @dpath.undecorate }
-    assert_kind_of(Pathname, @dpath.undecorate)
-  end
-
-  test "undecorate returns expected results" do
-    assert_equal('C:\Program Files\File.txt', @dpath.undecorate)
-    assert_equal('C:\Path\File', Pathname.new('C:\Path\File').undecorate)
-    assert_equal('C:\Path\File', Pathname.new('C:\Path\File[12]').undecorate)
-    assert_equal('C:\Path\[3].txt', Pathname.new('C:\Path\[3].txt').undecorate)
-    assert_equal('\\foo\bar.txt',Pathname.new('\\foo\bar[5].txt').undecorate)
-    assert_equal('\\foo\bar', Pathname.new('\\foo\bar[5]').undecorate)
-    assert_equal('\\foo\bar', Pathname.new('\\foo\bar').undecorate)
-    assert_equal("C:\\Program Files\\File[5].txt", @dpath)
-  end
-
   test "undecorate_bang basic functionality" do
     assert_respond_to(@dpath, :undecorate!)
     assert_nothing_raised{ @dpath.undecorate! }
