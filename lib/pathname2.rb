@@ -71,6 +71,7 @@ class Pathname < String
 
     attach_function :PathAppendW, [:buffer_in, :buffer_in], :bool
     attach_function :PathCreateFromUrlW, [:buffer_in, :pointer, :pointer, :ulong], :long
+    attach_function :PathGetDriveNumberW, [:buffer_in], :int
     attach_function :PathIsRelativeW, [:buffer_in], :bool
     attach_function :PathIsRootW, [:buffer_in], :bool
     attach_function :PathIsUNCW, [:buffer_in], :bool
