@@ -477,24 +477,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_non_destructive
   end
 
-  def test_drive_number
-    assert_equal(2, @fpath.drive_number)
-    assert_equal(2, @bpath.drive_number)
-    assert_equal(nil, @upath.drive_number)
-    assert_equal(nil, @npath.drive_number)
-    assert_equal(25, @rpath.drive_number)
-    assert_equal(nil, @xpath.drive_number)
-    assert_equal(nil, @ypath.drive_number)
-    assert_equal(nil, @zpath.drive_number)
-    assert_equal(nil, @epath.drive_number)
-
-    # Edge cases
-    assert_equal(nil, Pathname.new("..").drive_number)
-    assert_equal(nil, Pathname.new(".").drive_number)
-
-    assert_non_destructive
-  end
-
   def test_to_a
     expected = ["C:", "Program Files", "Windows NT", "Accessories"]
     assert_equal(expected, @fpath.to_a)
