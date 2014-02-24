@@ -176,14 +176,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal("Z:\\", @rpath.parent)
   end
 
-  def test_short_path
-    assert_respond_to(@bpath, :short_path)
-    assert_nothing_raised{ @bpath.short_path }
-    assert_kind_of(Pathname, @bpath.short_path)
-    assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/, @bpath.short_path)
-    assert_equal("C:\\Program Files\\Windows NT\\Accessories", @bpath)
-  end
-
   test "long_path basic functionality" do
     assert_respond_to(@spath, :long_path)
     assert_nothing_raised{ @spath.long_path }
