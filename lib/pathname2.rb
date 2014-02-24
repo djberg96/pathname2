@@ -554,10 +554,7 @@ class Pathname < String
   #    Pathname.new('C:\Program Files').unc? # => false
   #
   def unc?
-    unless @win
-      raise NotImplementedError, "not supported on this platform"
-    end
-
+    raise NotImplementedError, "not supported on this platform" unless @win
     PathIsUNCW(self.wincode)
   end
 
