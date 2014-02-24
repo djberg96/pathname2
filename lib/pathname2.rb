@@ -83,7 +83,7 @@ class Pathname < String
     ffi_lib :kernel32
 
     attach_function :GetLongPathNameW, [:buffer_in, :buffer_out, :ulong], :ulong
-    attach_function :GetShortPathNameW, [:buffer_in, :buffer_out, :ulong], :ulong
+    attach_function :GetShortPathNameW, [:buffer_in, :pointer, :ulong], :ulong
   end
 
   public
@@ -260,14 +260,14 @@ class Pathname < String
       raise NotImplementedError, "not supported on this platform"
     end
 
-    buf  = (0.chr * MAXPATH).wincode
-    long = (self.dup << 0.chr).encode('UTF-16LE')
+    buf = FFI::MemoryPointer.new(:char, MAXPATH)
+    wpath = self.wincode
 
-    if GetShortPathNameW(long, buf, buf.length) == 0
-      raise SystemCallError.new('GetShortPathName', FFI.errno)
-    end
+    size = GetShortPathNameW(wpath, buf, buf.size)
 
-    self.class.new(buf.strip)
+    raise SystemCallError.new('GetShortPathName', FFI.errno) if size == 0
+
+    self.class.new(buf.read_bytes(size * 2).delete(0.chr))
   end
 
   # Windows only
@@ -1145,4 +1145,8 @@ class String
   def to_path
     Pathname.new(self)
   end
+end
+
+if $0 == __FILE__
+  Pathname.new("C:/Program Files").short_path
 end
