@@ -299,6 +299,7 @@ class Pathname < String
   #
   def pstrip
     str = self.dup
+    return str if str.empty?
 
     while ["/", "\\"].include?(str.to_s[-1].chr)
       str.strip!
@@ -311,15 +312,11 @@ class Pathname < String
   # Performs the substitution of Pathname#pstrip in place.
   #
   def pstrip!
-    if @win
-      str = self.wincode
-      PathRemoveBackslashW(str)
-      replace(str.strip)
-    else
-      if self.to_s[-1].chr == @sep
-        strip!
-        chop!
-      end
+    return self if self.empty?
+
+    while ["/", "\\"].include?(self.to_s[-1].chr)
+      self.strip!
+      self.chop!
     end
 
     self
