@@ -8,7 +8,12 @@ namespace :gem do
   desc "Build the pathname2 gem"
   task :create => [:clean] do
     spec = eval(IO.read('pathname2.gemspec'))
-    Gem::Builder.new(spec).build
+    if Gem::VERSION < "2.0"
+      Gem::Builder.new(spec).build
+    else
+      require 'rubygems/package'
+      Gem::Package.build(spec)
+    end
   end
 
   desc "Install the pathname2 gem"
