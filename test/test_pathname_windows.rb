@@ -384,21 +384,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_non_destructive
   end
 
-  def test_is_root
-    assert_false(@fpath.root?)
-    assert_false(@bpath.root?)
-    assert_false(@upath.root?)
-    assert_false(@npath.root?)
-    assert_true(@rpath.root?)
-    assert_true(@xpath.root?)
-    assert_true(@ypath.root?)
-    assert_true(@zpath.root?)
-    assert_false(@epath.root?)
-    assert_false(@ppath.root?)
-
-    assert_non_destructive
-  end
-
   # These are the methods from IO we have to explicitly define since
   # they aren't handled by Facade.
   def test_facade_io

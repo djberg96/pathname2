@@ -49,6 +49,12 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_drive_number.rb"]
   end
 
+  Rake::TestTask.new(:is_root) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_is_root.rb"]
+  end
+
   Rake::TestTask.new(:is_unc) do |t|
     t.warning = true
     t.verbose = true
