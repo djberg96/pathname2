@@ -355,19 +355,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_non_destructive
   end
 
-  def test_relative
-    assert_false(@fpath.relative?)
-    assert_false(@bpath.relative?)
-    assert_false(@upath.relative?)
-    assert_true(@npath.relative?)
-    assert_false(@rpath.relative?)
-    assert_false(@xpath.relative?)
-    assert_false(@ypath.relative?)
-    assert_false(@zpath.relative?)
-    assert_true(@epath.relative?)
-    assert_non_destructive
-  end
-
   def test_to_a
     expected = ["C:", "Program Files", "Windows NT", "Accessories"]
     assert_equal(expected, @fpath.to_a)
