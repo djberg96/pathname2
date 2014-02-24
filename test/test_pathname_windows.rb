@@ -176,19 +176,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal("Z:\\", @rpath.parent)
   end
 
-  def test_pstrip_bang
-    assert_respond_to(@ppath, :pstrip!)
-    assert_nothing_raised{ @ppath.pstrip! }
-    assert_nothing_raised{ @fpath.pstrip! }
-    assert_kind_of(Pathname, @ppath.pstrip!)
-
-    assert_equal('C:\foo', Pathname.new("C:\\foo\\").pstrip!)
-    assert_equal('C:\foo', Pathname.new("C:\\foo").pstrip!)
-    assert_equal("", Pathname.new("").pstrip!)
-
-    assert_equal("C:\\foo\\bar", @ppath)
-  end
-
   def test_exists
     assert_respond_to(@fpath, :exists?)
     assert_nothing_raised{ @fpath.exists? }
