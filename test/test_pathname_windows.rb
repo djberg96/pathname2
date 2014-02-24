@@ -202,29 +202,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     end
   end
 
-  test "unc basic functionality" do
-    assert_respond_to(@upath, :unc?)
-    assert_nothing_raised{ @upath.unc? }
-  end
-
-  test "unc returns expected results" do
-    assert_true(@upath.unc?)
-    assert_true(@xpath.unc?)
-    assert_true(@ypath.unc?)
-    assert_true(@zpath.unc?)
-    assert_false(@fpath.unc?)
-    assert_false(@bpath.unc?)
-    assert_false(@dpath.unc?)
-    assert_false(@spath.unc?)
-    assert_false(@epath.unc?)
-
-    # Arguably a bug in the PathIsUNC() function since drive letters
-    # are, in fact, a legal part of a UNC path (for historical reasons).
-    assert_false(Pathname.new("C:\\\\foo\\bar\\baz").unc?)
-
-    assert_non_destructive
-  end
-
   def test_pstrip
     assert_respond_to(@ppath, :pstrip)
     assert_nothing_raised{ @ppath.pstrip }
