@@ -176,24 +176,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal("Z:\\", @rpath.parent)
   end
 
-  test "long_path basic functionality" do
-    assert_respond_to(@spath, :long_path)
-    assert_nothing_raised{ @spath.long_path }
-    assert_kind_of(Pathname, @spath.long_path)
-  end
-
-  test "long_path returns expected result" do
-    if windows_7?
-      spath = Pathname.new("C:\\PROGRA~1\\Window~2\\ACCESS~1")
-      lpath = "C:\\Program Files\\Windows NT\\Accessories"
-      assert_equal("C:\\Program Files\\Windows NT\\Accessories", spath.long_path)
-      assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/i, spath)
-    else
-      assert_equal("C:\\Program Files\\Windows NT\\Accessories", @spath.long_path)
-      assert_match(/C:\\PROGRA~1\\WINDOW~\d\\ACCESS~\d/i, @spath)
-    end
-  end
-
   def test_pstrip
     assert_respond_to(@ppath, :pstrip)
     assert_nothing_raised{ @ppath.pstrip }
