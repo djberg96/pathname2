@@ -6,7 +6,7 @@
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_IsRoot < Test::Unit::TestCase
+class TC_Pathname_IsRelative < Test::Unit::TestCase
   def setup
     @relative = Pathname.new("foo/bar")
     @absolute = Pathname.new("C:/foo/bar")
