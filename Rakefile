@@ -35,6 +35,69 @@ Rake::TestTask.new('test') do |t|
   end
 end
 
+namespace :test do
+  dir = File::ALT_SEPARATOR ? "windows" : "unix"
+  Rake::TestTask.new(:all) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/*.rb"]
+  end
+
+  Rake::TestTask.new(:drive_number) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_drive_number.rb"]
+  end
+
+  Rake::TestTask.new(:is_unc) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_is_unc.rb"]
+  end
+ 
+  Rake::TestTask.new(:long_path) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_long_path.rb"]
+  end
+
+  Rake::TestTask.new(:short_path) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_short_path.rb"]
+  end
+
+  Rake::TestTask.new(:pstrip) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_pstrip.rb"]
+  end
+
+  Rake::TestTask.new(:pstrip!) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_pstrip_bang.rb"]
+  end
+
+  Rake::TestTask.new(:root) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_root.rb"]
+  end
+
+  Rake::TestTask.new(:undecorate) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_undecorate.rb"]
+  end
+
+  Rake::TestTask.new(:undecorate_bang) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_undecorate_bang.rb"]
+  end
+end
+
 desc 'Run the Pathname benchmark suite'
 task :benchmark do
   sh 'ruby -Ilib benchmarks/bench_pathname.rb'
