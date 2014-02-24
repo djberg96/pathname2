@@ -341,20 +341,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal("C:\\bar\\baz", @cpath)
   end
 
-  def test_absolute
-    assert_true(@fpath.absolute?)
-    assert_true(@bpath.absolute?)
-    assert_true(@upath.absolute?)
-    assert_false(@npath.absolute?)
-    assert_true(@rpath.absolute?)
-    assert_true(@xpath.absolute?)
-    assert_true(@ypath.absolute?)
-    assert_true(@zpath.absolute?)
-    assert_false(@epath.absolute?)
-
-    assert_non_destructive
-  end
-
   def test_to_a
     expected = ["C:", "Program Files", "Windows NT", "Accessories"]
     assert_equal(expected, @fpath.to_a)

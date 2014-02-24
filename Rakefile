@@ -48,6 +48,12 @@ namespace :test do
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_drive_number.rb"]
   end
+
+  Rake::TestTask.new(:is_absolute) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_is_absolute.rb"]
+  end
  
   Rake::TestTask.new(:is_relative) do |t|
     t.warning = true
