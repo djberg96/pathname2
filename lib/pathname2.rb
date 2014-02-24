@@ -290,7 +290,7 @@ class Pathname < String
     self.class.new(buf.read_bytes(size * 2).delete(0.chr))
   end
 
-  # Removes trailing slash, if present.  Non-destructive.
+  # Removes all trailing slashes, if present. Non-destructive.
   #
   # Example:
   #
@@ -298,15 +298,11 @@ class Pathname < String
   #    path.pstrip # => '/usr/local'
   #
   def pstrip
-    if @win
-      str = self.wincode
-      PathRemoveBackslashW(str)
+    str = self.dup
+
+    while ["/", "\\"].include?(str.to_s[-1].chr)
       str.strip!
-    else
-      if str.to_s[-1].chr == @sep
-        str.strip!
-        str.chop!
-      end
+      str.chop!
     end
 
     self.class.new(str)
@@ -376,6 +372,7 @@ class Pathname < String
   #    path[0, 3] # => 'C:\Documents and Settings\John'
   #    path[0..1] # => 'C:\Documents and Settings'
   #
+=begin
   def [](index, length=nil)
     if index.is_a?(Fixnum)
       if length
@@ -398,6 +395,7 @@ class Pathname < String
 
     path
   end
+=end
 
   # Yields each component of the path, concatenating the next component on
   # each iteration as a new Pathname object, starting with the root path.
@@ -1141,8 +1139,4 @@ class String
   def to_path
     Pathname.new(self)
   end
-end
-
-if $0 == __FILE__
-  Pathname.new("C:/Program Files").short_path
 end
