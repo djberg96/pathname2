@@ -256,9 +256,7 @@ class Pathname < String
   #    path.short_path # => C:\Progra~1\Java.
   #
   def short_path
-    unless @win
-      raise NotImplementedError, "not supported on this platform"
-    end
+    raise NotImplementedError, "not supported on this platform" unless @win
 
     buf = FFI::MemoryPointer.new(:char, MAXPATH)
     wpath = self.wincode
@@ -280,18 +278,16 @@ class Pathname < String
   #    path.long_path # => C:\Program Files\Java.
   #
   def long_path
-    unless @win
-      raise NotImplementedError, "not supported on this platform"
-    end
+    raise NotImplementedError, "not supported on this platform" unless @win
 
-    buf   = (0.chr * MAXPATH).wincode
-    short = (self.dup << 0.chr).encode('UTF-16LE')
+    buf = FFI::MemoryPointer.new(:char, MAXPATH)
+    wpath = self.wincode
 
-    if GetLongPathNameW(short, buf, buf.length) == 0
-      raise SystemCallError.new('GetLongPathName', FFI.errno)
-    end
+    size = GetLongPathNameW(wpath, buf, buf.size)
 
-    self.class.new(buf.strip)
+    raise SystemCallError.new('GetShortPathName', FFI.errno) if size == 0
+
+    self.class.new(buf.read_bytes(size * 2).delete(0.chr))
   end
 
   # Removes trailing slash, if present.  Non-destructive.
