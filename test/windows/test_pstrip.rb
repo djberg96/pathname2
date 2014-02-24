@@ -25,6 +25,7 @@ class TC_Pathname_Pstrip < Test::Unit::TestCase
 
   test "pstrip returns the path as is if it does not contain a trailing slash" do
     assert_equal("C:\\Program Files", Pathname.new("C:\\Program Files").pstrip)
+    assert_equal("", Pathname.new("").pstrip)
   end
 
   test "pstrip method is not destructive" do
