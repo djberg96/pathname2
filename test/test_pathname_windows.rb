@@ -357,50 +357,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_non_destructive
   end
 
-  # These are the methods from IO we have to explicitly define since
-  # they aren't handled by Facade.
-  def test_facade_io
-    assert_respond_to(@fpath, :foreach)
-    assert_respond_to(@fpath, :read)
-    assert_respond_to(@fpath, :readlines)
-    assert_respond_to(@fpath, :sysopen)
-  end
-
-  def test_facade_file
-    File.methods(false).each{ |method|
-      assert_respond_to(@fpath, method.to_sym)
-    }
-  end
-
-  def test_facade_dir
-    Dir.methods(false).each{ |method|
-      assert_respond_to(@fpath, method.to_sym)
-    }
-  end
-
-  def test_facade_fileutils
-    methods = FileUtils.public_instance_methods
-    methods -= File.methods(false)
-    methods -= Dir.methods(false)
-    methods.delete_if{ |m| m =~ /stream/ }
-    methods.delete_if{ |m| m =~ /^ln/ }
-    methods.delete("identical?")
-
-    methods.each{ |method|
-      assert_respond_to(@fpath, method.to_sym)
-    }
-  end
-
-  def test_facade_find
-    assert_respond_to(@fpath, :find)
-    assert_nothing_raised{ @fpath.find{} }
-
-    Pathname.new(Dir.pwd).find{ |f|
-      Find.prune if f.match("CVS")
-      assert_kind_of(Pathname, f)
-    }
-  end
-
   def test_children
     assert_respond_to(@cur_path, :children)
     assert_nothing_raised{ @cur_path.children }
