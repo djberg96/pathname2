@@ -275,39 +275,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal('foo\bar\baz', @npath)
   end
 
-  def test_clean
-    assert_respond_to(@cpath, :clean)
-    assert_nothing_raised{ @cpath.clean }
-    assert_kind_of(Pathname, @cpath.clean)
-
-    # Our preset stuff
-    assert_equal("C:\\Program Files\\Windows NT\\Accessories", @fpath.clean)
-    assert_equal("C:\\Program Files\\Windows NT\\Accessories", @bpath.clean)
-    assert_equal("\\\\foo\\bar\\baz", @upath.clean)
-    assert_equal("foo\\bar\\baz", @npath.clean)
-    assert_equal("Z:\\", @rpath.clean)
-    assert_equal("\\\\foo\\bar", @xpath.clean)
-    assert_equal("\\\\foo", @ypath.clean)
-    assert_equal("\\\\", @zpath.clean)
-    assert_equal("", @epath.clean)
-    assert_equal("C:\\bar\\baz", @cpath.clean)
-
-    # Standard stuff
-    assert_equal("C:\\a\\c", Pathname.new("C:\\a\\.\\b\\..\\c").clean)
-    assert_equal("C:\\a", Pathname.new("C:\\.\\a").clean)
-    assert_equal("C:\\a\\b", Pathname.new("C:\\a\\.\\b").clean)
-    assert_equal("C:\\b", Pathname.new("C:\\a\\..\\b").clean)
-    assert_equal("C:\\a", Pathname.new("C:\\a\\.").clean)
-    assert_equal("C:\\d", Pathname.new("C:\\..\\..\\..\\d").clean)
-    assert_equal("C:\\a\\", Pathname.new("C:\\a\\").clean)
-
-    # Edge cases
-    assert_equal("\\", Pathname.new(".").clean)
-    assert_equal("\\", Pathname.new("..").clean)
-
-    assert_non_destructive
-  end
-
   def test_clean_bang
     assert_respond_to(@cpath, :clean!)
     assert_nothing_raised{ @cpath.clean! }
