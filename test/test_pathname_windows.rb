@@ -44,26 +44,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     @unc_array = []
   end
 
-  def test_aref_with_range
-    assert_equal("C:\\Program Files", @fpath[0..1])
-    assert_equal("C:\\Program Files\\Windows NT", @fpath[0..2])
-    assert_equal("Program Files\\Windows NT", @fpath[1..2])
-    assert_equal(@fpath, @fpath[0..-1])
-  end
-
-  def test_aref_with_index_and_length
-    assert_equal("C:", @fpath[0,1])
-    assert_equal("C:\\Program Files", @fpath[0,2])
-    assert_equal("Program Files\\Windows NT", @fpath[1,2])
-  end
-
-  def test_aref_with_index
-    assert_equal("C:", @fpath[0])
-    assert_equal("Program Files", @fpath[1])
-    assert_equal("Accessories", @fpath[-1])
-    assert_equal(nil, @fpath[10])
-  end
-
   def test_version
     assert_equal('1.6.5', Pathname::VERSION)
   end
@@ -85,13 +65,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_respond_to(@fpath, :realpath)
     assert_equal(@cur_path, Pathname.new('.').realpath)
     assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
-  end
-
-  def test_exists
-    assert_respond_to(@fpath, :exists?)
-    assert_nothing_raised{ @fpath.exists? }
-    assert_true(Pathname.new("C:\\").exists?)
-    assert_false(Pathname.new("X:\\foo\\bar\\baz").exists?)
   end
 
   def test_each
