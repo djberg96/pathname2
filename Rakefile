@@ -127,6 +127,12 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_root.rb"]
   end
 
+  Rake::TestTask.new(:to_a) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_to_a.rb"]
+  end
+
   Rake::TestTask.new(:undecorate) do |t|
     t.warning = true
     t.verbose = true
