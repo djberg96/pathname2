@@ -696,7 +696,7 @@ class Pathname < String
 
       PathAppendW(path, more)
 
-      path = path.read_string(path.size).delete(0.chr)
+      path = path.read_string(path.size).split("\000\000").first.delete(0.chr)
 
       return self.class.new(path) # PathAppend cleans automatically
     end
