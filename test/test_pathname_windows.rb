@@ -84,18 +84,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal(int, result)
   end
 
-  # Convenience method for test_relative_path_from
-  def assert_relpath(result, dest, base)
-    assert_equal(result, Pathname.new(dest).relative_path_from(base))
-  end
-
-  # Convenience method for test_relative_path_from_expected_errors
-  def assert_relative_path_error(to, from)
-    assert_raise(ArgumentError){
-      Pathname.new(to).relative_path_from(from)
-    }
-  end
-
   def test_file_urls
     assert_equal("C:\\Documents and Settings", @url_path)
     assert_raises(Pathname::Error){ Pathname.new('http://rubyforge.org') }
@@ -105,50 +93,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_respond_to(@fpath, :realpath)
     assert_equal(@cur_path, Pathname.new('.').realpath)
     assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
-  end
-
-  def test_relative_path_from
-    assert_relpath("..\\a", "a", "b")
-    assert_relpath("..\\a", "a", "b\\")
-    assert_relpath("..\\a", "a\\", "b")
-    assert_relpath("..\\a", "a\\", "b\\")
-    assert_relpath("..\\a", "c:\\a", "c:\\b")
-    assert_relpath("..\\a", "c:\\a", "c:\\b\\")
-    assert_relpath("..\\a", "c:\\a\\", "c:\\b")
-    assert_relpath("..\\a", "c:\\a\\", "c:\\b\\")
-
-    assert_relpath("..\\b", "a\\b", "a\\c")
-    assert_relpath("..\\a", "..\\a", "..\\b")
-
-    assert_relpath("a", "a", ".")
-    assert_relpath("..", ".", "a")
-
-    assert_relpath(".", ".", ".")
-    assert_relpath(".", "..", "..")
-    assert_relpath("..", "..", ".")
-
-    assert_relpath("c\\d", "c:\\a\\b\\c\\d", "c:\\a\\b")
-    assert_relpath("..\\..", "c:\\a\\b", "c:\\a\\b\\c\\d")
-    assert_relpath("..\\..\\..\\..\\e", "c:\\e", "c:\\a\\b\\c\\d")
-    assert_relpath("..\\b\\c", "a\\b\\c", "a\\d")
-
-    assert_relpath("..\\a", "c:\\..\\a", "c:\\b")
-    #assert_relpath("..\\..\\a", "..\\a", "b") # fails
-    assert_relpath(".", "c:\\a\\..\\..\\b", "c:\\b")
-    assert_relpath("..", "a\\..", "a")
-    assert_relpath(".", "a\\..\\b", "b")
-
-    assert_relpath("a", "a", "b\\..")
-    assert_relpath("b\\c", "b\\c", "b\\..")
-  end
-
-  def test_relative_path_from_expected_errors
-    assert_relative_path_error("c:\\", ".")
-    assert_relative_path_error(".", "c:\\")
-    assert_relative_path_error("a", "..")
-    assert_relative_path_error(".", "..")
-    assert_relative_path_error("C:\\Temp", "D:\\Temp")
-    assert_relative_path_error("\\\\Server\\Temp", "D:\\Temp")
   end
 
   # Convenience method to verify that the receiver was not modified
