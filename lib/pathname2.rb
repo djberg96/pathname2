@@ -784,9 +784,9 @@ class Pathname < String
     return self if self.empty?
 
     if @win
-      path = 0.chr * MAXPATH
-      if PathCanonicalizeW(path, self)
-        replace(path.split(0.chr).first)
+      ptr = FFI::MemoryPointer.new(:char, MAXPATH)
+      if PathCanonicalizeW(ptr, self)
+        replace(ptr.read_string(ptr.size).delete(0.chr))
       end
       return self
     end
