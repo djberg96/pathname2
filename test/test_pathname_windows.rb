@@ -87,31 +87,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
   end
 
-  # Convenience method to verify that the receiver was not modified
-  # except perhaps slashes
-  def assert_non_destructive
-    assert_equal("C:\\Program Files\\Windows NT\\Accessories", @fpath)
-    assert_equal("C:\\Program Files\\Windows NT\\Accessories", @bpath)
-    assert_equal("C:\\Program Files\\File[5].txt", @dpath)
-    assert_equal("C:\\PROGRA~1\\WINDOW~1\\ACCESS~1", @spath)
-    assert_equal("\\\\foo\\bar\\baz", @upath)
-    assert_equal("foo\\bar\\baz", @npath)
-    assert_equal("Z:\\", @rpath)
-    assert_equal("\\\\foo\\bar", @xpath)
-    assert_equal("\\\\foo", @ypath)
-    assert_equal("\\\\", @zpath)
-    assert_equal("", @epath)
-    assert_equal("C:\\foo\\bar\\", @ppath)
-    assert_equal("C:\\foo\\..\\bar\\.\\baz", @cpath)
-  end
-
-  def test_parent
-    assert_respond_to(@bpath, :parent)
-    assert_equal("C:\\Program Files\\Windows NT", @bpath.parent)
-    assert_equal("foo\\bar", @npath.parent)
-    assert_equal("Z:\\", @rpath.parent)
-  end
-
   def test_exists
     assert_respond_to(@fpath, :exists?)
     assert_nothing_raised{ @fpath.exists? }
