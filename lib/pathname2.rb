@@ -331,7 +331,12 @@ class Pathname < String
   #    Pathname.new('C:\WINNT\Fonts').to_a # => ['C:', 'WINNT', 'Fonts']
   #
   def to_a
-    array = split(@sep) # Split string by path separator
+    # Split string by path separator
+    if @win
+      array = tr(File::SEPARATOR, File::ALT_SEPARATOR).split(@sep)
+    else
+      array = split(@sep)
+    end
     array.delete("")    # Remove empty elements
     array
   end
