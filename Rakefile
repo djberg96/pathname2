@@ -103,10 +103,10 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_long_path.rb"]
   end
 
-  Rake::TestTask.new(:short_path) do |t|
+  Rake::TestTask.new(:parent) do |t|
     t.warning = true
     t.verbose = true
-    t.test_files = FileList["test/#{dir}/test_short_path.rb"]
+    t.test_files = FileList["test/#{dir}/test_parent.rb"]
   end
 
   Rake::TestTask.new(:pstrip) do |t|
@@ -131,6 +131,12 @@ namespace :test do
     t.warning = true
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_root.rb"]
+  end
+
+  Rake::TestTask.new(:short_path) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_short_path.rb"]
   end
 
   Rake::TestTask.new(:to_a) do |t|
