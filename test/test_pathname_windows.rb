@@ -275,22 +275,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal('foo\bar\baz', @npath)
   end
 
-  def test_to_a
-    expected = ["C:", "Program Files", "Windows NT", "Accessories"]
-    assert_equal(expected, @fpath.to_a)
-    assert_equal(expected, @bpath.to_a)
-    assert_equal(["foo","bar","baz"], @upath.to_a)
-    assert_equal(["foo","bar","baz"], @npath.to_a)
-    assert_equal(["Z:"], @rpath.to_a)
-    assert_equal(["foo","bar"], @xpath.to_a)
-    assert_equal(["foo"], @ypath.to_a)
-    assert_equal([], @zpath.to_a)
-    assert_equal([], @epath.to_a)
-    assert_equal(["C:", "foo", "bar"], @ppath.to_a)
-
-    assert_non_destructive
-  end
-
   def test_children
     assert_respond_to(@cur_path, :children)
     assert_nothing_raised{ @cur_path.children }
