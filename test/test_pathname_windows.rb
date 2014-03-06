@@ -68,14 +68,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal('1.6.5', Pathname::VERSION)
   end
 
-  # Convenience method for test_plus
-  def assert_pathname_plus(a, b, c)
-    a = Pathname.new(a)
-    b = Pathname.new(b)
-    c = Pathname.new(c)
-    assert_equal(a, b + c)
-  end
-
   # Convenience method for test_spaceship operator
   def assert_pathname_cmp(int, s1, s2)
     p1 = Pathname.new(s1)
@@ -189,34 +181,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_true(path.frozen?)
     assert_nothing_raised{ Pathname.new(path) }
     assert_nothing_raised{ Pathname.new(path).root }
-  end
-
-  def test_plus_operator
-    # Standard stuff
-    assert_pathname_plus("C:\\a\\b", "C:\\a", "b")
-    assert_pathname_plus("C:\\b", "a", "C:\\b")
-    assert_pathname_plus("a\\b", "a", "b")
-    assert_pathname_plus("C:\\b", "C:\\a", "..\\b")
-    assert_pathname_plus("C:\\a\\b", "C:\\a\\.", "\\b")
-    assert_pathname_plus("C:\\a\\b.txt", "C:\\a", "b.txt")
-
-    # UNC paths
-    assert_pathname_plus("\\\\foo\\bar", "\\\\foo", "bar")
-    assert_pathname_plus("\\\\foo", "\\\\", "foo")
-    assert_pathname_plus("\\\\", "\\\\", "")
-    assert_pathname_plus("\\\\foo\\baz", "\\\\foo\\bar", "\\..\\baz")
-    assert_pathname_plus("\\\\", "\\\\", "..\\..\\..\\..")
-
-    # Pathname + String
-    assert_nothing_raised{ @tpath + "bar" }
-    assert_equal('C:\foo\bar\baz', @tpath + 'baz')
-    assert_equal('C:\foo\bar', @tpath)
-
-    # Ensure neither left nor right operand are modified
-    assert_nothing_raised{ @tpath + @npath }
-    assert_equal('C:\foo\bar\foo\bar\baz', @tpath + @npath)
-    assert_equal('C:\foo\bar', @tpath)
-    assert_equal('foo\bar\baz', @npath)
   end
 
   def test_children
