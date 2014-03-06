@@ -43,6 +43,12 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/*.rb"]
   end
 
+  Rake::TestTask.new(:append) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_append.rb"]
+  end
+
   Rake::TestTask.new(:clean) do |t|
     t.warning = true
     t.verbose = true
