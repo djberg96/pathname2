@@ -375,7 +375,6 @@ class Pathname < String
   #    path[0, 3] # => 'C:\Documents and Settings\John'
   #    path[0..1] # => 'C:\Documents and Settings'
   #
-=begin
   def [](index, length=nil)
     if index.is_a?(Fixnum)
       if length
@@ -398,7 +397,6 @@ class Pathname < String
 
     path
   end
-=end
 
   # Yields each component of the path, concatenating the next component on
   # each iteration as a new Pathname object, starting with the root path.
