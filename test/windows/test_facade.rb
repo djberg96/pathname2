@@ -51,6 +51,13 @@ class TC_Pathname_Facade < Test::Unit::TestCase
     assert_respond_to(@path, :sysopen)
   end
 
+  test "exists? facade works as expected" do
+    assert_respond_to(@path, :exists?)
+    assert_nothing_raised{ @path.exists? }
+    assert_true(Pathname.new("C:\\").exists?)
+    assert_false(Pathname.new("X:\\foo\\bar\\baz").exists?)
+  end
+
   def teardown
     @path = nil
   end
