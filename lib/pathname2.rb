@@ -70,6 +70,7 @@ class Pathname < String
     ffi_lib :shlwapi
 
     attach_function :PathAppendW, [:buffer_in, :buffer_in], :bool
+    attach_function :PathCanonicalizeW, [:pointer, :buffer_in], :bool
     attach_function :PathCreateFromUrlW, [:buffer_in, :pointer, :pointer, :ulong], :long
     attach_function :PathGetDriveNumberW, [:buffer_in], :int
     attach_function :PathIsRelativeW, [:buffer_in], :bool
@@ -661,7 +662,7 @@ class Pathname < String
     end
   end
 
-  # Adds two Pathname objects together, or a Pathname and a String.  It
+  # Adds two Pathname objects together, or a Pathname and a String. It
   # also automatically cleans the Pathname.
   #
   # Adding a root path to an existing path merely replaces the current
@@ -749,9 +750,9 @@ class Pathname < String
     return self if self.empty?
 
     if @win
-      path = 0.chr * MAXPATH
-      if PathCanonicalize(path, self)
-        return self.class.new(path.split(0.chr).first)
+      ptr = FFI::MemoryPointer.new(:char, MAXPATH)
+      if PathCanonicalizeW(ptr, self.wincode)
+        return self.class.new(ptr.read_string(ptr.size).delete(0.chr))
       else
         return self
       end
@@ -784,7 +785,7 @@ class Pathname < String
 
     if @win
       path = 0.chr * MAXPATH
-      if PathCanonicalize(path, self)
+      if PathCanonicalizeW(path, self)
         replace(path.split(0.chr).first)
       end
       return self
