@@ -43,6 +43,12 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/*.rb"]
   end
 
+  Rake::TestTask.new(:clean) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_clean.rb"]
+  end
+
   Rake::TestTask.new(:drive_number) do |t|
     t.warning = true
     t.verbose = true
@@ -101,6 +107,12 @@ namespace :test do
     t.warning = true
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_pstrip_bang.rb"]
+  end
+
+  Rake::TestTask.new(:relative_path_from) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_relative_path_from.rb"]
   end
 
   Rake::TestTask.new(:root) do |t|
