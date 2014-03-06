@@ -69,7 +69,7 @@ class Pathname < String
     extend FFI::Library
     ffi_lib :shlwapi
 
-    attach_function :PathAppendW, [:buffer_in, :buffer_in], :bool
+    attach_function :PathAppendW, [:pointer, :pointer], :bool
     attach_function :PathCanonicalizeW, [:pointer, :buffer_in], :bool
     attach_function :PathCreateFromUrlW, [:buffer_in, :pointer, :pointer, :ulong], :long
     attach_function :PathGetDriveNumberW, [:buffer_in], :int
@@ -690,15 +690,15 @@ class Pathname < String
 
     # Use the builtin PathAppend() function if on Windows - much easier
     if @win
-      buf = 0.chr * MAXPATH
-      buf[0..self.length-1] = self
-      buf = buf.wincode
+      path = FFI::MemoryPointer.new(:char, MAXPATH)
+      path.write_string(self.dup.wincode)
+      more = FFI::MemoryPointer.from_string(string.wincode)
 
-      PathAppendW(buf, string)
+      PathAppendW(path, more)
 
-      buf = buf.encode('US-ASCII').split("\0").first
+      path = path.read_string(path.size).delete(0.chr)
 
-      return self.class.new(buf) # PathAppend cleans automatically
+      return self.class.new(path) # PathAppend cleans automatically
     end
 
     # If the string is an absolute directory, return it
