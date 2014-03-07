@@ -1,3 +1,8 @@
+== 1.7.0 - ???
+* Windows now uses FFI internally instead of win32-api.
+* Added a custom pretty_print method for the pp library.
+* Reorganized the test suite, and added many more test tasks to the Rakefile.
+
 == 1.6.5 - 19-Sep-2011
 * Added the String#to_path instance method. This returns a Pathname
   object.
