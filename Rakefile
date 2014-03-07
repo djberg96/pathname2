@@ -67,6 +67,12 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_clean_bang.rb"]
   end
 
+  Rake::TestTask.new(:descend) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_descend.rb"]
+  end
+
   Rake::TestTask.new(:drive_number) do |t|
     t.warning = true
     t.verbose = true
