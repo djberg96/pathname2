@@ -1,12 +1,12 @@
 # == Synopsis
 #
-# Pathname represents a path name on a filesystem.  A Pathname can be
+# Pathname represents a path name on a filesystem. A Pathname can be
 # relative or absolute.  It does not matter whether the path exists or not.
 #
 # All functionality from File, FileTest, and Dir is included, using a facade
 # pattern.
 #
-# This class works on both Unix and Windows, including UNC path names.  Note
+# This class works on both Unix and Windows, including UNC path names. Note
 # that forward slashes are converted to backslashes on Windows systems.
 #
 # == Usage
@@ -117,8 +117,7 @@ class Pathname < String
   # example, all forward slashes are replaced with backslashes.
   #
   # File URL's will be converted to Pathname objects, e.g. the file URL
-  # "file:///C:/Documents%20and%20Settings" will become
-  # 'C:\Documents and Settings'.
+  # "file:///C:/Documents%20and%20Settings" will become 'C:\Documents and Settings'.
   #
   # Examples:
   #
@@ -198,7 +197,7 @@ class Pathname < String
   # the returned pathnames will contain the filename only.
   #
   # Note that the result never contain the entries '.' and '..' in the
-  # the directory because they are not children.  Also note that this method
+  # the directory because they are not children. Also note that this method
   # is *not* recursive.
   #
   # Example:
@@ -497,7 +496,7 @@ class Pathname < String
   # Returns the root directory of the path, or '.' if there is no root
   # directory.
   #
-  # On Unix, this means the '/' character.  On Windows, this can refer
+  # On Unix, this means the '/' character. On Windows, this can refer
   # to the drive letter, or the server and share path if the path is a
   # UNC path.
   #
@@ -575,7 +574,7 @@ class Pathname < String
   end
 
   # Compares two Pathname objects.  Note that Pathnames may only be compared
-  # against other Pathnames, not strings.  Otherwise nil is returned.
+  # against other Pathnames, not strings. Otherwise nil is returned.
   #
   # Example:
   #
@@ -672,7 +671,7 @@ class Pathname < String
   # also automatically cleans the Pathname.
   #
   # Adding a root path to an existing path merely replaces the current
-  # path.  Adding '.' to an existing path does nothing.
+  # path. Adding '.' to an existing path does nothing.
   #
   # Example:
   #
