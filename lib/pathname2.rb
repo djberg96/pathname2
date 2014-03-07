@@ -29,6 +29,7 @@
 #
 require 'facade'
 require 'fileutils'
+require 'pp'
 
 if File::ALT_SEPARATOR
   require 'ffi'
@@ -50,6 +51,8 @@ Object.send(:remove_const, :Pathname) if defined?(Pathname)
 class Pathname < String
   class Error < StandardError; end
   extend Facade
+
+  undef_method :pretty_print
 
   facade File, File.methods(false).map{ |m| m.to_sym } - [
     :chmod, :lchmod, :chown, :lchown, :dirname, :fnmatch, :fnmatch?,
@@ -838,6 +841,15 @@ class Pathname < String
 
     level.times{ |n| local_path = File.dirname(local_path) }
     local_path
+  end
+
+  # A custom pretty printer
+  def pretty_print(q)
+    if File::ALT_SEPARATOR
+      q.text(self.to_s.tr(File::SEPARATOR, File::ALT_SEPARATOR))
+    else
+      q.text(self.to_s)
+    end
   end
 
   #-- Find facade
