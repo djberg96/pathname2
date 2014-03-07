@@ -75,32 +75,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_equal(["C:", "Program Files", "Windows NT", "Accessories"], array)
   end
 
-  def test_ascend
-    assert_respond_to(@bpath, :ascend)
-    assert_nothing_raised{ @bpath.ascend{} }
-
-    @bpath.ascend{ |path| @abs_array.push(path) }
-    @npath.ascend{ |path| @rel_array.push(path) }
-    @upath.ascend{ |path| @unc_array.push(path) }
-
-    assert_equal("C:\\Program Files\\Windows NT\\Accessories", @abs_array[0])
-    assert_equal("C:\\Program Files\\Windows NT", @abs_array[1])
-    assert_equal("C:\\Program Files", @abs_array[2])
-    assert_equal("C:", @abs_array[3])
-    assert_equal(4, @abs_array.length)
-
-    assert_equal("foo\\bar\\baz", @rel_array[0])
-    assert_equal("foo\\bar", @rel_array[1])
-    assert_equal("foo", @rel_array[2])
-    assert_equal(3, @rel_array.length)
-
-    assert_equal("\\\\foo\\bar\\baz", @unc_array[0])
-    assert_equal("\\\\foo\\bar", @unc_array[1])
-    assert_equal(2, @unc_array.length)
-
-    assert_non_destructive
-  end
-
   def test_immutability
     path = "C:\\Program Files\\foo\\bar".freeze
     assert_true(path.frozen?)
