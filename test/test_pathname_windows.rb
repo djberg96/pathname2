@@ -45,7 +45,7 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
   end
 
   def test_version
-    assert_equal('1.6.5', Pathname::VERSION)
+    assert_equal('1.7.0', Pathname::VERSION)
   end
 
   # Convenience method for test_spaceship operator
@@ -59,12 +59,6 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
   def test_file_urls
     assert_equal("C:\\Documents and Settings", @url_path)
     assert_raises(Pathname::Error){ Pathname.new('http://rubyforge.org') }
-  end
-
-  def test_realpath
-    assert_respond_to(@fpath, :realpath)
-    assert_equal(@cur_path, Pathname.new('.').realpath)
-    assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
   end
 
   def test_each
