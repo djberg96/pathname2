@@ -139,6 +139,12 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_pstrip_bang.rb"]
   end
 
+  Rake::TestTask.new(:realpath) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_realpath.rb"]
+  end
+
   Rake::TestTask.new(:relative_path_from) do |t|
     t.warning = true
     t.verbose = true
