@@ -61,6 +61,12 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_ascend.rb"]
   end
 
+  Rake::TestTask.new(:children) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_children.rb"]
+  end
+
   Rake::TestTask.new(:clean) do |t|
     t.warning = true
     t.verbose = true
