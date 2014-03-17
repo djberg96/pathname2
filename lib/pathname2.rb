@@ -129,7 +129,7 @@ class Pathname < String
   def initialize(path)
     if path.length > MAXPATH
       msg = "string too long.  maximum string length is " + MAXPATH.to_s
-      raise Error, msg
+      raise ArgumentError, msg
     end
 
     @sep = File::ALT_SEPARATOR || File::SEPARATOR
@@ -160,6 +160,8 @@ class Pathname < String
     end
 
     # Convert forward slashes to backslashes on Windows
+    path = path.tr(File::SEPARATOR, File::ALT_SEPARATOR) if @win
+
     super(path)
   end
 
