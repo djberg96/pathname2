@@ -40,7 +40,7 @@ namespace :test do
   Rake::TestTask.new(:all) do |t|
     t.warning = true
     t.verbose = true
-    t.test_files = FileList["test/#{dir}/*.rb"]
+    t.test_files = FileList["test/#{dir}/*.rb"] + FileList["test/test_version.rb"]
   end
 
   Rake::TestTask.new(:append) do |t|
@@ -96,6 +96,12 @@ namespace :test do
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_drive_number.rb"]
   end
+ 
+  Rake::TestTask.new(:each) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_each.rb"]
+  end
 
   Rake::TestTask.new(:facade) do |t|
     t.warning = true
@@ -131,6 +137,12 @@ namespace :test do
     t.warning = true
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_long_path.rb"]
+  end
+
+  Rake::TestTask.new(:misc) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_misc.rb"]
   end
 
   Rake::TestTask.new(:parent) do |t|
