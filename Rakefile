@@ -29,7 +29,7 @@ Rake::TestTask.new('test') do |t|
   t.verbose = true
    
   if File::ALT_SEPARATOR
-    t.test_files = FileList['test/test_pathname_windows.rb']
+    t.test_files = FileList["test/windows/*.rb"] + FileList["test/test_version.rb"]
   else
     t.test_files = FileList['test/test_pathname.rb']
   end
