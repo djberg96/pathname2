@@ -27,7 +27,7 @@ class TC_Pathname_Children < Test::Unit::TestCase
 
   test "children method returns expected results" do
     path = Pathname.new(@dir)
-    assert_equal(%w[foo/alpha foo/beta foo/gamma], path.children)
+    assert_equal(%w[foo\alpha foo\beta foo\gamma], path.children)
   end
 
   test "each result of the children method is a Pathname object" do
