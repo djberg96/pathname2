@@ -76,60 +76,12 @@ class TC_Pathname_MSWin < Test::Unit::TestCase
     assert_nothing_raised{ Pathname.new(path).root }
   end
 
-  def test_children
-    assert_respond_to(@cur_path, :children)
-    assert_nothing_raised{ @cur_path.children }
-    assert_kind_of(Array, @cur_path.children)
-
-    # Delete Eclipse related files
-    children = @cur_path.children
-    children.delete_if{ |e| File.basename(e) == "CVS" }
-    children.delete_if{ |e| File.basename(e) == ".git" }
-    children.delete_if{ |e| File.basename(e) == ".gitignore" }
-    children.delete_if{ |e| File.basename(e) == ".cvsignore" }
-    children.delete_if{ |e| File.basename(e) == ".project" }
-    children.delete_if{ |e| File.basename(e) == ".loadpath" }
-
-    assert_equal(
-      [
-        Dir.pwd + "/benchmarks",
-        Dir.pwd + "/CHANGES",
-        Dir.pwd + "/examples",
-        Dir.pwd + "/lib",
-        Dir.pwd + "/MANIFEST",
-        Dir.pwd + "/pathname2.gemspec",
-        Dir.pwd + "/Rakefile",
-        Dir.pwd + "/README",
-        Dir.pwd + "/test"
-      ].map{ |e| e.tr("/", "\\") },
-      children
-    )
-
-    # Delete Eclipse related files
-    children = @cur_path.children(false)
-    children.delete("CVS")
-    children.delete(".git")
-    children.delete(".gitignore")
-    children.delete(".cvsignore")
-    children.delete(".project")
-    children.delete(".loadpath")
-
-    assert_equal(
-      [
-        "benchmarks", "CHANGES", "examples", "lib", "MANIFEST",
-        "pathname2.gemspec", "Rakefile", "README", "test"
-      ],
-      children
-    )
-  end
-
   # Ensures that subclasses return the subclass as the class, not a hard
   # coded Pathname.
   def test_subclasses
     assert_kind_of(MyPathname, @mypath)
     assert_kind_of(MyPathname, @mypath + MyPathname.new('foo'))
     assert_kind_of(MyPathname, @mypath.realpath)
-    assert_kind_of(MyPathname, @mypath.children.first)
   end
 
   # Test to ensure that the pn{ } shortcut works
