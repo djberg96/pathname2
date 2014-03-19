@@ -27,8 +27,8 @@ class TC_Pathname_Parent < Test::Unit::TestCase
   end
 
   test "parent method returns root if already a root path" do
-    assert_equal("C:\\", Pathname.new("C:\\"))
-    assert_equal("//foo/bar", Pathname.new("//foo/bar"))
+    assert_equal("C:\\", Pathname.new("C:\\").parent)
+    assert_equal("\\\\foo\\bar", Pathname.new("//foo/bar").parent)
   end
 
   def teardown
