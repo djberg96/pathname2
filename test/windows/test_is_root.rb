@@ -33,7 +33,7 @@ class TC_Pathname_IsRoot < Test::Unit::TestCase
     str = 'C:/foo'
     path = Pathname.new(str)
     assert_nothing_raised{ path.root }
-    assert_equal('C:/foo', path.to_s)
+    assert_equal('C:\foo', path.to_s)
     assert_equal('C:/foo', str)
   end
 
