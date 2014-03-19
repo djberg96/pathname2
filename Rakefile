@@ -73,7 +73,7 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_clean.rb"]
   end
 
-  Rake::TestTask.new(:clean_bang) do |t|
+  Rake::TestTask.new(:clean!) do |t|
     t.warning = true
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_clean_bang.rb"]
@@ -199,7 +199,7 @@ namespace :test do
     t.test_files = FileList["test/#{dir}/test_undecorate.rb"]
   end
 
-  Rake::TestTask.new(:undecorate_bang) do |t|
+  Rake::TestTask.new(:undecorate!) do |t|
     t.warning = true
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_undecorate_bang.rb"]
