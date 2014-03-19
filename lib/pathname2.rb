@@ -317,14 +317,7 @@ class Pathname < String
   # Performs the substitution of Pathname#pstrip in place.
   #
   def pstrip!
-    return self if self.empty?
-
-    while ["/", "\\"].include?(self.to_s[-1].chr)
-      self.strip!
-      self.chop!
-    end
-
-    self
+    self.replace(pstrip)
   end
 
   # Splits a pathname into strings based on the path separator.
