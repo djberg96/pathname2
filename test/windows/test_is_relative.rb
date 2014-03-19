@@ -35,7 +35,7 @@ class TC_Pathname_IsRelative < Test::Unit::TestCase
     str = 'C:/foo'
     path = Pathname.new(str)
     assert_nothing_raised{ path.relative? }
-    assert_equal('C:/foo', path.to_s)
+    assert_equal('C:\foo', path.to_s)
     assert_equal('C:/foo', str)
   end
 
