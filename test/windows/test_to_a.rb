@@ -37,7 +37,7 @@ class TC_Pathname_ToA < Test::Unit::TestCase
 
   test "to_a does not modify receiver" do
     @path.to_a
-    assert_equal('C:/Program Files/foo', @path)
+    assert_equal('C:\Program Files\foo', @path)
   end
 
   def teardown
