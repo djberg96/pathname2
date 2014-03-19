@@ -6,7 +6,7 @@
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_Append < Test::Unit::TestCase
+class TC_Pathname_Aref < Test::Unit::TestCase
   def setup
     @path = Pathname.new("C:/Program Files/Windows NT/Accessories")
   end
