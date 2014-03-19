@@ -40,7 +40,7 @@ class TC_Pathname_CleanBang < Test::Unit::TestCase
   end
 
   test "clean! modifies receiver" do
-    @path.clean
+    @path.clean!
     assert_equal("C:\\foo\\bar\\baz", @path)
   end
 
