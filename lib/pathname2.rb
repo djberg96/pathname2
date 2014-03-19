@@ -599,7 +599,8 @@ class Pathname < String
   #    Pathname.new('/usr/local/bin').parent # => '/usr/local'
   #
   def parent
-   self + ".." # Use our custom '+' method
+    return self if root?
+    self + ".." # Use our custom '+' method
   end
 
   # Returns a relative path from the argument to the receiver. If +self+
