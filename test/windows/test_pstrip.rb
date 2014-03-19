@@ -18,7 +18,7 @@ class TC_Pathname_Pstrip < Test::Unit::TestCase
   end
 
   test "pstrip returns expected result for path with trailing slashes" do
-    assert_equal("C:/Program Files", @path.pstrip)
+    assert_equal("C:\\Program Files", @path.pstrip)
     assert_equal("C:\\Program Files", Pathname.new("C:\\Program Files\\\\").pstrip)
     assert_equal("C:\\Program Files", Pathname.new("C:\\Program Files//\\").pstrip)
   end
