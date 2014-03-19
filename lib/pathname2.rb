@@ -788,32 +788,7 @@ class Pathname < String
   # in place.
   #
   def clean!
-    return self if self.empty?
-
-    if @win
-      ptr = FFI::MemoryPointer.new(:char, MAXPATH)
-      if PathCanonicalizeW(ptr, self)
-        replace(ptr.read_string(ptr.size).delete(0.chr))
-      end
-      return self
-    end
-
-    final = []
-
-    to_a.each{ |element|
-      next if element == "."
-      final.push(element)
-      if element == ".." && self != ".."
-        2.times{ final.pop }
-      end
-    }
-
-    final = final.join(@sep)
-    final = root + final if root != "."
-    final = "." if final.empty?
-    replace(self.class.new(final))
-
-    self
+    self.replace(clean)
   end
 
   alias cleanpath! clean!
