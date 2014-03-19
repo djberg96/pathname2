@@ -36,7 +36,7 @@ class TC_Pathname_IsAbsolute < Test::Unit::TestCase
     str = 'C:/foo'
     path = Pathname.new(str)
     assert_nothing_raised{ path.absolute? }
-    assert_equal('C:/foo', path.to_s)
+    assert_equal('C:\foo', path.to_s)
     assert_equal('C:/foo', str)
   end
 
