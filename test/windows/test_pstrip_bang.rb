@@ -18,7 +18,7 @@ class TC_Pathname_PstripBang < Test::Unit::TestCase
   end
 
   test "pstrip! returns expected result for path with trailing slashes" do
-    assert_equal("C:/Program Files", @path.pstrip!)
+    assert_equal("C:\\Program Files", @path.pstrip!)
     assert_equal("C:\\Program Files", Pathname.new("C:\\Program Files\\\\").pstrip!)
     assert_equal("C:\\Program Files", Pathname.new("C:\\Program Files//\\").pstrip!)
   end
@@ -31,7 +31,7 @@ class TC_Pathname_PstripBang < Test::Unit::TestCase
   test "pstrip! alters pathname object" do
     path = Pathname.new('C:/Program Files////')
     assert_nothing_raised{ path.pstrip! }
-    assert_equal('C:/Program Files', path.to_s)
+    assert_equal('C:\Program Files', path.to_s)
   end
 
   test "pstrip! method does not modify original constructor argument" do
@@ -41,8 +41,6 @@ class TC_Pathname_PstripBang < Test::Unit::TestCase
   end
 
   def teardown
-    @abs_path = nil
-    @unc_path = nil
-    @rel_path = nil
+    @path = nil
   end
 end
