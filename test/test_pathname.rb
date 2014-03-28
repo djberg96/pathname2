@@ -1,17 +1,13 @@
 ##############################################################################
 # test_pathname.rb
 #
-# Test suite for the pathname package (Unix). This test suite should be run
-# via the Rake tasks, i.e. 'rake test_pr' to test the pure Ruby version, or
-# 'rake test_c' to test the C version.
+# Test suite for the pathname library on unixy platforms. This test suite
+# should be run via the test rake task.
 ##############################################################################
 require 'pathname2'
 require 'rbconfig'
-include Config
-
-require 'rubygems'
-gem 'test-unit'
-require 'test/unit'
+require 'test-unit'
+include RbConfig
 
 class MyPathname < Pathname; end
 
@@ -72,7 +68,7 @@ class TC_Pathname < Test::Unit::TestCase
   end
 
   def test_version
-    assert_equal('1.6.5', Pathname::VERSION)
+    assert_equal('1.7.0', Pathname::VERSION)
   end
 
   def test_file_url_path
@@ -222,11 +218,12 @@ class TC_Pathname < Test::Unit::TestCase
     assert_nothing_raised{ @cur_path.children }
     assert_kind_of(Array, @cur_path.children)
 
-    children = @cur_path.children.sort.reject{ |f| f.include?('CVS') }
+    children = @cur_path.children.sort.reject{ |f| f.include?('git') || f.include?('.swp') }
     assert_equal(
        [
           Dir.pwd + '/test_pathname.rb',
-          Dir.pwd + '/test_pathname_windows.rb'
+          Dir.pwd + '/test_version.rb',
+          Dir.pwd + '/windows'
        ],
        children.sort
     )
@@ -235,8 +232,8 @@ class TC_Pathname < Test::Unit::TestCase
   def test_children_without_directory
     assert_nothing_raised{ @cur_path.children(false) }
 
-    children = @cur_path.children(false).reject{ |f| f.include?('CVS') }
-    assert_equal(['test_pathname.rb', 'test_pathname_windows.rb'], children.sort)
+    children = @cur_path.children(false).reject{ |f| f.include?('git') || f.include?('.swp') }
+    assert_equal(['test_pathname.rb', 'test_version.rb', 'windows'], children.sort)
   end
 
   def test_unc
@@ -416,8 +413,12 @@ class TC_Pathname < Test::Unit::TestCase
     methods = FileUtils.public_instance_methods
     methods -= File.methods(false)
     methods -= Dir.methods(false)
-    methods.delete_if{ |m| m =~ /stream/ }
-    methods.delete('identical?')
+    methods.delete_if{ |m| m.to_s =~ /stream/ }
+    methods.delete(:identical?)
+    methods.delete(:sh)
+    methods.delete(:ruby)
+    methods.delete(:safe_ln)
+    methods.delete(:split_all)
 
     methods.each{ |method|
       assert_respond_to(@abs_path, method.to_sym)
