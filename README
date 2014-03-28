@@ -2,8 +2,9 @@
   A drop-in replacement for the current Pathname class.
 
 == Prerequisites
-  * facade 1.0.4 or later
-  * windows-pr 1.1.2 or later (Windows only)
+  * facade
+  * ffi
+  * test-unit (testing only)
    
 == Installation
 
@@ -76,9 +77,7 @@
   supposed to be private. See ruby-core:7383.
    
   Any other issues should be reported on the project page at
-  http://www.rubyforge.org/projects/shards
-
-  The git repo itself is located at https://github.com/djberg96/pathname2
+  https://github.com/djberg96/pathname2
 
 == Future Plans
   Suggestions welcome.
@@ -87,7 +86,7 @@
   Artistic 2.0
    
 == Copyright
-  (C) 2003-2011 Daniel J. Berger
+  (C) 2003-2014 Daniel J. Berger
   All rights reserved.
 
 == Warranty
