@@ -67,10 +67,6 @@ class TC_Pathname < Test::Unit::TestCase
     }
   end
 
-  def test_version
-    assert_equal('1.7.0', Pathname::VERSION)
-  end
-
   def test_file_url_path
     assert_equal('/foo bar/baz', @url_path)
   end
