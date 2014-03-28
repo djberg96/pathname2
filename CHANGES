@@ -1,6 +1,6 @@
 == 1.7.1 - 28-Mar-2014
 * Updated gemspec for Windows vs Unix.
-* Updated README.
+* Updated README and MANIFEST.
 
 == 1.7.0 - 28-Mar-2014
 * Windows now uses FFI internally instead of win32-api.
