@@ -3,7 +3,7 @@
 
 == Prerequisites
   * facade
-  * ffi
+  * ffi (Windows only)
   * test-unit (testing only)
    
 == Installation
