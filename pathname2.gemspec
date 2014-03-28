@@ -16,6 +16,13 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('test-unit')
   spec.add_development_dependency('rake')
 
+  if File::ALT_SEPARATOR
+    spec.add_dependency('ffi')
+    spec.test_files = FileList['test/windows/*.rb', 'test/test_version.rb']
+  else
+    spec.test_files = FileList['test/test_pathname.rb', 'test/test_version.rb']
+  end
+
   spec.description = <<-EOF
     The pathname2 library provides an implementation of the Pathname
     class different from the one that ships as part of the Ruby standard
