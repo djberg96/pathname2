@@ -8,6 +8,6 @@ require 'test-unit'
 
 class TC_Pathname_Version < Test::Unit::TestCase
   test "version is set to expected value" do
-    assert_equal('1.7.0', Pathname::VERSION)
+    assert_equal('1.7.1', Pathname::VERSION)
   end
 end
