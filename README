@@ -14,8 +14,8 @@
   require 'pathname2'
 
   # Unix
-  path1 = "/foo/bar/baz"
-  path2 = "../zap"
+  path1 = Pathname.new("/foo/bar/baz")
+  path2 = Pathname.new("../zap")
 
   path1 + path2 # "/foo/bar/zap"
   path1 / path2 # "/foo/bar/zap" (same as +)
@@ -24,8 +24,8 @@
   path1.to_a    # ['foo','bar','baz']
 
   # Windows
-  path1 = "C:/foo/bar/baz"
-  path2 = "../zap"
+  path1 = Pathname.new("C:/foo/bar/baz")
+  path2 = Pathname.new("../zap")
 
   path1 + path2 # "C:\\foo\\bar\\zap"
   path1.root    # "C:\\"
