@@ -132,6 +132,12 @@ namespace :test do
     t.verbose = true
     t.test_files = FileList["test/#{dir}/test_is_unc.rb"]
   end
+
+  Rake::TestTask.new(:join) do |t|
+    t.warning = true
+    t.verbose = true
+    t.test_files = FileList["test/#{dir}/test_join.rb"]
+  end
  
   Rake::TestTask.new(:long_path) do |t|
     t.warning = true
