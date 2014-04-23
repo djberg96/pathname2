@@ -6,7 +6,7 @@
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_Append < Test::Unit::TestCase
+class TC_Pathname_Join < Test::Unit::TestCase
   def setup
     @apath = Pathname.new("C:\\foo\\bar")
     @rpath = Pathname.new("foo\\bar\\baz")
