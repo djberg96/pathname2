@@ -992,7 +992,7 @@ class Pathname < String
 
   # File.expand_path
   def expand_path(*args)
-    File.expand_path(self, *args)
+    self.class.new(File.expand_path(self, *args))
   end
 
   #--
