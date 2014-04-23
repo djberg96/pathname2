@@ -93,7 +93,7 @@ class Pathname < String
   public
 
   # The version of the pathname2 library
-  VERSION = '1.7.1'
+  VERSION = '1.7.2'
 
   # The maximum length of a path
   MAXPATH = 1024 unless defined? MAXPATH # Yes, I willfully violate POSIX
@@ -813,6 +813,26 @@ class Pathname < String
     local_path
   end
 
+  # Joins the given pathnames onto +self+ to create a new Pathname object.
+  #
+  #  path = Pathname.new("C:/Users")
+  #  path = path.join("foo", "Downloads") # => C:/Users/foo/Downloads
+  #
+  def join(*args)
+    args.unshift self
+    result = args.pop
+    result = self.class.new(result) unless result === self.class
+    return result if result.absolute?
+
+    args.reverse_each{ |path|
+      path = self.class.new(path) unless path === self.class
+      result = path + result
+      break if result.absolute?
+    }
+
+    result
+  end
+
   # A custom pretty printer
   def pretty_print(q)
     if File::ALT_SEPARATOR
@@ -973,11 +993,6 @@ class Pathname < String
   # File.expand_path
   def expand_path(*args)
     File.expand_path(self, *args)
-  end
-
-  # File.join
-  def join(*args)
-    File.join(self, *args)
   end
 
   #--
