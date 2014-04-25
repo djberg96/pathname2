@@ -1,3 +1,6 @@
+== 1.7.3 - 24-Apr-2014
+* The basename and dirname methods now return Pathname objects.
+
 == 1.7.2 - 23-Apr-2014
 * The join and expand_path methods now return Pathname objects.
 
