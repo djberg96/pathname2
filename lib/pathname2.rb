@@ -810,7 +810,7 @@ class Pathname < String
     local_path = self.dup
 
     level.times{ |n| local_path = File.dirname(local_path) }
-    local_path
+    self.class.new(local_path)
   end
 
   # Joins the given pathnames onto +self+ to create a new Pathname object.
@@ -987,7 +987,7 @@ class Pathname < String
 
   # File.basename
   def basename(*args)
-    File.basename(self, *args)
+    self.class.new(File.basename(self, *args))
   end
 
   # File.expand_path
