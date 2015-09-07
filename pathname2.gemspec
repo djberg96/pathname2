@@ -2,13 +2,14 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name        = 'pathname2'
-  spec.version     = '1.7.3'
+  spec.version     = '1.7.4'
   spec.author      = 'Daniel J. Berger'
   spec.license     = 'Artistic 2.0'
   spec.email       = 'djberg96@gmail.com'
   spec.homepage    = 'https://github.com/djberg96/pathname2'
   spec.summary     = 'An alternate implementation of the Pathname class'
   spec.files       = Dir['**/*'].reject{ |f| f.include?('git') }
+  spec.cert_chain  = ['certs/djberg96_pub.pem']
 
   spec.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
 
