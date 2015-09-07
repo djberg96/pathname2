@@ -1,3 +1,7 @@
+== 1.7.4 - ???
+* This gem is now signed.
+* Rakefile now assumes Rubygems 2.x for some tasks.
+
 == 1.7.3 - 24-Apr-2014
 * The basename and dirname methods now return Pathname objects.
 
