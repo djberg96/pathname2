@@ -5,6 +5,7 @@
 # should be run via the test rake task.
 ##############################################################################
 require 'pathname2'
+require 'fileutils'
 require 'rbconfig'
 require 'test-unit'
 include RbConfig
@@ -30,6 +31,10 @@ class TC_Pathname < Test::Unit::TestCase
     @rel_array = []
 
     @mypath = MyPathname.new('/usr/bin')
+
+    @test_file  = 'realpath_test.txt'
+    @link_file  = 'realpath_symlink.txt'
+    @link_file2 = 'realpath_symlink2.txt'
   end
 
   # Convenience method to verify that the receiver was not modified
@@ -62,41 +67,30 @@ class TC_Pathname < Test::Unit::TestCase
 
   # Convenience method for test_relative_path_from_expected_errors
   def assert_relpath_err(to, from)
-    assert_raise(ArgumentError) {
-      Pathname.new(to).relative_path_from(from)
-    }
+    assert_raise(ArgumentError) { Pathname.new(to).relative_path_from(from) }
   end
 
-  def test_file_url_path
+  test "url_path returns expected result" do
     assert_equal('/foo bar/baz', @url_path)
   end
 
-  def test_realpath
+  test "realpath basic functionality" do
+    FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file)
     assert_respond_to(@abs_path, :realpath)
     assert_equal(@@pwd, Pathname.new('.').realpath)
-    assert_kind_of(Pathname, Pathname.new('/dev/stdin').realpath)
-    assert(Pathname.new('/dev/stdin') != Pathname.new('/dev/stdin').realpath)
-    if CONFIG['host_os'] =~ /bsd|darwin|mac/i
-      assert_raises(Errno::ENOENT){ Pathname.new('../blahblah/bogus').realpath }
-    else
-      assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
-    end
+    assert_kind_of(Pathname, Pathname.new(@link_file).realpath)
   end
 
-  def test_realpath_platform
-    case CONFIG['host_os']
-      when /linux/i
-        path1 = '/dev/stdin'
-        assert_true(['/dev/pts/0', '/dev/proc/self/fd/0'].include?(Pathname.new(path1).realpath))
-      when /sunos|solaris/i
-        path1 = '/dev/null'
-        path2 = '/dev/stdin'
-        path3 = '/dev/fd0'   # Multiple symlinks
+  test "realpath returns expected result for simple symlink" do
+    FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file)
+    assert_true(Pathname.new(@link_file) != Pathname.new(@link_file).realpath)
+    assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
+  end
 
-        assert_equal('/devices/pseudo/mm@0:null', Pathname.new(path1).realpath)
-        assert_equal('/dev/fd/0', Pathname.new(path2).realpath)
-        assert_equal('/devices/pci@1f,0/isa@7/dma@0,0/floppy@0,3f0:c', Pathname.new(path3).realpath)
-    end
+  test "realpath returns expected result for nested symlink" do
+    FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file) && File.symlink(@link_file, @link_file2)
+    assert_true(Pathname.new(@link_file) != Pathname.new(@link_file2).realpath)
+    assert_equal(Pathname.new(@link_file).realpath, Pathname.new(@link_file2).realpath)
   end
 
   # These tests taken directly from Tanaka's pathname.rb. The one failure
@@ -476,6 +470,14 @@ class TC_Pathname < Test::Unit::TestCase
     @mypath = nil
     @abs_array.clear
     @rel_array.clear
+
+    File.delete(@link_file2) if File.exist?(@link_file2)
+    File.delete(@link_file) if File.exist?(@link_file)
+    File.delete(@test_file) if File.exist?(@test_file)
+
+    @link_file2 = nil
+    @link_file  = nil
+    @test_file  = nil
   end
 
   def self.shutdown
