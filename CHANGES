@@ -1,3 +1,7 @@
+== 1.8.0 - 19-Jun-2016
+* Changed license to Apache 2.0.
+* Some cleanup and updates to the Rakefile and benchmarks.
+
 == 1.7.4 - 7-Sep-2015
 * This gem is now signed.
 * Rakefile now assumes Rubygems 2.x for some tasks.
