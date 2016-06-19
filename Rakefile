@@ -10,7 +10,7 @@ namespace :gem do
     require 'rubygems/package'
     spec = eval(IO.read('pathname2.gemspec'))
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
-    Gem::Package.build(spec)
+    Gem::Package.build(spec, true)
   end
 
   desc "Install the pathname2 gem"
