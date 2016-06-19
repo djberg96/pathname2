@@ -1,6 +1,9 @@
 == 1.8.0 - 19-Jun-2016
 * Changed license to Apache 2.0.
 * Some cleanup and updates to the Rakefile and benchmarks.
+* Refactored some realpath tests so they're not touching system files like
+  /dev/stdin any more. Thanks go to Michael R. Crusoe for pointing out the
+  potential pitfalls of doing that.
 
 == 1.7.4 - 7-Sep-2015
 * This gem is now signed.
