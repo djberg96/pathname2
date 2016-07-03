@@ -23,7 +23,7 @@ else
    path4 = Pathname.new("/dev/stdin")
 end
 
-MAX = 10000
+MAX = 100000
 
 Benchmark.bm(25) do |bench|
   bench.report("Pathname.new(path)"){
