@@ -103,7 +103,7 @@
   instead of the pure Ruby version instead.  See the README for more details.
 * Fixed bug in the root method where the result wasn't guaranteed to be a
   Pathname class.
-* Fixed bugs in Windows version where the receiver was inadvertantly modified
+* Fixed bugs in Windows version where the receiver was inadvertently modified
   in some cases, and added tests to check for this in the future.
 * Modified the Dir.glob facade so that it (temporarily) changes to the path
   directory, globs on that path, then returns to the original directory.
