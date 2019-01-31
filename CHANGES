@@ -1,4 +1,5 @@
 == 1.8.1 - 31-Jan-2019
+* The VERSION constant is now frozen.
 * Added metadata to the gemspec.
 * Fixed missing hyphen in license name.
 * Updated cert, should be good for about 10 years.
