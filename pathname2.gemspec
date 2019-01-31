@@ -2,9 +2,9 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name        = 'pathname2'
-  spec.version     = '1.8.0'
+  spec.version     = '1.8.1'
   spec.author      = 'Daniel J. Berger'
-  spec.license     = 'Apache 2.0'
+  spec.license     = 'Apache-2.0'
   spec.email       = 'djberg96@gmail.com'
   spec.homepage    = 'https://github.com/djberg96/pathname2'
   spec.summary     = 'An alternate implementation of the Pathname class'
@@ -16,6 +16,15 @@ Gem::Specification.new do |spec|
   spec.add_dependency('facade')
   spec.add_development_dependency('test-unit')
   spec.add_development_dependency('rake')
+
+  spec.metadata = {
+    'homepage_uri'      => 'https://github.com/djberg96/pathname2',
+    'bug_tracker_uri'   => 'https://github.com/djberg96/pathname2/issues',
+    'changelog_uri'     => 'https://github.com/djberg96/pathname2/blob/ffi/CHANGES',
+    'documentation_uri' => 'https://github.com/djberg96/pathname2/wiki',
+    'source_code_uri'   => 'https://github.com/djberg96/pathname2',
+    'wiki_uri'          => 'https://github.com/djberg96/pathname2/wiki'
+  }
 
   if File::ALT_SEPARATOR
     spec.add_dependency('ffi')

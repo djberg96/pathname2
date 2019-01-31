@@ -1,3 +1,9 @@
+== 1.8.1 - 31-Jan-2019
+* The VERSION constant is now frozen.
+* Added metadata to the gemspec.
+* Fixed missing hyphen in license name.
+* Updated cert, should be good for about 10 years.
+
 == 1.8.0 - 19-Jun-2016
 * Changed license to Apache 2.0.
 * Some cleanup and updates to the Rakefile and benchmarks.
