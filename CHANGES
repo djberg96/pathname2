@@ -1,3 +1,6 @@
+== 1.8.2 - 21-Jul-2020
+* Added a LICENSE file as required by the Apache-2.0 license.
+
 == 1.8.1 - 31-Jan-2019
 * The VERSION constant is now frozen.
 * Added metadata to the gemspec.
@@ -5,7 +8,7 @@
 * Updated cert, should be good for about 10 years.
 
 == 1.8.0 - 19-Jun-2016
-* Changed license to Apache 2.0.
+* Changed license to Apache-2.0.
 * Some cleanup and updates to the Rakefile and benchmarks.
 * Refactored some realpath tests so they're not touching system files like
   /dev/stdin any more. Thanks go to Michael R. Crusoe for pointing out the
