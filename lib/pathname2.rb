@@ -93,7 +93,7 @@ class Pathname < String
   public
 
   # The version of the pathname2 library
-  VERSION = '1.8.1'.freeze
+  VERSION = '1.8.2'.freeze
 
   # The maximum length of a path
   MAXPATH = 1024 unless defined? MAXPATH # Yes, I willfully violate POSIX
