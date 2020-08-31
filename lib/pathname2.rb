@@ -373,7 +373,7 @@ class Pathname < String
   #    path[0..1] # => 'C:\Documents and Settings'
   #
   def [](index, length=nil)
-    if index.is_a?(Fixnum)
+    if index.is_a?(Numeric)
       if length
         path = File.join(to_a[index, length])
       else
@@ -385,7 +385,7 @@ class Pathname < String
       end
       path = File.join(to_a[index])
     else
-      raise TypeError, "Only Fixnums and Ranges allowed as first argument"
+      raise TypeError, "Only Numerics and Ranges allowed as first argument"
     end
 
     if path && @win
