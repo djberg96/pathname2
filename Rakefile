@@ -1,6 +1,6 @@
 require 'rake'
 require 'rake/clean'
-require 'rake/testtask'
+require 'rspec/core/rake_task'
 
 CLEAN.include("**/*.gem", "**/*.rbc")
 
@@ -20,18 +20,13 @@ namespace :gem do
   end
 end
 
-desc 'Run the test suite for the pure Ruby version'
-Rake::TestTask.new('test') do |t|
-  t.warning = true
-  t.verbose = true
-   
-  if File::ALT_SEPARATOR
-    t.test_files = FileList["test/windows/*.rb"] + FileList["test/test_version.rb"]
-  else
-    t.test_files = FileList['test/test_pathname.rb']
-  end
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = ['spec/**/*_spec.rb']
 end
 
+task :default => :spec
+
+=begin
 namespace :test do
   dir = File::ALT_SEPARATOR ? "windows" : "unix"
   Rake::TestTask.new(:all) do |t|
@@ -218,5 +213,4 @@ desc 'Run the benchmark suite for Pathname#+ vs File.join'
 task :benchmark_plus do
   sh 'ruby -Ilib benchmarks/bench_plus.rb'
 end
-
-task :default => :test
+=end
