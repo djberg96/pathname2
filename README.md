@@ -43,22 +43,22 @@ All forward slashes are converted to backslashes for Pathname objects.
 
 ## Differences between Pathname in the standard library and this version
 * It is a subclass of String (and thus, mixes in Enumerable).
-* It has sensical to_a and root instance methods.
-* It works on Windows and Unix.  The current implementation does not work
+* It has sensical `to_a` and `root` instance methods.
+* It works on Windows and Unix. The current implementation does not work
   with Windows path names very well, and not at all when it comes to UNC
   paths.
-* The Pathname#cleanpath method works differently - it always returns
-  a canonical pathname.  In addition, there is no special consideration
+* The `Pathname#cleanpath` method works differently - it always returns
+  a canonical pathname. In addition, there is no special consideration
   for symlinks (yet), though I'm not sure it warrants it.
-* The Pathname#+ method auto cleans.
+* The `Pathname#+` method auto cleans.
 * It uses a facade for all File and Dir methods, as well as most FileUtils
   methods.
-* Pathname#clean works slightly differently.  In the stdlib version,
-  Pathname#clean("../a") returns "../a".  In this version, it returns "a".
-  This affects other methods, such as Pathname#relative_path_from.
+* `Pathname#clean` works slightly differently. In the stdlib version,
+  `Pathname#clean("../a")` returns "../a". In this version, it returns "a".
+  This affects other methods, such as `Pathname#relative_path_from`.
 * Accepts file urls and converts them to paths automatically, e.g.
   file:///foo%20bar/baz becomes '/foo/bar/baz'.
-* Adds a Kernel level +pn+ method as a shortcut.
+* Adds a Kernel level `pn` method as a shortcut.
 * Allows you to add paths together with the '/' operator.
      
 ## Method Priority
