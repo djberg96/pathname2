@@ -17,35 +17,40 @@ RSpec.describe Pathname, :unix => true, :append => true do
   end
 
   example "appending a relative path to an absolute path works as expected" do
-    expect(described_class.new("/a") + "b").to eq("/a/b")
+    expect(described_class.new("/foo") + "bar").to eq("/foo/bar")
   end
 
   example "appending an absolute path to a relative path works as expected" do
-    expect(described_class.new("a") + "/b").to eq("/b")
+    expect(described_class.new("foo") + "/bar").to eq("/bar")
   end
 
   example "appending a relative path to a relative path works as expected" do
+    expect(described_class.new("foo") + "bar").to eq("foo/bar")
   end
 
-    #expect_pathname_plus("a\\b", "a", "b")
-    #expect_pathname_plus("C:\\b", "C:\\a", "..\\b")
-    #expect_pathname_plus("C:\\a\\b", "C:\\a\\.", "\\b")
-    #expect_pathname_plus("C:\\a\\b.txt", "C:\\a", "b.txt")
+  example "appending a '.' to a path works as expected" do
+    expect(described_class.new("foo") + ".").to eq("foo")
+    expect(described_class.new("/foo") + ".").to eq("/foo")
+  end
+
+  example "appending a path with a '.' works as expected" do
+    expect(described_class.new(".") + "foo").to eq("foo")
+    expect(described_class.new(".") + "/foo").to eq("/foo")
+  end
+
+  example "appending a '..' to a path works as expected" do
+    expect(described_class.new("foo/bar") + "..").to eq("foo")
+    expect(described_class.new("foo/bar") + "../zap").to eq("foo/zap")
+    expect(described_class.new("/") + "../foo").to eq("/foo")
+    expect(described_class.new("foo") + "..").to eq(".")
+  end
+
+  example "appending a path with a '..' works as expected" do
+    expect(described_class.new("..") + "foo").to eq("foo")
+    expect(described_class.new("..") + "../foo").to eq("foo")
+  end
 
 =begin
-    # Standard stuff
-    assert_pathname_plus('/foo/bar', '/foo', 'bar')
-    assert_pathname_plus('foo/bar', 'foo', 'bar')
-    assert_pathname_plus('foo', 'foo', '.')
-    assert_pathname_plus('foo', '.', 'foo')
-    assert_pathname_plus('/foo', 'bar', '/foo')
-    assert_pathname_plus('foo', 'foo/bar', '..')
-    assert_pathname_plus('/foo', '/', '../foo')
-    assert_pathname_plus('foo/zap', 'foo/bar', '../zap')
-    assert_pathname_plus('.', 'foo', '..')
-    assert_pathname_plus('foo', '..', 'foo')     # Auto clean
-    assert_pathname_plus('foo', '..', '../foo')  # Auto clean
-
     # Edge cases
     assert_pathname_plus('.', '.', '.')
     assert_pathname_plus('/', '/', '..')
