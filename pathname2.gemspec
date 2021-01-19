@@ -11,8 +11,6 @@ Gem::Specification.new do |spec|
   spec.files       = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain  = ['certs/djberg96_pub.pem']
 
-  spec.extra_rdoc_files  = ['README', 'CHANGES', 'MANIFEST']
-
   spec.add_dependency('facade')
   spec.add_development_dependency('test-unit')
   spec.add_development_dependency('rake')
@@ -20,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.metadata = {
     'homepage_uri'      => 'https://github.com/djberg96/pathname2',
     'bug_tracker_uri'   => 'https://github.com/djberg96/pathname2/issues',
-    'changelog_uri'     => 'https://github.com/djberg96/pathname2/blob/ffi/CHANGES',
+    'changelog_uri'     => 'https://github.com/djberg96/pathname2/blob/ffi/CHANGES.md',
     'documentation_uri' => 'https://github.com/djberg96/pathname2/wiki',
     'source_code_uri'   => 'https://github.com/djberg96/pathname2',
     'wiki_uri'          => 'https://github.com/djberg96/pathname2/wiki'
