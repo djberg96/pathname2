@@ -1,8 +1,9 @@
-* CHANGES
+* CHANGES.md
+* Gemfile
 * LICENSE
-* MANIFEST
+* MANIFEST.md
 * Rakefile
-* README
+* README.md
 * pathname2.gempsec
 * benchmarks/bench_all.rb
 * benchmarks/bench_plus.rb
