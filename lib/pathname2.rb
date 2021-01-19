@@ -64,9 +64,9 @@ class Pathname < String
     :chdir, :entries, :glob, :foreach, :mkdir, :open, :children
   ]
 
-  private
-
   alias :_plus_ :+ # Used to prevent infinite loops in some cases
+
+  protected :_plus_
 
   if File::ALT_SEPARATOR
     extend FFI::Library
@@ -88,12 +88,17 @@ class Pathname < String
 
     attach_function :GetLongPathNameW, [:buffer_in, :buffer_out, :ulong], :ulong
     attach_function :GetShortPathNameW, [:buffer_in, :pointer, :ulong], :ulong
+
+    private_class_method :PathAppendW, :PathCanonicalizeW, :PathCreateFromUrlW
+    private_class_method :PathGetDriveNumberW, :PathIsRelativeW, :PathIsRelativeW
+    private_class_method :PathIsRootW, :PathIsUNCW, :PathIsURLW, :PathRemoveBackslashW
+    private_class_method :PathStripToRootW, :PathUndecorateW, :GetLongPathNameW, :GetShortPathNameW
   end
 
   public
 
   # The version of the pathname2 library
-  VERSION = '1.8.3'.freeze
+  VERSION = '1.8.4'.freeze
 
   # The maximum length of a path
   MAXPATH = 1024 unless defined? MAXPATH # Yes, I willfully violate POSIX
@@ -809,7 +814,7 @@ class Pathname < String
     raise ArgumentError if level < 0
     local_path = self.dup
 
-    level.times{ |n| local_path = File.dirname(local_path) }
+    level.times{ local_path = File.dirname(local_path) }
     self.class.new(local_path)
   end
 
@@ -854,8 +859,8 @@ class Pathname < String
   # If +self+ is ".", yielded pathnames begin with a filename in the current
   # current directory, not ".".
   #
-  def find(&block)
-    require "find"
+  def find
+    require 'find'
     if self == "."
       Find.find(self){ |f| yield self.class.new(f.sub(%r{\A\./}, '')) }
     else
@@ -1119,11 +1124,13 @@ module Kernel
     instance_eval{ Pathname.new(yield) }
   end
 
+  # rubocop:disable Lint/ShadowedException
   begin
     remove_method(:Pathname)
   rescue NoMethodError, NameError
     # Do nothing, not defined.
   end
+  # rubocop:enable Lint/ShadowedException
 
   # Synonym for Pathname.new
   #

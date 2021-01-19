@@ -28,10 +28,10 @@ Gem::Specification.new do |spec|
 
   if File::ALT_SEPARATOR
     spec.add_dependency('ffi')
-    spec.test_files = FileList['test/windows/*.rb', 'test/test_version.rb']
+    spec.test_files = Dir['test/windows/*.rb', 'test/test_version.rb']
     spec.platform = Gem::Platform.new(['universal', 'mingw32'])
   else
-    spec.test_files = FileList['test/test_pathname.rb', 'test/test_version.rb']
+    spec.test_files = Dir['test/test_pathname.rb', 'test/test_version.rb']
   end
 
   spec.description = <<-EOF
