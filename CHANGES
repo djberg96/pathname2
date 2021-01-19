@@ -1,3 +1,8 @@
+== 1.8.4 - 19-Jan-2021
+* Cleaned up the Rubocop warnings.
+* Added a Gemfile.
+* Some minor updates to the gemspec and Rakefile.
+
 == 1.8.3 - 30-Aug-2020
 * Updated the tests to match the version. Thanks go to Cédric Boutillier for the spot.
 * Fixed a redefinition warning for the :children method.
