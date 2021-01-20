@@ -50,18 +50,18 @@ RSpec.describe Pathname, :unix => true, :append => true do
     expect(described_class.new("..") + "../foo").to eq("foo")
   end
 
-=begin
-    # Edge cases
-    assert_pathname_plus('.', '.', '.')
-    assert_pathname_plus('/', '/', '..')
-    assert_pathname_plus('.', '..',  '..')
-    assert_pathname_plus('.', 'foo', '..')
-
-    # Alias
-    assert_equal('/foo/bar', Pathname.new('/foo') / Pathname.new('bar'))
+  example "appending '.' and '..' works as expected" do
+    expect(described_class.new('.') + '.').to eq('.')
+    expect(described_class.new('/') + '..').to eq('/')
+    expect(described_class.new('..') + '..').to eq('.')
+    expect(described_class.new('foo') + '..').to eq('.')
   end
 
+  example "the '/' method is an alias for '+'" do
+    expect(described_class.instance_method(:+)).to eq(described_class.instance_method(:/))
+  end
 
+=begin
   example "appending a string to a UNC path works as expected" do
     expect_pathname_plus("\\\\foo\\bar", "\\\\foo", "bar")
     expect_pathname_plus("\\\\foo", "\\\\", "foo")
