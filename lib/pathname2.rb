@@ -133,7 +133,7 @@ class Pathname < String
   #
   def initialize(path)
     if path.length > MAXPATH
-      msg = "string too long.  maximum string length is " + MAXPATH.to_s
+      msg = 'string too long.  maximum string length is ' + MAXPATH.to_s
       raise ArgumentError, msg
     end
 
@@ -238,7 +238,7 @@ class Pathname < String
   #
   def undecorate
     unless @win
-      raise NotImplementedError, "not supported on this platform"
+      raise NotImplementedError, 'not supported on this platform'
     end
 
     wpath = FFI::MemoryPointer.from_string(wincode)
@@ -266,7 +266,7 @@ class Pathname < String
   #    path.short_path # => C:\Progra~1\Java.
   #
   def short_path
-    raise NotImplementedError, "not supported on this platform" unless @win
+    raise NotImplementedError, 'not supported on this platform' unless @win
 
     buf = FFI::MemoryPointer.new(:char, MAXPATH)
     wpath = wincode
@@ -288,7 +288,7 @@ class Pathname < String
   #    path.long_path # => C:\Program Files\Java.
   #
   def long_path
-    raise NotImplementedError, "not supported on this platform" unless @win
+    raise NotImplementedError, 'not supported on this platform' unless @win
 
     buf = FFI::MemoryPointer.new(:char, MAXPATH)
     wpath = wincode
@@ -311,7 +311,7 @@ class Pathname < String
     str = dup
     return str if str.empty?
 
-    while ["/", "\\"].include?(str.to_s[-1].chr)
+    while [File::SEPARATOR, File::ALT_SEPARATOR].include?(str.to_s[-1].chr)
       str.strip!
       str.chop!
     end
@@ -339,7 +339,7 @@ class Pathname < String
     else
       array = split(@sep)
     end
-    array.delete("")    # Remove empty elements
+    array.delete('')    # Remove empty elements
     array
   end
 
@@ -390,11 +390,11 @@ class Pathname < String
       end
       path = File.join(to_a[index])
     else
-      raise TypeError, "Only Numerics and Ranges allowed as first argument"
+      raise TypeError, 'Only Numerics and Ranges allowed as first argument'
     end
 
     if path && @win
-      path = path.tr("/", "\\")
+      path = path.tr(File::SEPARATOR, File::ALT_SEPARATOR)
     end
 
     path
@@ -423,9 +423,9 @@ class Pathname < String
     end
 
     if @win
-      path = unc? ? "#{root}\\" : ""
+      path = unc? ? "#{root}\\" : ''
     else
-      path = absolute? ? root : ""
+      path = absolute? ? root : ''
     end
 
     # Yield the root directory if an absolute path (and not Windows)
@@ -511,7 +511,7 @@ class Pathname < String
   #    Pathname.new('\\some\share\foo').root # => '\\some\share'
   #
   def root
-    dir = "."
+    dir = '.'
 
     if @win
       wpath = FFI::MemoryPointer.from_string(wincode)
@@ -519,7 +519,7 @@ class Pathname < String
         dir = wpath.read_string(wpath.size).split("\000\000").first.tr(0.chr, '')
       end
     else
-      dir = "/" if self =~ /^\//
+      dir = '/' if self =~ /^\//
     end
 
     self.class.new(dir)
@@ -551,7 +551,7 @@ class Pathname < String
   #    Pathname.new('C:\Program Files').unc? # => false
   #
   def unc?
-    raise NotImplementedError, "not supported on this platform" unless @win
+    raise NotImplementedError, 'not supported on this platform' unless @win
     PathIsUNCW(wincode)
   end
 
@@ -566,7 +566,7 @@ class Pathname < String
   #
   def drive_number
     unless @win
-      raise NotImplementedError, "not supported on this platform"
+      raise NotImplementedError, 'not supported on this platform'
     end
 
     num = PathGetDriveNumberW(wincode)
@@ -598,7 +598,7 @@ class Pathname < String
   #
   def parent
     return self if root?
-    self + ".." # Use our custom '+' method
+    self + '..' # Use our custom '+' method
   end
 
   # Returns a relative path from the argument to the receiver. If +self+
@@ -624,11 +624,11 @@ class Pathname < String
     base = self.class.new(base) unless base.kind_of?(Pathname)
 
     if absolute? != base.absolute?
-      raise ArgumentError, "relative path between absolute and relative path"
+      raise ArgumentError, 'relative path between absolute and relative path'
     end
 
-    return self.class.new(".") if self == base
-    return self if base == "."
+    return self.class.new('.') if self == base
+    return self if base == '.'
 
     # Because of the way the Windows version handles Pathname#clean, we need
     # a little extra help here.
@@ -654,15 +654,15 @@ class Pathname < String
       dest_arr.shift
     end
 
-    if base_arr.include?("..")
+    if base_arr.include?('..')
       raise ArgumentError, "base directory may not contain '..'"
     end
 
-    base_arr.fill("..")
+    base_arr.fill('..')
     rel_path = base_arr + dest_arr
 
     if rel_path.empty?
-      self.class.new(".")
+      self.class.new('.')
     else
       self.class.new(rel_path.join(@sep))
     end
@@ -686,8 +686,8 @@ class Pathname < String
     end
 
     # Any path plus "." is the same directory
-    return self if string == "."
-    return string if self == "."
+    return self if string == '.'
+    return string if self == '.'
 
     # Use the builtin PathAppend() function if on Windows - much easier
     if @win
@@ -740,7 +740,7 @@ class Pathname < String
     if @win
       PathIsRelativeW(wincode)
     else
-      root == "."
+      root == '.'
     end
   end
 
@@ -767,16 +767,16 @@ class Pathname < String
     final = []
 
     to_a.each do |element|
-      next if element == "."
+      next if element == '.'
       final.push(element)
-      if element == ".." && self != ".."
+      if element == '..' && self != '..'
         2.times{ final.pop }
       end
     end
 
     final = final.join(@sep)
-    final = root._plus_(final) if root != "."
-    final = "." if final.empty?
+    final = root._plus_(final) if root != '.'
+    final = '.' if final.empty?
 
     self.class.new(final)
   end
@@ -861,7 +861,7 @@ class Pathname < String
   #
   def find
     require 'find'
-    if self == "."
+    if self == '.'
       Find.find(self){ |f| yield self.class.new(f.sub(%r{\A\./}, '')) }
     else
       Find.find(self){ |f| yield self.class.new(f) }
