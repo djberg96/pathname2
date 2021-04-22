@@ -188,7 +188,7 @@ class Pathname < String
     if File.symlink?(self)
       file = dup
 
-      while true
+      loop do
         file = File.join(File.dirname(file), File.readlink(file))
         break unless File.symlink?(file)
       end
