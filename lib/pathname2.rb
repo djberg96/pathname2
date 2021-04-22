@@ -54,14 +54,14 @@ class Pathname < String
 
   undef_method :pretty_print
 
-  facade File, File.methods(false).map{ |m| m.to_sym } - [
-    :chmod, :lchmod, :chown, :lchown, :dirname, :fnmatch, :fnmatch?,
-    :link, :open, :realpath, :rename, :symlink, :truncate, :utime,
-    :basename, :expand_path, :join
+  facade File, File.methods(false).map{ |m| m.to_sym } - %i[
+    chmod lchmod chown lchown dirname fnmatch fnmatch?
+    link open realpath rename symlink truncate utime
+    basename expand_path join
   ]
 
-  facade Dir, Dir.methods(false).map{ |m| m.to_sym } - [
-    :chdir, :entries, :glob, :foreach, :mkdir, :open, :children
+  facade Dir, Dir.methods(false).map{ |m| m.to_sym } - %i[
+    chdir entries glob foreach mkdir open children
   ]
 
   alias :_plus_ :+ # Used to prevent infinite loops in some cases
@@ -72,9 +72,9 @@ class Pathname < String
     extend FFI::Library
     ffi_lib :shlwapi
 
-    attach_function :PathAppendW, [:pointer, :pointer], :bool
-    attach_function :PathCanonicalizeW, [:pointer, :buffer_in], :bool
-    attach_function :PathCreateFromUrlW, [:buffer_in, :pointer, :pointer, :ulong], :long
+    attach_function :PathAppendW, %i[pointer pointer], :bool
+    attach_function :PathCanonicalizeW, %i[pointer buffer_in], :bool
+    attach_function :PathCreateFromUrlW, %i[buffer_in pointer pointer ulong], :long
     attach_function :PathGetDriveNumberW, [:buffer_in], :int
     attach_function :PathIsRelativeW, [:buffer_in], :bool
     attach_function :PathIsRootW, [:buffer_in], :bool
@@ -86,8 +86,8 @@ class Pathname < String
 
     ffi_lib :kernel32
 
-    attach_function :GetLongPathNameW, [:buffer_in, :buffer_out, :ulong], :ulong
-    attach_function :GetShortPathNameW, [:buffer_in, :pointer, :ulong], :ulong
+    attach_function :GetLongPathNameW, %i[buffer_in buffer_out ulong], :ulong
+    attach_function :GetShortPathNameW, %i[buffer_in pointer ulong], :ulong
 
     private_class_method :PathAppendW, :PathCanonicalizeW, :PathCreateFromUrlW
     private_class_method :PathGetDriveNumberW, :PathIsRelativeW, :PathIsRelativeW
