@@ -64,7 +64,7 @@ class Pathname < String
     chdir entries glob foreach mkdir open children
   ]
 
-  alias :_plus_ :+ # Used to prevent infinite loops in some cases
+  alias _plus_ + # Used to prevent infinite loops in some cases
 
   protected :_plus_
 
@@ -716,7 +716,7 @@ class Pathname < String
     self.class.new(new_string).clean
   end
 
-  alias :/ :+
+  alias / +
 
   # Returns whether or not the path is an absolute path.
   #
@@ -781,7 +781,7 @@ class Pathname < String
     self.class.new(final)
   end
 
-  alias :cleanpath :clean
+  alias cleanpath clean
 
   # Identical to Pathname#clean, except that it modifies the receiver
   # in place.
