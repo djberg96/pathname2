@@ -216,14 +216,14 @@ class Pathname < String
   def children(with_directory = true)
     with_directory = false if self == '.'
     result = []
-    Dir.foreach(self) { |file|
+    Dir.foreach(self) do |file|
       next if file == '.' || file == '..'
       if with_directory
         result << self.class.new(File.join(self, file))
       else
         result << self.class.new(file)
       end
-    }
+    end
     result
   end
 
@@ -433,13 +433,13 @@ class Pathname < String
       yield root if absolute?
     end
 
-    each{ |element|
+    each do |element|
       if @win && unc?
         next if root.to_a.include?(element)
       end
       path << element << @sep
       yield self.class.new(path.chop)
-    }
+    end
   end
 
   # Yields the path, minus one component on each iteration, as a new
@@ -766,13 +766,13 @@ class Pathname < String
 
     final = []
 
-    to_a.each{ |element|
+    to_a.each do |element|
       next if element == "."
       final.push(element)
       if element == ".." && self != ".."
         2.times{ final.pop }
       end
-    }
+    end
 
     final = final.join(@sep)
     final = root._plus_(final) if root != "."
@@ -829,11 +829,11 @@ class Pathname < String
     result = self.class.new(result) unless result === self.class
     return result if result.absolute?
 
-    args.reverse_each{ |path|
+    args.reverse_each do |path|
       path = self.class.new(path) unless path === self.class
       result = path + result
       break if result.absolute?
-    }
+    end
 
     result
   end
@@ -899,13 +899,13 @@ class Pathname < String
   # chdir to the path in question, then performs the glob.
   #
   def glob(*args)
-    Dir.chdir(self){
+    Dir.chdir(self) do
       if block_given?
         Dir.glob(*args){ |file| yield self.class.new(file) }
       else
         Dir.glob(*args).map{ |file| self.class.new(file) }
       end
-    }
+    end
   end
 
   # Dir.chdir
