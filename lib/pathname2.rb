@@ -54,13 +54,13 @@ class Pathname < String
 
   undef_method :pretty_print
 
-  facade File, File.methods(false).map{ |m| m.to_sym } - %i[
+  facade File, File.methods(false).map(&:to_sym) - %i[
     chmod lchmod chown lchown dirname fnmatch fnmatch?
     link open realpath rename symlink truncate utime
     basename expand_path join
   ]
 
-  facade Dir, Dir.methods(false).map{ |m| m.to_sym } - %i[
+  facade Dir, Dir.methods(false).map(&:to_sym) - %i[
     chdir entries glob foreach mkdir open children
   ]
 
