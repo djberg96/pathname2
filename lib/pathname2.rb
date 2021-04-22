@@ -1115,6 +1115,7 @@ class Pathname < String
   end
 end
 
+# Re-open the Kernel module to add some global methods.
 module Kernel
   # Usage: pn{ path }
   #
