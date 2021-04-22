@@ -1047,7 +1047,7 @@ class Pathname < String
     FileUtils.mv(self, *args)
   end
 
-   # FileUtils.rm
+  # FileUtils.rm
   def rm(*args)
     FileUtils.rm(self, *args)
   end
