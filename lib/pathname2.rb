@@ -37,8 +37,8 @@ if File::ALT_SEPARATOR
     # Convenience method for converting strings to UTF-16LE for wide character
     # functions that require it.
     def wincode
-      if self.encoding.name != 'UTF-16LE'
-        temp = self.dup
+      if encoding.name != 'UTF-16LE'
+        temp = dup
         (temp.tr(File::SEPARATOR, File::ALT_SEPARATOR) << 0.chr).encode('UTF-16LE')
       end
     end
@@ -186,7 +186,7 @@ class Pathname < String
     File.stat(self) # Check to ensure that the path exists
 
     if File.symlink?(self)
-      file = self.dup
+      file = dup
 
       while true
         file = File.join(File.dirname(file), File.readlink(file))
@@ -241,7 +241,7 @@ class Pathname < String
       raise NotImplementedError, "not supported on this platform"
     end
 
-    wpath = FFI::MemoryPointer.from_string(self.wincode)
+    wpath = FFI::MemoryPointer.from_string(wincode)
 
     PathUndecorateW(wpath)
 
@@ -253,7 +253,7 @@ class Pathname < String
   # Performs the substitution of Pathname#undecorate in place.
   #
   def undecorate!
-    self.replace(undecorate)
+    replace(undecorate)
   end
 
   # Windows only
@@ -269,7 +269,7 @@ class Pathname < String
     raise NotImplementedError, "not supported on this platform" unless @win
 
     buf = FFI::MemoryPointer.new(:char, MAXPATH)
-    wpath = self.wincode
+    wpath = wincode
 
     size = GetShortPathNameW(wpath, buf, buf.size)
 
@@ -291,7 +291,7 @@ class Pathname < String
     raise NotImplementedError, "not supported on this platform" unless @win
 
     buf = FFI::MemoryPointer.new(:char, MAXPATH)
-    wpath = self.wincode
+    wpath = wincode
 
     size = GetLongPathNameW(wpath, buf, buf.size)
 
@@ -308,7 +308,7 @@ class Pathname < String
   #    path.pstrip # => '/usr/local'
   #
   def pstrip
-    str = self.dup
+    str = dup
     return str if str.empty?
 
     while ["/", "\\"].include?(str.to_s[-1].chr)
@@ -322,7 +322,7 @@ class Pathname < String
   # Performs the substitution of Pathname#pstrip in place.
   #
   def pstrip!
-    self.replace(pstrip)
+    replace(pstrip)
   end
 
   # Splits a pathname into strings based on the path separator.
@@ -514,7 +514,7 @@ class Pathname < String
     dir = "."
 
     if @win
-      wpath = FFI::MemoryPointer.from_string(self.wincode)
+      wpath = FFI::MemoryPointer.from_string(wincode)
       if PathStripToRootW(wpath)
         dir = wpath.read_string(wpath.size).split("\000\000").first.tr(0.chr, '')
       end
@@ -534,7 +534,7 @@ class Pathname < String
   #
   def root?
     if @win
-      PathIsRootW(self.wincode)
+      PathIsRootW(wincode)
     else
       self == root
     end
@@ -552,7 +552,7 @@ class Pathname < String
   #
   def unc?
     raise NotImplementedError, "not supported on this platform" unless @win
-    PathIsUNCW(self.wincode)
+    PathIsUNCW(wincode)
   end
 
   # MS Windows only
@@ -569,7 +569,7 @@ class Pathname < String
       raise NotImplementedError, "not supported on this platform"
     end
 
-    num = PathGetDriveNumberW(self.wincode)
+    num = PathGetDriveNumberW(wincode)
     num >= 0 ? num : nil
   end
 
@@ -623,7 +623,7 @@ class Pathname < String
   def relative_path_from(base)
     base = self.class.new(base) unless base.kind_of?(Pathname)
 
-    if self.absolute? != base.absolute?
+    if absolute? != base.absolute?
       raise ArgumentError, "relative path between absolute and relative path"
     end
 
@@ -642,7 +642,7 @@ class Pathname < String
       end
     end
 
-    dest_arr = self.clean.to_a
+    dest_arr = clean.to_a
     base_arr = base.clean.to_a
     dest_arr.delete('.')
     base_arr.delete('.')
@@ -692,7 +692,7 @@ class Pathname < String
     # Use the builtin PathAppend() function if on Windows - much easier
     if @win
       path = FFI::MemoryPointer.new(:char, MAXPATH)
-      path.write_string(self.dup.wincode)
+      path.write_string(dup.wincode)
       more = FFI::MemoryPointer.from_string(string.wincode)
 
       PathAppendW(path, more)
@@ -738,7 +738,7 @@ class Pathname < String
   #
   def relative?
     if @win
-      PathIsRelativeW(self.wincode)
+      PathIsRelativeW(wincode)
     else
       root == "."
     end
@@ -753,11 +753,11 @@ class Pathname < String
   #    path.clean # => '/usr/bin'
   #
   def clean
-    return self if self.empty?
+    return self if empty?
 
     if @win
       ptr = FFI::MemoryPointer.new(:char, MAXPATH)
-      if PathCanonicalizeW(ptr, self.wincode)
+      if PathCanonicalizeW(ptr, wincode)
         return self.class.new(ptr.read_string(ptr.size).delete(0.chr))
       else
         return self
@@ -787,7 +787,7 @@ class Pathname < String
   # in place.
   #
   def clean!
-    self.replace(clean)
+    replace(clean)
   end
 
   alias cleanpath! clean!
@@ -812,7 +812,7 @@ class Pathname < String
   #
   def dirname(level = 1)
     raise ArgumentError if level < 0
-    local_path = self.dup
+    local_path = dup
 
     level.times{ local_path = File.dirname(local_path) }
     self.class.new(local_path)
@@ -841,9 +841,9 @@ class Pathname < String
   # A custom pretty printer
   def pretty_print(q)
     if File::ALT_SEPARATOR
-      q.text(self.to_s.tr(File::SEPARATOR, File::ALT_SEPARATOR))
+      q.text(to_s.tr(File::SEPARATOR, File::ALT_SEPARATOR))
     else
-      q.text(self.to_s)
+      q.text(to_s)
     end
   end
 
