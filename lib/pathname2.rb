@@ -37,8 +37,8 @@ if File::ALT_SEPARATOR
     # Convenience method for converting strings to UTF-16LE for wide character
     # functions that require it.
     def wincode
-      if self.encoding.name != 'UTF-16LE'
-        temp = self.dup
+      if encoding.name != 'UTF-16LE'
+        temp = dup
         (temp.tr(File::SEPARATOR, File::ALT_SEPARATOR) << 0.chr).encode('UTF-16LE')
       end
     end
@@ -54,17 +54,17 @@ class Pathname < String
 
   undef_method :pretty_print
 
-  facade File, File.methods(false).map{ |m| m.to_sym } - [
-    :chmod, :lchmod, :chown, :lchown, :dirname, :fnmatch, :fnmatch?,
-    :link, :open, :realpath, :rename, :symlink, :truncate, :utime,
-    :basename, :expand_path, :join
+  facade File, File.methods(false).map(&:to_sym) - %i[
+    chmod lchmod chown lchown dirname fnmatch fnmatch?
+    link open realpath rename symlink truncate utime
+    basename expand_path join
   ]
 
-  facade Dir, Dir.methods(false).map{ |m| m.to_sym } - [
-    :chdir, :entries, :glob, :foreach, :mkdir, :open, :children
+  facade Dir, Dir.methods(false).map(&:to_sym) - %i[
+    chdir entries glob foreach mkdir open children
   ]
 
-  alias :_plus_ :+ # Used to prevent infinite loops in some cases
+  alias _plus_ + # Used to prevent infinite loops in some cases
 
   protected :_plus_
 
@@ -72,9 +72,9 @@ class Pathname < String
     extend FFI::Library
     ffi_lib :shlwapi
 
-    attach_function :PathAppendW, [:pointer, :pointer], :bool
-    attach_function :PathCanonicalizeW, [:pointer, :buffer_in], :bool
-    attach_function :PathCreateFromUrlW, [:buffer_in, :pointer, :pointer, :ulong], :long
+    attach_function :PathAppendW, %i[pointer pointer], :bool
+    attach_function :PathCanonicalizeW, %i[pointer buffer_in], :bool
+    attach_function :PathCreateFromUrlW, %i[buffer_in pointer pointer ulong], :long
     attach_function :PathGetDriveNumberW, [:buffer_in], :int
     attach_function :PathIsRelativeW, [:buffer_in], :bool
     attach_function :PathIsRootW, [:buffer_in], :bool
@@ -86,8 +86,8 @@ class Pathname < String
 
     ffi_lib :kernel32
 
-    attach_function :GetLongPathNameW, [:buffer_in, :buffer_out, :ulong], :ulong
-    attach_function :GetShortPathNameW, [:buffer_in, :pointer, :ulong], :ulong
+    attach_function :GetLongPathNameW, %i[buffer_in buffer_out ulong], :ulong
+    attach_function :GetShortPathNameW, %i[buffer_in pointer ulong], :ulong
 
     private_class_method :PathAppendW, :PathCanonicalizeW, :PathCreateFromUrlW
     private_class_method :PathGetDriveNumberW, :PathIsRelativeW, :PathIsRelativeW
@@ -133,7 +133,7 @@ class Pathname < String
   #
   def initialize(path)
     if path.length > MAXPATH
-      msg = "string too long.  maximum string length is " + MAXPATH.to_s
+      msg = 'string too long.  maximum string length is ' + MAXPATH.to_s
       raise ArgumentError, msg
     end
 
@@ -186,9 +186,9 @@ class Pathname < String
     File.stat(self) # Check to ensure that the path exists
 
     if File.symlink?(self)
-      file = self.dup
+      file = dup
 
-      while true
+      loop do
         file = File.join(File.dirname(file), File.readlink(file))
         break unless File.symlink?(file)
       end
@@ -216,14 +216,14 @@ class Pathname < String
   def children(with_directory = true)
     with_directory = false if self == '.'
     result = []
-    Dir.foreach(self) { |file|
+    Dir.foreach(self) do |file|
       next if file == '.' || file == '..'
       if with_directory
         result << self.class.new(File.join(self, file))
       else
         result << self.class.new(file)
       end
-    }
+    end
     result
   end
 
@@ -238,10 +238,10 @@ class Pathname < String
   #
   def undecorate
     unless @win
-      raise NotImplementedError, "not supported on this platform"
+      raise NotImplementedError, 'not supported on this platform'
     end
 
-    wpath = FFI::MemoryPointer.from_string(self.wincode)
+    wpath = FFI::MemoryPointer.from_string(wincode)
 
     PathUndecorateW(wpath)
 
@@ -253,7 +253,7 @@ class Pathname < String
   # Performs the substitution of Pathname#undecorate in place.
   #
   def undecorate!
-    self.replace(undecorate)
+    replace(undecorate)
   end
 
   # Windows only
@@ -266,10 +266,10 @@ class Pathname < String
   #    path.short_path # => C:\Progra~1\Java.
   #
   def short_path
-    raise NotImplementedError, "not supported on this platform" unless @win
+    raise NotImplementedError, 'not supported on this platform' unless @win
 
     buf = FFI::MemoryPointer.new(:char, MAXPATH)
-    wpath = self.wincode
+    wpath = wincode
 
     size = GetShortPathNameW(wpath, buf, buf.size)
 
@@ -288,10 +288,10 @@ class Pathname < String
   #    path.long_path # => C:\Program Files\Java.
   #
   def long_path
-    raise NotImplementedError, "not supported on this platform" unless @win
+    raise NotImplementedError, 'not supported on this platform' unless @win
 
     buf = FFI::MemoryPointer.new(:char, MAXPATH)
-    wpath = self.wincode
+    wpath = wincode
 
     size = GetLongPathNameW(wpath, buf, buf.size)
 
@@ -308,10 +308,10 @@ class Pathname < String
   #    path.pstrip # => '/usr/local'
   #
   def pstrip
-    str = self.dup
+    str = dup
     return str if str.empty?
 
-    while ["/", "\\"].include?(str.to_s[-1].chr)
+    while [File::SEPARATOR, File::ALT_SEPARATOR].include?(str.to_s[-1].chr)
       str.strip!
       str.chop!
     end
@@ -322,7 +322,7 @@ class Pathname < String
   # Performs the substitution of Pathname#pstrip in place.
   #
   def pstrip!
-    self.replace(pstrip)
+    replace(pstrip)
   end
 
   # Splits a pathname into strings based on the path separator.
@@ -339,7 +339,7 @@ class Pathname < String
     else
       array = split(@sep)
     end
-    array.delete("")    # Remove empty elements
+    array.delete('')    # Remove empty elements
     array
   end
 
@@ -390,11 +390,11 @@ class Pathname < String
       end
       path = File.join(to_a[index])
     else
-      raise TypeError, "Only Numerics and Ranges allowed as first argument"
+      raise TypeError, 'Only Numerics and Ranges allowed as first argument'
     end
 
     if path && @win
-      path = path.tr("/", "\\")
+      path = path.tr(File::SEPARATOR, File::ALT_SEPARATOR)
     end
 
     path
@@ -423,9 +423,9 @@ class Pathname < String
     end
 
     if @win
-      path = unc? ? "#{root}\\" : ""
+      path = unc? ? "#{root}\\" : ''
     else
-      path = absolute? ? root : ""
+      path = absolute? ? root : ''
     end
 
     # Yield the root directory if an absolute path (and not Windows)
@@ -433,13 +433,13 @@ class Pathname < String
       yield root if absolute?
     end
 
-    each{ |element|
+    each do |element|
       if @win && unc?
         next if root.to_a.include?(element)
       end
       path << element << @sep
       yield self.class.new(path.chop)
-    }
+    end
   end
 
   # Yields the path, minus one component on each iteration, as a new
@@ -511,15 +511,15 @@ class Pathname < String
   #    Pathname.new('\\some\share\foo').root # => '\\some\share'
   #
   def root
-    dir = "."
+    dir = '.'
 
     if @win
-      wpath = FFI::MemoryPointer.from_string(self.wincode)
+      wpath = FFI::MemoryPointer.from_string(wincode)
       if PathStripToRootW(wpath)
         dir = wpath.read_string(wpath.size).split("\000\000").first.tr(0.chr, '')
       end
     else
-      dir = "/" if self =~ /^\//
+      dir = '/' if self =~ /^\//
     end
 
     self.class.new(dir)
@@ -534,7 +534,7 @@ class Pathname < String
   #
   def root?
     if @win
-      PathIsRootW(self.wincode)
+      PathIsRootW(wincode)
     else
       self == root
     end
@@ -551,8 +551,8 @@ class Pathname < String
   #    Pathname.new('C:\Program Files').unc? # => false
   #
   def unc?
-    raise NotImplementedError, "not supported on this platform" unless @win
-    PathIsUNCW(self.wincode)
+    raise NotImplementedError, 'not supported on this platform' unless @win
+    PathIsUNCW(wincode)
   end
 
   # MS Windows only
@@ -566,10 +566,10 @@ class Pathname < String
   #
   def drive_number
     unless @win
-      raise NotImplementedError, "not supported on this platform"
+      raise NotImplementedError, 'not supported on this platform'
     end
 
-    num = PathGetDriveNumberW(self.wincode)
+    num = PathGetDriveNumberW(wincode)
     num >= 0 ? num : nil
   end
 
@@ -586,7 +586,7 @@ class Pathname < String
   #    path1 <=> path3 # => -1
   #
   def <=>(string)
-    return nil unless string.kind_of?(Pathname)
+    return nil unless string.is_a?(Pathname)
     super
   end
 
@@ -598,7 +598,7 @@ class Pathname < String
   #
   def parent
     return self if root?
-    self + ".." # Use our custom '+' method
+    self + '..' # Use our custom '+' method
   end
 
   # Returns a relative path from the argument to the receiver. If +self+
@@ -621,14 +621,14 @@ class Pathname < String
   #    path.relative_path_from("C:\\Program Files") # => "..\\WINNT\\Fonts"
   #
   def relative_path_from(base)
-    base = self.class.new(base) unless base.kind_of?(Pathname)
+    base = self.class.new(base) unless base.is_a?(Pathname)
 
-    if self.absolute? != base.absolute?
-      raise ArgumentError, "relative path between absolute and relative path"
+    if absolute? != base.absolute?
+      raise ArgumentError, 'relative path between absolute and relative path'
     end
 
-    return self.class.new(".") if self == base
-    return self if base == "."
+    return self.class.new('.') if self == base
+    return self if base == '.'
 
     # Because of the way the Windows version handles Pathname#clean, we need
     # a little extra help here.
@@ -642,7 +642,7 @@ class Pathname < String
       end
     end
 
-    dest_arr = self.clean.to_a
+    dest_arr = clean.to_a
     base_arr = base.clean.to_a
     dest_arr.delete('.')
     base_arr.delete('.')
@@ -654,15 +654,15 @@ class Pathname < String
       dest_arr.shift
     end
 
-    if base_arr.include?("..")
+    if base_arr.include?('..')
       raise ArgumentError, "base directory may not contain '..'"
     end
 
-    base_arr.fill("..")
+    base_arr.fill('..')
     rel_path = base_arr + dest_arr
 
     if rel_path.empty?
-      self.class.new(".")
+      self.class.new('.')
     else
       self.class.new(rel_path.join(@sep))
     end
@@ -681,18 +681,18 @@ class Pathname < String
   #    path1 + path2 # '/foo/baz'
   #
   def +(string)
-    unless string.kind_of?(Pathname)
+    unless string.is_a?(Pathname)
       string = self.class.new(string)
     end
 
     # Any path plus "." is the same directory
-    return self if string == "."
-    return string if self == "."
+    return self if string == '.'
+    return string if self == '.'
 
     # Use the builtin PathAppend() function if on Windows - much easier
     if @win
       path = FFI::MemoryPointer.new(:char, MAXPATH)
-      path.write_string(self.dup.wincode)
+      path.write_string(dup.wincode)
       more = FFI::MemoryPointer.from_string(string.wincode)
 
       PathAppendW(path, more)
@@ -716,7 +716,7 @@ class Pathname < String
     self.class.new(new_string).clean
   end
 
-  alias :/ :+
+  alias / +
 
   # Returns whether or not the path is an absolute path.
   #
@@ -738,9 +738,9 @@ class Pathname < String
   #
   def relative?
     if @win
-      PathIsRelativeW(self.wincode)
+      PathIsRelativeW(wincode)
     else
-      root == "."
+      root == '.'
     end
   end
 
@@ -753,11 +753,11 @@ class Pathname < String
   #    path.clean # => '/usr/bin'
   #
   def clean
-    return self if self.empty?
+    return self if empty?
 
     if @win
       ptr = FFI::MemoryPointer.new(:char, MAXPATH)
-      if PathCanonicalizeW(ptr, self.wincode)
+      if PathCanonicalizeW(ptr, wincode)
         return self.class.new(ptr.read_string(ptr.size).delete(0.chr))
       else
         return self
@@ -766,28 +766,28 @@ class Pathname < String
 
     final = []
 
-    to_a.each{ |element|
-      next if element == "."
+    to_a.each do |element|
+      next if element == '.'
       final.push(element)
-      if element == ".." && self != ".."
+      if element == '..' && self != '..'
         2.times{ final.pop }
       end
-    }
+    end
 
     final = final.join(@sep)
-    final = root._plus_(final) if root != "."
-    final = "." if final.empty?
+    final = root._plus_(final) if root != '.'
+    final = '.' if final.empty?
 
     self.class.new(final)
   end
 
-  alias :cleanpath :clean
+  alias cleanpath clean
 
   # Identical to Pathname#clean, except that it modifies the receiver
   # in place.
   #
   def clean!
-    self.replace(clean)
+    replace(clean)
   end
 
   alias cleanpath! clean!
@@ -812,7 +812,7 @@ class Pathname < String
   #
   def dirname(level = 1)
     raise ArgumentError if level < 0
-    local_path = self.dup
+    local_path = dup
 
     level.times{ local_path = File.dirname(local_path) }
     self.class.new(local_path)
@@ -829,11 +829,11 @@ class Pathname < String
     result = self.class.new(result) unless result === self.class
     return result if result.absolute?
 
-    args.reverse_each{ |path|
+    args.reverse_each do |path|
       path = self.class.new(path) unless path === self.class
       result = path + result
       break if result.absolute?
-    }
+    end
 
     result
   end
@@ -841,9 +841,9 @@ class Pathname < String
   # A custom pretty printer
   def pretty_print(q)
     if File::ALT_SEPARATOR
-      q.text(self.to_s.tr(File::SEPARATOR, File::ALT_SEPARATOR))
+      q.text(to_s.tr(File::SEPARATOR, File::ALT_SEPARATOR))
     else
-      q.text(self.to_s)
+      q.text(to_s)
     end
   end
 
@@ -861,7 +861,7 @@ class Pathname < String
   #
   def find
     require 'find'
-    if self == "."
+    if self == '.'
       Find.find(self){ |f| yield self.class.new(f.sub(%r{\A\./}, '')) }
     else
       Find.find(self){ |f| yield self.class.new(f) }
@@ -899,13 +899,13 @@ class Pathname < String
   # chdir to the path in question, then performs the glob.
   #
   def glob(*args)
-    Dir.chdir(self){
+    Dir.chdir(self) do
       if block_given?
         Dir.glob(*args){ |file| yield self.class.new(file) }
       else
         Dir.glob(*args).map{ |file| self.class.new(file) }
       end
-    }
+    end
   end
 
   # Dir.chdir
@@ -1047,7 +1047,7 @@ class Pathname < String
     FileUtils.mv(self, *args)
   end
 
-   # FileUtils.rm
+  # FileUtils.rm
   def rm(*args)
     FileUtils.rm(self, *args)
   end
@@ -1115,6 +1115,7 @@ class Pathname < String
   end
 end
 
+# Re-open the Kernel module to add some global methods.
 module Kernel
   # Usage: pn{ path }
   #
