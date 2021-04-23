@@ -586,7 +586,7 @@ class Pathname < String
   #    path1 <=> path3 # => -1
   #
   def <=>(string)
-    return nil unless string.kind_of?(Pathname)
+    return nil unless string.is_a?(Pathname)
     super
   end
 
@@ -621,7 +621,7 @@ class Pathname < String
   #    path.relative_path_from("C:\\Program Files") # => "..\\WINNT\\Fonts"
   #
   def relative_path_from(base)
-    base = self.class.new(base) unless base.kind_of?(Pathname)
+    base = self.class.new(base) unless base.is_a?(Pathname)
 
     if absolute? != base.absolute?
       raise ArgumentError, 'relative path between absolute and relative path'
@@ -681,7 +681,7 @@ class Pathname < String
   #    path1 + path2 # '/foo/baz'
   #
   def +(string)
-    unless string.kind_of?(Pathname)
+    unless string.is_a?(Pathname)
       string = self.class.new(string)
     end
 
