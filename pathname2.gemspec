@@ -11,8 +11,8 @@ Gem::Specification.new do |spec|
   spec.files       = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain  = ['certs/djberg96_pub.pem']
 
-  spec.add_dependency('facade')
-  spec.add_development_dependency('test-unit')
+  spec.add_dependency('facade', '~> 1.2')
+  spec.add_development_dependency('test-unit', '~> 3.4')
   spec.add_development_dependency('rake')
 
   spec.metadata = {
