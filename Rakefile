@@ -8,9 +8,9 @@ namespace :gem do
   desc "Build the pathname2 gem"
   task :create => [:clean] do
     require 'rubygems/package'
-    spec = eval(IO.read('pathname2.gemspec'))
+    spec = Gem::Specification.load('pathname2.gemspec')
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
-    Gem::Package.build(spec, true)
+    Gem::Package.build(spec)
   end
 
   desc "Install the pathname2 gem"
