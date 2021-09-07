@@ -1,3 +1,5 @@
+[![Ruby](https://github.com/djberg96/pathname2/actions/workflows/ruby.yml/badge.svg)](https://github.com/djberg96/pathname2/actions/workflows/ruby.yml)
+
 ## Description
 A drop-in replacement for the current Pathname class.
 
