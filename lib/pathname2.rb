@@ -872,17 +872,17 @@ class Pathname < String
 
   # IO.foreach
   def foreach(*args, &block)
-    IO.foreach(self, *args, &block)
+    File.foreach(self, *args, &block)
   end
 
   # IO.read
   def read(*args)
-    IO.read(self, *args)
+    File.read(self, *args)
   end
 
   # IO.readlines
   def readlines(*args)
-    IO.readlines(self, *args)
+    File.readlines(self, *args)
   end
 
   # IO.sysopen
