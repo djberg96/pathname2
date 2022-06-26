@@ -16,12 +16,13 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rake')
 
   spec.metadata = {
-    'homepage_uri'      => 'https://github.com/djberg96/pathname2',
-    'bug_tracker_uri'   => 'https://github.com/djberg96/pathname2/issues',
-    'changelog_uri'     => 'https://github.com/djberg96/pathname2/blob/main/CHANGES.md',
-    'documentation_uri' => 'https://github.com/djberg96/pathname2/wiki',
-    'source_code_uri'   => 'https://github.com/djberg96/pathname2',
-    'wiki_uri'          => 'https://github.com/djberg96/pathname2/wiki'
+    'homepage_uri'          => 'https://github.com/djberg96/pathname2',
+    'bug_tracker_uri'       => 'https://github.com/djberg96/pathname2/issues',
+    'changelog_uri'         => 'https://github.com/djberg96/pathname2/blob/main/CHANGES.md',
+    'documentation_uri'     => 'https://github.com/djberg96/pathname2/wiki',
+    'source_code_uri'       => 'https://github.com/djberg96/pathname2',
+    'wiki_uri'              => 'https://github.com/djberg96/pathname2/wiki',
+    'rubygems_mfa_required' => 'true'
   }
 
   if File::ALT_SEPARATOR
