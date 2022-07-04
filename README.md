@@ -11,6 +11,10 @@ A drop-in replacement for the current Pathname class.
 ## Installation
 `gem install pathname2`
 
+## Adding the Trusted Cert
+
+gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/pathname2/main/certs/djberg96_pub.pem)
+
 ## Synopsis
 ```ruby
 require 'pathname2'
