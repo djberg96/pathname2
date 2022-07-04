@@ -13,7 +13,7 @@ A drop-in replacement for the current Pathname class.
 
 ## Adding the Trusted Cert
 
-gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/pathname2/main/certs/djberg96_pub.pem)
+`gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/pathname2/main/certs/djberg96_pub.pem)`
 
 ## Synopsis
 ```ruby
