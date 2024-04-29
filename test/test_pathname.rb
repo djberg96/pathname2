@@ -70,24 +70,24 @@ class TC_Pathname < Test::Unit::TestCase
     assert_raise(ArgumentError) { Pathname.new(to).relative_path_from(from) }
   end
 
-  test "url_path returns expected result" do
+  test 'url_path returns expected result' do
     assert_equal('/foo bar/baz', @url_path)
   end
 
-  test "realpath basic functionality" do
+  test 'realpath basic functionality' do
     FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file)
     assert_respond_to(@abs_path, :realpath)
     assert_equal(@@pwd, Pathname.new('.').realpath)
     assert_kind_of(Pathname, Pathname.new(@link_file).realpath)
   end
 
-  test "realpath returns expected result for simple symlink" do
+  test 'realpath returns expected result for simple symlink' do
     FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file)
     assert_true(Pathname.new(@link_file) != Pathname.new(@link_file).realpath)
     assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
   end
 
-  test "realpath returns expected result for nested symlink" do
+  test 'realpath returns expected result for nested symlink' do
     FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file) && File.symlink(@link_file, @link_file2)
     assert_true(Pathname.new(@link_file) != Pathname.new(@link_file2).realpath)
     assert_equal(Pathname.new(@link_file).realpath, Pathname.new(@link_file2).realpath)
@@ -450,8 +450,8 @@ class TC_Pathname < Test::Unit::TestCase
     assert_equal(@@pwd, Pathname.pwd)
   end
 
-  test "String#to_path instance method is implemented" do
-    string = "/usr/local/bin"
+  test 'String#to_path instance method is implemented' do
+    string = '/usr/local/bin'
     assert_respond_to(string, :to_path)
     assert_nothing_raised{ string.to_path }
     assert_kind_of(Pathname, string.to_path)

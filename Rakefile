@@ -2,10 +2,10 @@ require 'rake'
 require 'rake/clean'
 require 'rake/testtask'
 
-CLEAN.include("**/*.gem", "**/*.rbc", "**/*.lock")
+CLEAN.include('**/*.gem', '**/*.rbc', '**/*.lock')
 
 namespace :gem do
-  desc "Build the pathname2 gem"
+  desc 'Build the pathname2 gem'
   task :create => [:clean] do
     require 'rubygems/package'
     spec = Gem::Specification.load('pathname2.gemspec')
@@ -13,9 +13,9 @@ namespace :gem do
     Gem::Package.build(spec)
   end
 
-  desc "Install the pathname2 gem"
+  desc 'Install the pathname2 gem'
   task :install => [:create] do
-     file = Dir["*.gem"].first
+     file = Dir['*.gem'].first
      sh "gem install -l #{file}"
   end
 end
@@ -26,18 +26,18 @@ Rake::TestTask.new('test') do |t|
   t.verbose = true
    
   if File::ALT_SEPARATOR
-    t.test_files = FileList["test/windows/*.rb"] + FileList["test/test_version.rb"]
+    t.test_files = FileList['test/windows/*.rb'] + FileList['test/test_version.rb']
   else
     t.test_files = FileList['test/test_pathname.rb']
   end
 end
 
 namespace :test do
-  dir = File::ALT_SEPARATOR ? "windows" : "unix"
+  dir = File::ALT_SEPARATOR ? 'windows' : 'unix'
   Rake::TestTask.new(:all) do |t|
     t.warning = true
     t.verbose = true
-    t.test_files = FileList["test/#{dir}/*.rb"] + FileList["test/test_version.rb"]
+    t.test_files = FileList["test/#{dir}/*.rb"] + FileList['test/test_version.rb']
   end
 
   Rake::TestTask.new(:append) do |t|

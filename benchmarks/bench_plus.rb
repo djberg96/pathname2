@@ -17,18 +17,18 @@ require 'pathname2'
 
 MAX = 10000
 
-s1 = "a/b/c"
-s2 = "d/e/f"
+s1 = 'a/b/c'
+s2 = 'd/e/f'
 
 path1 = Pathname.new(s1)
 path2 = Pathname.new(s2)
 
 Benchmark.bm(10) do |bench|
-   bench.report("File.join"){
+   bench.report('File.join'){
       MAX.times{ File.join(s1, s2) }
    }
 
-   bench.report("Pathname#+"){
+   bench.report('Pathname#+'){
       MAX.times{ path1 + path2 }
    }
 end

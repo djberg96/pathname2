@@ -8,18 +8,18 @@ require 'pathname2'
 
 class TC_Pathname_Facade < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:/Program Files")
+    @path = Pathname.new('C:/Program Files')
   end
 
-  test "file facade methods are defined" do
+  test 'file facade methods are defined' do
     File.methods(false).each{ |m| assert_respond_to(@path, m.to_sym) }
   end
 
-  test "dir facade methods are defined" do
+  test 'dir facade methods are defined' do
     Dir.methods(false).each{ |m| assert_respond_to(@path, m.to_sym) }
   end
 
-  test "fileutils facade methods are defined" do
+  test 'fileutils facade methods are defined' do
     methods = FileUtils.public_instance_methods
     methods -= File.methods(false)
     methods -= Dir.methods(false)
@@ -34,28 +34,28 @@ class TC_Pathname_Facade < Test::Unit::TestCase
     }
   end
 
-  test "find facade works as expected" do
+  test 'find facade works as expected' do
     assert_respond_to(@path, :find)
     assert_nothing_raised{ @path.find{} }
 
     Pathname.new(Dir.pwd).find{ |f|
-      Find.prune if f.match("git")
+      Find.prune if f.match('git')
       assert_kind_of(Pathname, f)
     }
   end
 
-  test "custom io methods are defined" do
+  test 'custom io methods are defined' do
     assert_respond_to(@path, :foreach)
     assert_respond_to(@path, :read)
     assert_respond_to(@path, :readlines)
     assert_respond_to(@path, :sysopen)
   end
 
-  test "exist? facade works as expected" do
+  test 'exist? facade works as expected' do
     assert_respond_to(@path, :exist?)
     assert_nothing_raised{ @path.exist? }
-    assert_true(Pathname.new("C:\\").exist?)
-    assert_false(Pathname.new("X:\\foo\\bar\\baz").exist?)
+    assert_true(Pathname.new('C:\\').exist?)
+    assert_false(Pathname.new('X:\\foo\\bar\\baz').exist?)
   end
 
   def teardown

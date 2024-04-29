@@ -8,40 +8,40 @@ require 'pathname2'
 
 class TC_Pathname_Clean < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:\\foo\\..\\bar\\.\\baz")
+    @path = Pathname.new('C:\\foo\\..\\bar\\.\\baz')
   end
 
-  test "clean basic functionality" do
+  test 'clean basic functionality' do
     assert_respond_to(@path, :clean)
     assert_nothing_raised{ @path.clean }
     assert_kind_of(Pathname, @path.clean)
   end
 
-  test "clean returns expected results for unclean paths" do
-    assert_equal("C:\\a\\c", Pathname.new("C:\\a\\.\\b\\..\\c").clean)
-    assert_equal("C:\\a", Pathname.new("C:\\.\\a").clean)
-    assert_equal("C:\\a\\b", Pathname.new("C:\\a\\.\\b").clean)
-    assert_equal("C:\\b", Pathname.new("C:\\a\\..\\b").clean)
-    assert_equal("C:\\a", Pathname.new("C:\\a\\.").clean)
-    assert_equal("C:\\d", Pathname.new("C:\\..\\..\\..\\d").clean)
+  test 'clean returns expected results for unclean paths' do
+    assert_equal('C:\\a\\c', Pathname.new('C:\\a\\.\\b\\..\\c').clean)
+    assert_equal('C:\\a', Pathname.new('C:\\.\\a').clean)
+    assert_equal('C:\\a\\b', Pathname.new('C:\\a\\.\\b').clean)
+    assert_equal('C:\\b', Pathname.new('C:\\a\\..\\b').clean)
+    assert_equal('C:\\a', Pathname.new('C:\\a\\.').clean)
+    assert_equal('C:\\d', Pathname.new('C:\\..\\..\\..\\d').clean)
   end
 
-  test "clean returns already clean paths unmodified" do
-    assert_equal("C:\\", Pathname.new("C:\\").clean)
-    assert_equal("C:\\a", Pathname.new("C:\\a").clean)
-    assert_equal("C:\\a\\", Pathname.new("C:\\a\\").clean)
-    assert_equal("\\\\foo\\bar", Pathname.new("\\\\foo\\bar").clean)
-    assert_equal("a", Pathname.new("a").clean)
+  test 'clean returns already clean paths unmodified' do
+    assert_equal('C:\\', Pathname.new('C:\\').clean)
+    assert_equal('C:\\a', Pathname.new('C:\\a').clean)
+    assert_equal('C:\\a\\', Pathname.new('C:\\a\\').clean)
+    assert_equal('\\\\foo\\bar', Pathname.new('\\\\foo\\bar').clean)
+    assert_equal('a', Pathname.new('a').clean)
   end
 
-  test "clean returns a slash for . and .." do
-    assert_equal("\\", Pathname.new(".").clean)
-    assert_equal("\\", Pathname.new("..").clean)
+  test 'clean returns a slash for . and ..' do
+    assert_equal('\\', Pathname.new('.').clean)
+    assert_equal('\\', Pathname.new('..').clean)
   end
 
-  test "clean does not modify receiver" do
+  test 'clean does not modify receiver' do
     @path.clean
-    assert_equal("C:\\foo\\..\\bar\\.\\baz", @path)
+    assert_equal('C:\\foo\\..\\bar\\.\\baz', @path)
   end
 
   def teardown

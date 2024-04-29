@@ -8,15 +8,15 @@ require 'test-unit'
 
 class TC_Pathname_Each < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:/Users/foo/bar")
+    @path = Pathname.new('C:/Users/foo/bar')
   end
 
-  test "each basic functionality" do
+  test 'each basic functionality' do
     assert_respond_to(@path, :each)
     assert_nothing_raised{ @path.each{} }
   end
 
-  test "each returns the expected results" do
+  test 'each returns the expected results' do
     arr = []
     @path.each{ |e| arr << e }
     assert_equal(['C:', 'Users', 'foo', 'bar'], arr)

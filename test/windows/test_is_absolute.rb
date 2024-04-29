@@ -8,31 +8,31 @@ require 'pathname2'
 
 class TC_Pathname_IsAbsolute < Test::Unit::TestCase
   def setup
-    @abs_std = Pathname.new("C:/foo/bar/baz")
-    @abs_unc = Pathname.new("//foo/bar/baz")
+    @abs_std = Pathname.new('C:/foo/bar/baz')
+    @abs_unc = Pathname.new('//foo/bar/baz')
   end
 
-  test "absolute? basic functionality" do
+  test 'absolute? basic functionality' do
     assert_respond_to(@abs_std, :absolute?)
     assert_nothing_raised{ @abs_std.absolute? }
     assert_boolean(@abs_std.absolute?)
   end
 
-  test "absolute? method returns true for absolute paths" do
+  test 'absolute? method returns true for absolute paths' do
     assert_true(@abs_std.absolute?)
     assert_true(@abs_unc.absolute?)
   end
 
-  test "absolute? method returns false for non-absolute paths" do
-    assert_false(Pathname.new("foo").absolute?)
-    assert_false(Pathname.new("foo/bar").absolute?)
+  test 'absolute? method returns false for non-absolute paths' do
+    assert_false(Pathname.new('foo').absolute?)
+    assert_false(Pathname.new('foo/bar').absolute?)
   end
 
-  test "absolute? method returns false for empty path" do
-    assert_false(Pathname.new("").absolute?)
+  test 'absolute? method returns false for empty path' do
+    assert_false(Pathname.new('').absolute?)
   end
 
-  test "absolute? method is not destructive" do
+  test 'absolute? method is not destructive' do
     str = 'C:/foo'
     path = Pathname.new(str)
     assert_nothing_raised{ path.absolute? }

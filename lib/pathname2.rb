@@ -470,7 +470,7 @@ class Pathname < String
       path = to_a[0..n-1].join(@sep)
       if absolute?
         if @win && unc?
-          path = "\\\\" << path
+          path = '\\\\' << path
         end
         unless @win
           path = root << path

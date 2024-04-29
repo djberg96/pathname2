@@ -19,18 +19,18 @@ class TC_Pathname_Children < Test::Unit::TestCase
     }
   end
 
-  test "children basic functionality" do
+  test 'children basic functionality' do
     assert_respond_to(@path, :children)
     assert_nothing_raised{ @path.children{} }
     assert_kind_of(Array, @path.children)
   end
 
-  test "children method returns expected results" do
+  test 'children method returns expected results' do
     path = Pathname.new(@dir)
     assert_equal(%w[foo\alpha foo\beta foo\gamma], path.children)
   end
 
-  test "each result of the children method is a Pathname object" do
+  test 'each result of the children method is a Pathname object' do
     path = Pathname.new(@dir)
     assert_kind_of(Pathname, path.children.first)
   end
