@@ -26,9 +26,9 @@ class TC_Pathname_Aref < Test::Unit::TestCase
   end
 
   test '[] with index and length works as expected' do
-    assert_equal('C:', @path[0,1])
-    assert_equal('C:\\Program Files', @path[0,2])
-    assert_equal('Program Files\\Windows NT', @path[1,2])
+    assert_equal('C:', @path[0, 1])
+    assert_equal('C:\\Program Files', @path[0, 2])
+    assert_equal('Program Files\\Windows NT', @path[1, 2])
   end
 
   def teardown

@@ -31,7 +31,7 @@ class TC_Pathname_UndecorateBang < Test::Unit::TestCase
   end
 
   test 'undecorate! returns expected result for UNC path' do
-    assert_equal('\\foo\bar.txt',Pathname.new('\\foo\bar[5].txt').undecorate!)
+    assert_equal('\\foo\bar.txt', Pathname.new('\\foo\bar[5].txt').undecorate!)
     assert_equal('\\foo\bar', Pathname.new('\\foo\bar[5]').undecorate!)
   end
 

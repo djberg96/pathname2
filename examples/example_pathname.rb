@@ -21,5 +21,5 @@ path = pn{ 'C:\\Documents and Settings\\snoopy\\My Documents' }
 
 p path[0]    # C:
 p path[1]    # Documents and Settings
-p path[0,2]  # C:\\Documents and Settings
+p path[0, 2] # C:\\Documents and Settings
 p path[0..2] # C:\\Documents and Settings\\snoopy
