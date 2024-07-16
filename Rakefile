@@ -219,4 +219,9 @@ task :benchmark_plus do
   sh 'ruby -Ilib benchmarks/bench_plus.rb'
 end
 
+# Clean up afterwards
+Rake::Task[:test].enhance do
+  Rake::Task[:clean].invoke
+end
+
 task :default => :test
