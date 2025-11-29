@@ -28,7 +28,7 @@ Rake::TestTask.new('test') do |t|
   if File::ALT_SEPARATOR
     t.test_files = FileList["test/windows/*.rb"] + FileList["test/test_version.rb"]
   else
-    t.test_files = FileList['test/test_pathname.rb']
+    t.test_files = FileList['test/test_pathname2.rb']
   end
 end
 
@@ -209,12 +209,12 @@ namespace :test do
   end
 end
 
-desc 'Run the Pathname benchmark suite'
+desc 'Run the Pathname2 benchmark suite'
 task :benchmark do
-  sh 'ruby -Ilib benchmarks/bench_pathname.rb'
+  sh 'ruby -Ilib benchmarks/bench_pathname2.rb'
 end
 
-desc 'Run the benchmark suite for Pathname#+ vs File.join'
+desc 'Run the benchmark suite for Pathname2#+ vs File.join'
 task :benchmark_plus do
   sh 'ruby -Ilib benchmarks/bench_plus.rb'
 end
