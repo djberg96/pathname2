@@ -215,7 +215,7 @@ class TC_Pathname2 < Test::Unit::TestCase
     children = @cur_path.children.sort.reject{ |f| f.include?('git') || f.include?('.swp') }
     assert_equal(
        [
-          Dir.pwd + '/test_pathname.rb',
+          Dir.pwd + '/test_pathname2.rb',
           Dir.pwd + '/test_version.rb',
           Dir.pwd + '/windows'
        ],
@@ -227,7 +227,7 @@ class TC_Pathname2 < Test::Unit::TestCase
     assert_nothing_raised{ @cur_path.children(false) }
 
     children = @cur_path.children(false).reject{ |f| f.include?('git') || f.include?('.swp') }
-    assert_equal(['test_pathname.rb', 'test_version.rb', 'windows'], children.sort)
+    assert_equal(['test_pathname2.rb', 'test_version.rb', 'windows'], children.sort)
   end
 
   def test_unc
