@@ -1,15 +1,15 @@
 ########################################################################
 # test_is_relative.rb
 #
-# Test suite for the Pathname#relative method
+# Test suite for the Pathname2#relative method
 ########################################################################
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_IsRelative < Test::Unit::TestCase
+class TC_Pathname2_IsRelative < Test::Unit::TestCase
   def setup
-    @relative = Pathname.new("foo/bar")
-    @absolute = Pathname.new("C:/foo/bar")
+    @relative = Pathname2.new("foo/bar")
+    @absolute = Pathname2.new("C:/foo/bar")
   end
 
   test "relative? basic functionality" do
@@ -24,16 +24,16 @@ class TC_Pathname_IsRelative < Test::Unit::TestCase
 
   test "relative? method returns false for non-relative paths" do
     assert_false(@absolute.relative?)
-    assert_false(Pathname.new("//foo/bar").relative?)
+    assert_false(Pathname2.new("//foo/bar").relative?)
   end
 
   test "relative? method returns true for empty path" do
-    assert_true(Pathname.new("").relative?)
+    assert_true(Pathname2.new("").relative?)
   end
 
   test "relative? method is not destructive" do
     str = 'C:/foo'
-    path = Pathname.new(str)
+    path = Pathname2.new(str)
     assert_nothing_raised{ path.relative? }
     assert_equal('C:\foo', path.to_s)
     assert_equal('C:/foo', str)

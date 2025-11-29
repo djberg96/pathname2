@@ -1,14 +1,14 @@
 ########################################################################
 # test_each.rb
 #
-# Test suite for the Pathname#each method.
+# Test suite for the Pathname2#each method.
 ########################################################################
 require 'pathname2'
 require 'test-unit'
 
-class TC_Pathname_Each < Test::Unit::TestCase
+class TC_Pathname2_Each < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:/Users/foo/bar")
+    @path = Pathname2.new("C:/Users/foo/bar")
   end
 
   test "each basic functionality" do

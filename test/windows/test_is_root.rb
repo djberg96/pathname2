@@ -1,15 +1,15 @@
 ########################################################################
 # test_is_root.rb
 #
-# Test suite for the Pathname#root method
+# Test suite for the Pathname2#root method
 ########################################################################
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_IsRoot < Test::Unit::TestCase
+class TC_Pathname2_IsRoot < Test::Unit::TestCase
   def setup
-    @std_root = Pathname.new("C:\\")
-    @unc_root = Pathname.new("\\\\foo\\bar")
+    @std_root = Pathname2.new("C:\\")
+    @unc_root = Pathname2.new("\\\\foo\\bar")
   end
 
   test "root? basic functionality" do
@@ -24,14 +24,14 @@ class TC_Pathname_IsRoot < Test::Unit::TestCase
   end
 
   test "root? method returns false for non-root paths" do
-    assert_false(Pathname.new("C:/foo").root?)
-    assert_false(Pathname.new("//foo/bar/baz").root?)
-    assert_false(Pathname.new("").root?)
+    assert_false(Pathname2.new("C:/foo").root?)
+    assert_false(Pathname2.new("//foo/bar/baz").root?)
+    assert_false(Pathname2.new("").root?)
   end
 
   test "root? method is not destructive" do
     str = 'C:/foo'
-    path = Pathname.new(str)
+    path = Pathname2.new(str)
     assert_nothing_raised{ path.root }
     assert_equal('C:\foo', path.to_s)
     assert_equal('C:/foo', str)

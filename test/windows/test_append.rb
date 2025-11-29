@@ -1,21 +1,21 @@
 ########################################################################
 # test_append.rb
 #
-# Test suite for the Pathname#append method.
+# Test suite for the Pathname2#append method.
 ########################################################################
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_Append < Test::Unit::TestCase
+class TC_Pathname2_Append < Test::Unit::TestCase
   def setup
-    @abs_path = Pathname.new("C:\\foo\\bar")
-    @rel_path = Pathname.new("foo\\bar\\baz")
+    @abs_path = Pathname2.new("C:\\foo\\bar")
+    @rel_path = Pathname2.new("foo\\bar\\baz")
   end
 
   def assert_pathname_plus(a, b, c)
-    a = Pathname.new(a)
-    b = Pathname.new(b)
-    c = Pathname.new(c)
+    a = Pathname2.new(a)
+    b = Pathname2.new(b)
+    c = Pathname2.new(c)
     assert_equal(a, b + c)
   end
 

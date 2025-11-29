@@ -1,20 +1,20 @@
 ########################################################################
 # test_join.rb
 #
-# Test suite for the Pathname#join method.
+# Test suite for the Pathname2#join method.
 ########################################################################
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_Join < Test::Unit::TestCase
+class TC_Pathname2_Join < Test::Unit::TestCase
   def setup
-    @apath = Pathname.new("C:\\foo\\bar")
-    @rpath = Pathname.new("foo\\bar\\baz")
+    @apath = Pathname2.new("C:\\foo\\bar")
+    @rpath = Pathname2.new("foo\\bar\\baz")
   end
 
   def assert_pathname_join(final, initial, *rest)
-    a = Pathname.new(final)
-    b = Pathname.new(initial)
+    a = Pathname2.new(final)
+    b = Pathname2.new(initial)
     assert_equal(a, b.join(*rest))
   end
 
@@ -41,8 +41,8 @@ class TC_Pathname_Join < Test::Unit::TestCase
     assert_pathname_join("D:\\", "C:\\", "foo", "bar", "D:\\")
   end
 
-  test "join returns an instance of Pathname" do
-    assert_kind_of(Pathname, @apath.join("foo"))
+  test "join returns an instance of Pathname2" do
+    assert_kind_of(Pathname2, @apath.join("foo"))
   end
 
   def teardown

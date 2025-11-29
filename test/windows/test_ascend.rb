@@ -1,14 +1,14 @@
 ########################################################################
 # test_ascend.rb
 #
-# Test suite for the Pathname#ascend method.
+# Test suite for the Pathname2#ascend method.
 ########################################################################
 require 'pathname2'
 require 'test-unit'
 
-class TC_Pathname_Ascend < Test::Unit::TestCase
+class TC_Pathname2_Ascend < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:\\foo\\bar\\baz")
+    @path = Pathname2.new("C:\\foo\\bar\\baz")
   end
 
   test "ascend basic functionality" do
@@ -27,14 +27,14 @@ class TC_Pathname_Ascend < Test::Unit::TestCase
 
   test "ascend works as expected on a UNC path" do
     array = []
-    Pathname.new('//foo/bar/baz').ascend{ |e| array << e }
+    Pathname2.new('//foo/bar/baz').ascend{ |e| array << e }
     assert_equal("\\\\foo\\bar\\baz", array[0])
     assert_equal("\\\\foo\\bar", array[1])
   end
 
   test "ascend works as expected on a relative path" do
     array = []
-    Pathname.new('foo/bar/baz').ascend{ |e| array << e }
+    Pathname2.new('foo/bar/baz').ascend{ |e| array << e }
     assert_equal('foo\bar\baz', array[0])
     assert_equal('foo\bar', array[1])
     assert_equal('foo', array[2])

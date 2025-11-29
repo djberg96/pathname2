@@ -6,9 +6,9 @@
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_Facade < Test::Unit::TestCase
+class TC_Pathname2_Facade < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:/Program Files")
+    @path = Pathname2.new("C:/Program Files")
   end
 
   test "file facade methods are defined" do
@@ -38,9 +38,9 @@ class TC_Pathname_Facade < Test::Unit::TestCase
     assert_respond_to(@path, :find)
     assert_nothing_raised{ @path.find{} }
 
-    Pathname.new(Dir.pwd).find{ |f|
+    Pathname2.new(Dir.pwd).find{ |f|
       Find.prune if f.match("git")
-      assert_kind_of(Pathname, f)
+      assert_kind_of(Pathname2, f)
     }
   end
 
@@ -54,8 +54,8 @@ class TC_Pathname_Facade < Test::Unit::TestCase
   test "exist? facade works as expected" do
     assert_respond_to(@path, :exist?)
     assert_nothing_raised{ @path.exist? }
-    assert_true(Pathname.new("C:\\").exist?)
-    assert_false(Pathname.new("X:\\foo\\bar\\baz").exist?)
+    assert_true(Pathname2.new("C:\\").exist?)
+    assert_false(Pathname2.new("X:\\foo\\bar\\baz").exist?)
   end
 
   def teardown

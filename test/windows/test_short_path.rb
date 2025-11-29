@@ -1,14 +1,14 @@
 ########################################################################
 # test_short_path.rb
 #
-# Test suite for the Pathname#short_path method
+# Test suite for the Pathname2#short_path method
 ########################################################################
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_ShortPath < Test::Unit::TestCase
+class TC_Pathname2_ShortPath < Test::Unit::TestCase
   def setup
-    @abs_path = Pathname.new("C:\\Program Files")
+    @abs_path = Pathname2.new("C:\\Program Files")
   end
 
   test "short_path basic functionality" do
@@ -22,16 +22,16 @@ class TC_Pathname_ShortPath < Test::Unit::TestCase
   end
 
   test "short_path returns the same string if it's already short" do
-    assert_equal("C:\\", Pathname.new("C:/").short_path)
+    assert_equal("C:\\", Pathname2.new("C:/").short_path)
   end
 
   test "short_path fails if the path does not exist" do
-    assert_raise(Errno::ESRCH){ Pathname.new("C:/Bogus/AlsoBogus").short_path }
+    assert_raise(Errno::ESRCH){ Pathname2.new("C:/Bogus/AlsoBogus").short_path }
   end
 
   test "short_path method is not destructive" do
     str = 'C:/Program Files'
-    assert_nothing_raised{ Pathname.new(str).short_path }
+    assert_nothing_raised{ Pathname2.new(str).short_path }
     assert_equal('C:/Program Files', str)
   end
 
