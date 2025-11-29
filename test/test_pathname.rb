@@ -70,6 +70,10 @@ class TC_Pathname2 < Test::Unit::TestCase
     assert_raise(ArgumentError) { Pathname2.new(to).relative_path_from(from) }
   end
 
+  test "VERSION constant is set to expected value" do
+    assert_equal("2.0.0", Pathname2::VERSION)
+  end
+
   test "url_path returns expected result" do
     assert_equal('/foo bar/baz', @url_path)
   end
