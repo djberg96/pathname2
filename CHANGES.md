@@ -1,3 +1,10 @@
+## 2.0.0 - 29-Nov-2025
+* Pathname has been renamed Pathname2, so it's no longer competing for the
+  same constant name as the stdlib vedrsion. Recent versions of Ruby simply
+  weren't allowing it, and this is probably the better way to go anyway.
+* Added addressable as a dependency since the stdlib uri library is a constant
+  source of warnings.
+
 ## 1.8.4 - 19-Jan-2021
 * Cleaned up the Rubocop warnings.
 * Added a Gemfile.
