@@ -95,7 +95,7 @@ class Pathname2 < String
   public
 
   # The version of the pathname2 library
-  VERSION = '1.8.4'.freeze
+  VERSION = '2.0.0'.freeze
 
   # The maximum length of a path
   MAXPATH = 1024 unless defined? MAXPATH # Yes, I willfully violate POSIX
@@ -156,8 +156,8 @@ class Pathname2 < String
       end
     else
       if path.index('file:///', 0)
-        require 'uri'
-        path = URI::Parser.new.unescape(path)[7..-1]
+        require 'addressable'
+        path = Addressable::URI.unescape(path)[7..-1]
       end
     end
 
