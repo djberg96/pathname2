@@ -1,14 +1,14 @@
 ########################################################################
 # test_descend.rb
 #
-# Test suite for the Pathname#descend method.
+# Test suite for the Pathname2#descend method.
 ########################################################################
 require 'pathname2'
 require 'test-unit'
 
-class TC_Pathname_Descend < Test::Unit::TestCase
+class TC_Pathname2_Descend < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:\\foo\\bar\\baz")
+    @path = Pathname2.new("C:\\foo\\bar\\baz")
   end
 
   test "descend basic functionality" do
@@ -27,14 +27,14 @@ class TC_Pathname_Descend < Test::Unit::TestCase
 
   test "descend works as expected on a UNC path" do
     array = []
-    Pathname.new('//foo/bar/baz').descend{ |e| array << e }
+    Pathname2.new('//foo/bar/baz').descend{ |e| array << e }
     assert_equal("\\\\foo\\bar", array[0])
     assert_equal("\\\\foo\\bar\\baz", array[1])
   end
 
   test "descend works as expected on a relative path" do
     array = []
-    Pathname.new('foo/bar/baz').descend{ |e| array << e }
+    Pathname2.new('foo/bar/baz').descend{ |e| array << e }
     assert_equal('foo', array[0])
     assert_equal('foo\bar', array[1])
     assert_equal('foo\bar\baz', array[2])

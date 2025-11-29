@@ -6,12 +6,12 @@
 require 'pathname2'
 require 'test-unit'
 
-class TC_Pathname_Version < Test::Unit::TestCase
+class TC_Pathname2_Version < Test::Unit::TestCase
   test "version is set to expected value" do
-    assert_equal('1.8.4', Pathname::VERSION)
+    assert_equal('2.0.0', Pathname2::VERSION)
   end
 
   test "version is frozen" do
-    assert_true(Pathname::VERSION.frozen?)
+    assert_true(Pathname2::VERSION.frozen?)
   end
 end

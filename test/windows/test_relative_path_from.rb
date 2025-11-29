@@ -1,18 +1,18 @@
 ########################################################################
 # test_relative_path_from.rb
 #
-# Test suite for the Pathname#relative_path_from method.
+# Test suite for the Pathname2#relative_path_from method.
 ########################################################################
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_RelativePathFrom < Test::Unit::TestCase
+class TC_Pathname2_RelativePathFrom < Test::Unit::TestCase
   def assert_relpath(result, dest, base)
-    assert_equal(result, Pathname.new(dest).relative_path_from(base))
+    assert_equal(result, Pathname2.new(dest).relative_path_from(base))
   end
 
   def assert_relative_path_error(to, from)
-    assert_raise(ArgumentError){ Pathname.new(to).relative_path_from(from) }
+    assert_raise(ArgumentError){ Pathname2.new(to).relative_path_from(from) }
   end
 
   test "relative_path_from works as expected between two relative paths" do

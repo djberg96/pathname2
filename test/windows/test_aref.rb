@@ -1,14 +1,14 @@
 ########################################################################
 # test_aref.rb
 #
-# Test suite for the Pathname#[] method.
+# Test suite for the Pathname2#[] method.
 ########################################################################
 require 'test-unit'
 require 'pathname2'
 
-class TC_Pathname_Aref < Test::Unit::TestCase
+class TC_Pathname2_Aref < Test::Unit::TestCase
   def setup
-    @path = Pathname.new("C:/Program Files/Windows NT/Accessories")
+    @path = Pathname2.new("C:/Program Files/Windows NT/Accessories")
   end
 
   test "[] with index works as expected" do

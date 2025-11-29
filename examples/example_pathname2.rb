@@ -1,17 +1,17 @@
 ########################################################################
-# example_pathname.rb
+# example_pathname2.rb
 #
 # Some examples to demonstrate the behavior of the pathname2 library.
 ########################################################################
 require 'pathname2'
 
-puts "VERSION: " + Pathname::VERSION
+puts "VERSION: " + Pathname2::VERSION
 
-path1 = Pathname.new("foo/bar")
-path2 = Pathname.new("baz/blah")
+path1 = Pathname2.new("foo/bar")
+path2 = Pathname2.new("baz/blah")
 
-path3 = Pathname.new("foo/../bar")
-path4 = Pathname.new("../baz")
+path3 = Pathname2.new("foo/../bar")
+path4 = Pathname2.new("../baz")
 
 p path1 + path2 # foo/bar/baz/blah
 p path3 + path4 # baz

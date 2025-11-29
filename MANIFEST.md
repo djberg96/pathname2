@@ -8,9 +8,9 @@
 * benchmarks/bench_all.rb
 * benchmarks/bench_plus.rb
 * certs/djberg96_pub.pem
-* examples/example_pathname.rb
+* examples/example_pathname2.rb
 * lib/pathname2.rb
-* test/test_pathname.rb
+* test/test_pathname2.rb
 * test/test_version.rb
 * test/windows/test_append.rb
 * test/windows/test_aref.rb

@@ -1,7 +1,7 @@
 # == Synopsis
 #
-# Pathname represents a path name on a filesystem. A Pathname can be
-# relative or absolute.  It does not matter whether the path exists or not.
+# Pathname2 represents a path name on a filesystem. A path name can be
+# relative or absolute. It does not matter whether the path exists or not.
 #
 # All functionality from File, FileTest, and Dir is included, using a facade
 # pattern.
@@ -14,15 +14,15 @@
 # require "pathname2"
 #
 # # Unix
-# path1 = Pathname.new("/foo/bar/baz")
-# path2 = Pathname.new("../zap")
+# path1 = Pathname2.new("/foo/bar/baz")
+# path2 = Pathname2.new("../zap")
 #
 # path1 + path2 # "/foo/bar/zap"
 # path1.dirname # "/foo/bar"
 #
 # # Windows
-# path1 = Pathname.new("C:\\foo\\bar\\baz")
-# path2 = Pathname.new("..\\zap")
+# path1 = Pathname2.new("C:\\foo\\bar\\baz")
+# path2 = Pathname2.new("..\\zap")
 #
 # path1 + path2 # "C:\\foo\\bar\\zap"
 # path1.exists? # Does the path exist?
@@ -45,10 +45,7 @@ if File::ALT_SEPARATOR
   end
 end
 
-# You're mine now.
-Object.send(:remove_const, :Pathname) if defined?(Pathname)
-
-class Pathname < String
+class Pathname2 < String
   class Error < StandardError; end
   extend Facade
 
@@ -98,14 +95,14 @@ class Pathname < String
   public
 
   # The version of the pathname2 library
-  VERSION = '1.8.4'.freeze
+  VERSION = '2.0.0'.freeze
 
   # The maximum length of a path
   MAXPATH = 1024 unless defined? MAXPATH # Yes, I willfully violate POSIX
 
   # Returns the expanded path of the current working directory.
   #
-  # Synonym for Pathname.new(Dir.pwd).
+  # Synonym for Pathname2.new(Dir.pwd).
   #
   def self.pwd
     new(Dir.pwd)
@@ -115,21 +112,21 @@ class Pathname < String
     alias getwd pwd
   end
 
-  # Creates and returns a new Pathname object.
+  # Creates and returns a new Pathname2 object.
   #
   # On platforms that define File::ALT_SEPARATOR, all forward slashes are
   # replaced with the value of File::ALT_SEPARATOR. On MS Windows, for
   # example, all forward slashes are replaced with backslashes.
   #
-  # File URL's will be converted to Pathname objects, e.g. the file URL
+  # File URL's will be converted to Pathname2 objects, e.g. the file URL
   # "file:///C:/Documents%20and%20Settings" will become 'C:\Documents and Settings'.
   #
   # Examples:
   #
-  #   Pathname.new("/foo/bar/baz")
-  #   Pathname.new("foo")
-  #   Pathname.new("file:///foo/bar/baz")
-  #   Pathname.new("C:\\Documents and Settings\\snoopy")
+  #   Pathname2.new("/foo/bar/baz")
+  #   Pathname2.new("foo")
+  #   Pathname2.new("file:///foo/bar/baz")
+  #   Pathname2.new("C:\\Documents and Settings\\snoopy")
   #
   def initialize(path)
     if path.length > MAXPATH
@@ -159,8 +156,8 @@ class Pathname < String
       end
     else
       if path.index('file:///', 0)
-        require 'uri'
-        path = URI::Parser.new.unescape(path)[7..-1]
+        require 'addressable'
+        path = Addressable::URI.unescape(path)[7..-1]
       end
     end
 
@@ -172,7 +169,7 @@ class Pathname < String
 
   # Returns a real (absolute) pathname of +self+ in the actual filesystem.
   #
-  # Unlike most Pathname methods, this one assumes that the path actually
+  # Unlike most Pathname2 methods, this one assumes that the path actually
   # exists on your filesystem. If it doesn't, an error is raised. If a
   # circular symlink is encountered a system error will be raised.
   #
@@ -180,7 +177,7 @@ class Pathname < String
   #
   #    Dir.pwd                      # => /usr/local
   #    File.exists?('foo')          # => true
-  #    Pathname.new('foo').realpath # => /usr/local/foo
+  #    Pathname2.new('foo').realpath # => /usr/local/foo
   #
   def realpath
     File.stat(self) # Check to ensure that the path exists
@@ -200,7 +197,7 @@ class Pathname < String
   end
 
   # Returns the children of the directory, files and subdirectories, as an
-  # array of Pathname objects. If you set +with_directory+ to +false+, then
+  # array of Pathname2 objects. If you set +with_directory+ to +false+, then
   # the returned pathnames will contain the filename only.
   #
   # Note that the result never contain the entries '.' and '..' in the
@@ -209,7 +206,7 @@ class Pathname < String
   #
   # Example:
   #
-  # path = Pathname.new('/usr/bin')
+  # path = Pathname2.new('/usr/bin')
   # path.children        # => ['/usr/bin/ruby', '/usr/bin/perl', ...]
   # path.children(false) # => ['ruby', 'perl', ...]
   #
@@ -233,7 +230,7 @@ class Pathname < String
   #
   # Example:
   #
-  # path = Pathname.new('C:\Path\File[5].txt')
+  # path = Pathname2.new('C:\Path\File[5].txt')
   # path.undecorate # => C:\Path\File.txt.
   #
   def undecorate
@@ -250,7 +247,7 @@ class Pathname < String
 
   # Windows only
   #
-  # Performs the substitution of Pathname#undecorate in place.
+  # Performs the substitution of Pathname2#undecorate in place.
   #
   def undecorate!
     replace(undecorate)
@@ -262,7 +259,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    path = Pathname.new('C:\Program Files\Java')
+  #    path = Pathname2.new('C:\Program Files\Java')
   #    path.short_path # => C:\Progra~1\Java.
   #
   def short_path
@@ -284,7 +281,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    path = Pathname.new('C:\Progra~1\Java')
+  #    path = Pathname2.new('C:\Progra~1\Java')
   #    path.long_path # => C:\Program Files\Java.
   #
   def long_path
@@ -304,7 +301,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    path = Pathname.new('/usr/local/')
+  #    path = Pathname2.new('/usr/local/')
   #    path.pstrip # => '/usr/local'
   #
   def pstrip
@@ -319,7 +316,7 @@ class Pathname < String
     self.class.new(str)
   end
 
-  # Performs the substitution of Pathname#pstrip in place.
+  # Performs the substitution of Pathname2#pstrip in place.
   #
   def pstrip!
     replace(pstrip)
@@ -329,8 +326,8 @@ class Pathname < String
   #
   # Examples:
   #
-  #    Pathname.new('/usr/local/bin').to_a # => ['usr', 'local', 'bin']
-  #    Pathname.new('C:\WINNT\Fonts').to_a # => ['C:', 'WINNT', 'Fonts']
+  #    Pathname2.new('/usr/local/bin').to_a # => ['usr', 'local', 'bin']
+  #    Pathname2.new('C:\WINNT\Fonts').to_a # => ['C:', 'WINNT', 'Fonts']
   #
   def to_a
     # Split string by path separator
@@ -347,7 +344,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    Pathname.new('/usr/local/bin').each{ |element|
+  #    Pathname2.new('/usr/local/bin').each{ |element|
   #       puts "Element: #{element}"
   #    }
   #
@@ -365,13 +362,13 @@ class Pathname < String
   #
   # Examples:
   #
-  #    path = Pathname.new('/home/john/source/ruby')
+  #    path = Pathname2.new('/home/john/source/ruby')
   #    path[0]    # => 'home'
   #    path[1]    # => 'john'
   #    path[0, 3] # => '/home/john/source'
   #    path[0..1] # => '/home/john'
   #
-  #    path = Pathname.new('C:/Documents and Settings/John/Source/Ruby')
+  #    path = Pathname2.new('C:/Documents and Settings/John/Source/Ruby')
   #    path[0]    # => 'C:\'
   #    path[1]    # => 'Documents and Settings'
   #    path[0, 3] # => 'C:\Documents and Settings\John'
@@ -401,11 +398,11 @@ class Pathname < String
   end
 
   # Yields each component of the path, concatenating the next component on
-  # each iteration as a new Pathname object, starting with the root path.
+  # each iteration as a new Pathname2 object, starting with the root path.
   #
   # Example:
   #
-  #    path = Pathname.new('/usr/local/bin')
+  #    path = Pathname2.new('/usr/local/bin')
   #
   #    path.descend{ |name|
   #       puts name
@@ -443,11 +440,11 @@ class Pathname < String
   end
 
   # Yields the path, minus one component on each iteration, as a new
-  # Pathname object, ending with the root path.
+  # Pathname2 object, ending with the root path.
   #
   # Example:
   #
-  #    path = Pathname.new('/usr/local/bin')
+  #    path = Pathname2.new('/usr/local/bin')
   #
   #    path.ascend{ |name|
   #       puts name
@@ -502,13 +499,13 @@ class Pathname < String
   #
   # Examples:
   #
-  #    Pathname.new('/usr/local').root       # => '/'
-  #    Pathname.new('lib').root              # => '.'
+  #    Pathname2.new('/usr/local').root       # => '/'
+  #    Pathname2.new('lib').root              # => '.'
   #
   #    On MS Windows:
   #
-  #    Pathname.new('C:\WINNT').root         # => 'C:'
-  #    Pathname.new('\\some\share\foo').root # => '\\some\share'
+  #    Pathname2.new('C:\WINNT').root         # => 'C:'
+  #    Pathname2.new('\\some\share\foo').root # => '\\some\share'
   #
   def root
     dir = '.'
@@ -529,8 +526,8 @@ class Pathname < String
   #
   # Examples:
   #
-  #   Pathname.new('/').root?    # => true
-  #   Pathname.new('/foo').root? # => false
+  #   Pathname2.new('/').root?    # => true
+  #   Pathname2.new('/foo').root? # => false
   #
   def root?
     if @win
@@ -547,8 +544,8 @@ class Pathname < String
   #
   # Examples:
   #
-  #    Pathname.new("\\\\foo\\bar").unc?     # => true
-  #    Pathname.new('C:\Program Files').unc? # => false
+  #    Pathname2.new("\\\\foo\\bar").unc?     # => true
+  #    Pathname2.new('C:\Program Files').unc? # => false
   #
   def unc?
     raise NotImplementedError, 'not supported on this platform' unless @win
@@ -562,7 +559,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    Pathname.new("C:\\foo").drive_number # => 2
+  #    Pathname2.new("C:\\foo").drive_number # => 2
   #
   def drive_number
     unless @win
@@ -573,20 +570,21 @@ class Pathname < String
     num >= 0 ? num : nil
   end
 
-  # Compares two Pathname objects.  Note that Pathnames may only be compared
-  # against other Pathnames, not strings. Otherwise nil is returned.
+  # Compares two Pathname2 objects. Note that Pathname2 objects may only be
+  # compared against other Pathname2 objects, not strings, otherwise nil is
+  # returned.
   #
   # Example:
   #
-  #    path1 = Pathname.new('/usr/local')
-  #    path2 = Pathname.new('/usr/local')
-  #    path3 = Pathname.new('/usr/local/bin')
+  #    path1 = Pathname2.new('/usr/local')
+  #    path2 = Pathname2.new('/usr/local')
+  #    path3 = Pathname2.new('/usr/local/bin')
   #
   #    path1 <=> path2 # => 0
   #    path1 <=> path3 # => -1
   #
   def <=>(string)
-    return nil unless string.is_a?(Pathname)
+    return nil unless string.is_a?(Pathname2)
     super
   end
 
@@ -594,7 +592,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    Pathname.new('/usr/local/bin').parent # => '/usr/local'
+  #    Pathname2.new('/usr/local/bin').parent # => '/usr/local'
   #
   def parent
     return self if root?
@@ -614,14 +612,14 @@ class Pathname < String
   #
   # Examples:
   #
-  #    path = Pathname.new('/usr/local/bin')
+  #    path = Pathname2.new('/usr/local/bin')
   #    path.relative_path_from('/usr/bin') # => "../local/bin"
   #
-  #    path = Pathname.new("C:\\WINNT\\Fonts")
+  #    path = Pathname2.new("C:\\WINNT\\Fonts")
   #    path.relative_path_from("C:\\Program Files") # => "..\\WINNT\\Fonts"
   #
   def relative_path_from(base)
-    base = self.class.new(base) unless base.is_a?(Pathname)
+    base = self.class.new(base) unless base.is_a?(Pathname2)
 
     if absolute? != base.absolute?
       raise ArgumentError, 'relative path between absolute and relative path'
@@ -630,7 +628,7 @@ class Pathname < String
     return self.class.new('.') if self == base
     return self if base == '.'
 
-    # Because of the way the Windows version handles Pathname#clean, we need
+    # Because of the way the Windows version handles Pathname2#clean, we need
     # a little extra help here.
     if @win
       if root != base.root
@@ -668,8 +666,8 @@ class Pathname < String
     end
   end
 
-  # Adds two Pathname objects together, or a Pathname and a String. It
-  # also automatically cleans the Pathname.
+  # Adds two Pathname2 objects together, or a Pathname2 and a String. It
+  # also automatically cleans the Pathname2.
   #
   # Adding a root path to an existing path merely replaces the current
   # path. Adding '.' to an existing path does nothing.
@@ -681,7 +679,7 @@ class Pathname < String
   #    path1 + path2 # '/foo/baz'
   #
   def +(string)
-    unless string.is_a?(Pathname)
+    unless string.is_a?(Pathname2)
       string = self.class.new(string)
     end
 
@@ -722,8 +720,8 @@ class Pathname < String
   #
   # Example:
   #
-  #    Pathname.new('/usr/bin').absolute? # => true
-  #    Pathname.new('usr').absolute?      # => false
+  #    Pathname2.new('/usr/bin').absolute? # => true
+  #    Pathname2.new('usr').absolute?      # => false
   #
   def absolute?
     !relative?
@@ -733,8 +731,8 @@ class Pathname < String
   #
   # Example:
   #
-  #    Pathname.new('/usr/bin').relative? # => true
-  #    Pathname.new('usr').relative?      # => false
+  #    Pathname2.new('/usr/bin').relative? # => true
+  #    Pathname2.new('usr').relative?      # => false
   #
   def relative?
     if @win
@@ -749,7 +747,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    path = Pathname.new('/usr/./local/../bin')
+  #    path = Pathname2.new('/usr/./local/../bin')
   #    path.clean # => '/usr/bin'
   #
   def clean
@@ -783,7 +781,7 @@ class Pathname < String
 
   alias cleanpath clean
 
-  # Identical to Pathname#clean, except that it modifies the receiver
+  # Identical to Pathname2#clean, except that it modifies the receiver
   # in place.
   #
   def clean!
@@ -803,7 +801,7 @@ class Pathname < String
   #
   # Example:
   #
-  #    path = Pathname.new('/usr/local/bin/ruby')
+  #    path = Pathname2.new('/usr/local/bin/ruby')
   #
   #    puts path.dirname    # => /usr/local/bin
   #    puts path.dirname(2) # => /usr/local
@@ -818,9 +816,9 @@ class Pathname < String
     self.class.new(local_path)
   end
 
-  # Joins the given pathnames onto +self+ to create a new Pathname object.
+  # Joins the given pathnames onto +self+ to create a new Pathname2 object.
   #
-  #  path = Pathname.new("C:/Users")
+  #  path = Pathname2.new("C:/Users")
   #  path = path.join("foo", "Downloads") # => C:/Users/foo/Downloads
   #
   def join(*args)
@@ -849,9 +847,9 @@ class Pathname < String
 
   #-- Find facade
 
-  # Pathname#find is an iterator to traverse a directory tree in a depth first
-  # manner. It yields a Pathname for each file under the directory passed to
-  # Pathname.new.
+  # Pathname2#find is an iterator to traverse a directory tree in a depth first
+  # manner. It yields a Pathname2 for each file under the directory passed to
+  # Pathname2.new.
   #
   # Since it is implemented by the Find module, Find.prune can be used to
   # control the traverse.
@@ -1119,30 +1117,22 @@ end
 module Kernel
   # Usage: pn{ path }
   #
-  # A shortcut for Pathname.new
+  # A shortcut for Pathname2.new
   #
   def pn
-    instance_eval{ Pathname.new(yield) }
+    instance_eval{ Pathname2.new(yield) }
   end
 
-  # rubocop:disable Lint/ShadowedException
-  begin
-    remove_method(:Pathname)
-  rescue NoMethodError, NameError
-    # Do nothing, not defined.
-  end
-  # rubocop:enable Lint/ShadowedException
-
-  # Synonym for Pathname.new
+  # Synonym for Pathname2.new
   #
-  def Pathname(path)
-    Pathname.new(path)
+  def Pathname2(path)
+    Pathname2.new(path)
   end
 end
 
 class String
   # Convert a string directly into a Pathname object.
   def to_path
-    Pathname.new(self)
+    Pathname2.new(self)
   end
 end

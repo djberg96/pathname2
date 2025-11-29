@@ -1,15 +1,15 @@
 ########################################################################
 # test_children.rb
 #
-# Test suite for the Pathname#children method.
+# Test suite for the Pathname2#children method.
 ########################################################################
 require 'pathname2'
 require 'test-unit'
 
-class TC_Pathname_Children < Test::Unit::TestCase
+class TC_Pathname2_Children < Test::Unit::TestCase
   def setup
     @dir  = 'foo'
-    @path = Pathname.new(File.dirname(File.dirname(__FILE__)))
+    @path = Pathname2.new(File.dirname(File.dirname(__FILE__)))
 
     Dir.mkdir(@dir)
     Dir.chdir(@dir){
@@ -26,13 +26,13 @@ class TC_Pathname_Children < Test::Unit::TestCase
   end
 
   test "children method returns expected results" do
-    path = Pathname.new(@dir)
+    path = Pathname2.new(@dir)
     assert_equal(%w[foo\alpha foo\beta foo\gamma], path.children)
   end
 
-  test "each result of the children method is a Pathname object" do
-    path = Pathname.new(@dir)
-    assert_kind_of(Pathname, path.children.first)
+  test "each result of the children method is a Pathname2 object" do
+    path = Pathname2.new(@dir)
+    assert_kind_of(Pathname2, path.children.first)
   end
 
   def teardown

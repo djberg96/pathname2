@@ -2,7 +2,7 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name        = 'pathname2'
-  spec.version     = '1.8.4'
+  spec.version     = '2.0.0'
   spec.author      = 'Daniel J. Berger'
   spec.license     = 'Apache-2.0'
   spec.email       = 'djberg96@gmail.com'
@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.cert_chain  = ['certs/djberg96_pub.pem']
 
   spec.add_dependency('facade', '~> 1.2')
+  spec.add_dependency('addressable', '~> 2.8')
   spec.add_development_dependency('test-unit', '~> 3.4')
   spec.add_development_dependency('rake')
 

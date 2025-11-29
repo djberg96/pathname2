@@ -10,27 +10,27 @@ require 'rbconfig'
 require 'test-unit'
 include RbConfig
 
-class MyPathname < Pathname; end
+class MyPathname2 < Pathname2; end
 
-class TC_Pathname < Test::Unit::TestCase
+class TC_Pathname2 < Test::Unit::TestCase
   def self.startup
     Dir.chdir(File.expand_path(File.dirname(__FILE__)))
     @@pwd = Dir.pwd
   end
 
   def setup
-    @abs_path = Pathname.new('/usr/local/bin')
-    @rel_path = Pathname.new('usr/local/bin')
-    @trl_path = Pathname.new('/usr/local/bin/')
-    @mul_path = Pathname.new('/usr/local/lib/local/lib')
-    @rul_path = Pathname.new('usr/local/lib/local/lib')
-    @url_path = Pathname.new('file:///foo%20bar/baz')
-    @cur_path = Pathname.new(@@pwd)
+    @abs_path = Pathname2.new('/usr/local/bin')
+    @rel_path = Pathname2.new('usr/local/bin')
+    @trl_path = Pathname2.new('/usr/local/bin/')
+    @mul_path = Pathname2.new('/usr/local/lib/local/lib')
+    @rul_path = Pathname2.new('usr/local/lib/local/lib')
+    @url_path = Pathname2.new('file:///foo%20bar/baz')
+    @cur_path = Pathname2.new(@@pwd)
 
     @abs_array = []
     @rel_array = []
 
-    @mypath = MyPathname.new('/usr/bin')
+    @mypath = MyPathname2.new('/usr/bin')
 
     @test_file  = 'realpath_test.txt'
     @link_file  = 'realpath_symlink.txt'
@@ -46,28 +46,32 @@ class TC_Pathname < Test::Unit::TestCase
 
   # Convenience method for test_plus
   def assert_pathname_plus(a, b, c)
-    a = Pathname.new(a)
-    b = Pathname.new(b)
-    c = Pathname.new(c)
+    a = Pathname2.new(a)
+    b = Pathname2.new(b)
+    c = Pathname2.new(c)
     assert_equal(a, b + c)
   end
 
   # Convenience method for test_spaceship operator
   def assert_pathname_cmp(int, s1, s2)
-    p1 = Pathname.new(s1)
-    p2 = Pathname.new(s2)
+    p1 = Pathname2.new(s1)
+    p2 = Pathname2.new(s2)
     result = p1 <=> p2
     assert_equal(int, result)
   end
 
   # Convenience method for test_relative_path_from
   def assert_relpath(result, dest, base)
-    assert_equal(result, Pathname.new(dest).relative_path_from(base))
+    assert_equal(result, Pathname2.new(dest).relative_path_from(base))
   end
 
   # Convenience method for test_relative_path_from_expected_errors
   def assert_relpath_err(to, from)
-    assert_raise(ArgumentError) { Pathname.new(to).relative_path_from(from) }
+    assert_raise(ArgumentError) { Pathname2.new(to).relative_path_from(from) }
+  end
+
+  test "VERSION constant is set to expected value" do
+    assert_equal("2.0.0", Pathname2::VERSION)
   end
 
   test "url_path returns expected result" do
@@ -77,20 +81,20 @@ class TC_Pathname < Test::Unit::TestCase
   test "realpath basic functionality" do
     FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file)
     assert_respond_to(@abs_path, :realpath)
-    assert_equal(@@pwd, Pathname.new('.').realpath)
-    assert_kind_of(Pathname, Pathname.new(@link_file).realpath)
+    assert_equal(@@pwd, Pathname2.new('.').realpath)
+    assert_kind_of(Pathname2, Pathname2.new(@link_file).realpath)
   end
 
   test "realpath returns expected result for simple symlink" do
     FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file)
-    assert_true(Pathname.new(@link_file) != Pathname.new(@link_file).realpath)
-    assert_raises(Errno::ENOENT){ Pathname.new('../bogus').realpath }
+    assert_true(Pathname2.new(@link_file) != Pathname2.new(@link_file).realpath)
+    assert_raises(Errno::ENOENT){ Pathname2.new('../bogus').realpath }
   end
 
   test "realpath returns expected result for nested symlink" do
     FileUtils.touch(@test_file) && File.symlink(@test_file, @link_file) && File.symlink(@link_file, @link_file2)
-    assert_true(Pathname.new(@link_file) != Pathname.new(@link_file2).realpath)
-    assert_equal(Pathname.new(@link_file).realpath, Pathname.new(@link_file2).realpath)
+    assert_true(Pathname2.new(@link_file) != Pathname2.new(@link_file2).realpath)
+    assert_equal(Pathname2.new(@link_file).realpath, Pathname2.new(@link_file2).realpath)
   end
 
   # These tests taken directly from Tanaka's pathname.rb. The one failure
@@ -144,7 +148,7 @@ class TC_Pathname < Test::Unit::TestCase
     assert_respond_to(@abs_path, :parent)
     assert_equal('/usr/local', @abs_path.parent)
     assert_equal('usr/local', @rel_path.parent)
-    assert_equal('/', Pathname.new('/').parent)
+    assert_equal('/', Pathname2.new('/').parent)
   end
 
   def test_pstrip
@@ -211,7 +215,7 @@ class TC_Pathname < Test::Unit::TestCase
     children = @cur_path.children.sort.reject{ |f| f.include?('git') || f.include?('.swp') }
     assert_equal(
        [
-          Dir.pwd + '/test_pathname.rb',
+          Dir.pwd + '/test_pathname2.rb',
           Dir.pwd + '/test_version.rb',
           Dir.pwd + '/windows'
        ],
@@ -223,7 +227,7 @@ class TC_Pathname < Test::Unit::TestCase
     assert_nothing_raised{ @cur_path.children(false) }
 
     children = @cur_path.children(false).reject{ |f| f.include?('git') || f.include?('.swp') }
-    assert_equal(['test_pathname.rb', 'test_version.rb', 'windows'], children.sort)
+    assert_equal(['test_pathname2.rb', 'test_version.rb', 'windows'], children.sort)
   end
 
   def test_unc
@@ -250,8 +254,8 @@ class TC_Pathname < Test::Unit::TestCase
     assert_nothing_raised{ @abs_path.root? }
     assert_nothing_raised{ @rel_path.root? }
 
-    path1 = Pathname.new('/')
-    path2 = Pathname.new('a')
+    path1 = Pathname2.new('/')
+    path2 = Pathname2.new('a')
     assert_equal(true, path1.root?)
     assert_equal(false, path2.root?)
 
@@ -266,10 +270,10 @@ class TC_Pathname < Test::Unit::TestCase
     assert_equal(true, @abs_path.absolute?)
     assert_equal(false, @rel_path.absolute?)
 
-    assert_equal(true, Pathname.new('/usr/bin/ruby').absolute?)
-    assert_equal(false, Pathname.new('foo').absolute?)
-    assert_equal(false, Pathname.new('foo/bar').absolute?)
-    assert_equal(false, Pathname.new('../foo/bar').absolute?)
+    assert_equal(true, Pathname2.new('/usr/bin/ruby').absolute?)
+    assert_equal(false, Pathname2.new('foo').absolute?)
+    assert_equal(false, Pathname2.new('foo/bar').absolute?)
+    assert_equal(false, Pathname2.new('../foo/bar').absolute?)
 
     assert_non_destructive
   end
@@ -282,10 +286,10 @@ class TC_Pathname < Test::Unit::TestCase
     assert_equal(false, @abs_path.relative?)
     assert_equal(true, @rel_path.relative?)
 
-    assert_equal(false, Pathname.new('/usr/bin/ruby').relative?)
-    assert_equal(true, Pathname.new('foo').relative?)
-    assert_equal(true, Pathname.new('foo/bar').relative?)
-    assert_equal(true, Pathname.new('../foo/bar').relative?)
+    assert_equal(false, Pathname2.new('/usr/bin/ruby').relative?)
+    assert_equal(true, Pathname2.new('foo').relative?)
+    assert_equal(true, Pathname2.new('foo/bar').relative?)
+    assert_equal(true, Pathname2.new('../foo/bar').relative?)
 
     assert_non_destructive
   end
@@ -333,7 +337,7 @@ class TC_Pathname < Test::Unit::TestCase
     assert_pathname_plus('.', 'foo', '..')
 
     # Alias
-    assert_equal('/foo/bar', Pathname.new('/foo') / Pathname.new('bar'))
+    assert_equal('/foo/bar', Pathname2.new('/foo') / Pathname2.new('bar'))
   end
 
   # Any tests marked with '***' mean that this behavior is different than
@@ -341,22 +345,22 @@ class TC_Pathname < Test::Unit::TestCase
   # implementation.
   def test_clean
     # Standard stuff
-    assert_equal('/a/b/c', Pathname.new('/a/b/c').cleanpath)
-    assert_equal('b/c', Pathname.new('./b/c').cleanpath)
-    assert_equal('a', Pathname.new('a/.').cleanpath)         # ***
-    assert_equal('a/c', Pathname.new('a/./c').cleanpath)
-    assert_equal('a/b', Pathname.new('a/b/.').cleanpath)     # ***
-    assert_equal('.', Pathname.new('a/../.').cleanpath)      # ***
-    assert_equal('/a', Pathname.new('/a/b/..').cleanpath)
-    assert_equal('/b', Pathname.new('/a/../b').cleanpath)
-    assert_equal('d', Pathname.new('a/../../d').cleanpath)   # ***
+    assert_equal('/a/b/c', Pathname2.new('/a/b/c').cleanpath)
+    assert_equal('b/c', Pathname2.new('./b/c').cleanpath)
+    assert_equal('a', Pathname2.new('a/.').cleanpath)         # ***
+    assert_equal('a/c', Pathname2.new('a/./c').cleanpath)
+    assert_equal('a/b', Pathname2.new('a/b/.').cleanpath)     # ***
+    assert_equal('.', Pathname2.new('a/../.').cleanpath)      # ***
+    assert_equal('/a', Pathname2.new('/a/b/..').cleanpath)
+    assert_equal('/b', Pathname2.new('/a/../b').cleanpath)
+    assert_equal('d', Pathname2.new('a/../../d').cleanpath)   # ***
 
     # Edge cases
-    assert_equal('', Pathname.new('').cleanpath)
-    assert_equal('.', Pathname.new('.').cleanpath)
-    assert_equal('..', Pathname.new('..').cleanpath)
-    assert_equal('/', Pathname.new('/').cleanpath)
-    assert_equal('/', Pathname.new('//').cleanpath)
+    assert_equal('', Pathname2.new('').cleanpath)
+    assert_equal('.', Pathname2.new('.').cleanpath)
+    assert_equal('..', Pathname2.new('..').cleanpath)
+    assert_equal('/', Pathname2.new('/').cleanpath)
+    assert_equal('/', Pathname2.new('//').cleanpath)
 
     assert_non_destructive
   end
@@ -419,20 +423,20 @@ class TC_Pathname < Test::Unit::TestCase
     assert_respond_to(@abs_path, :find)
     assert_nothing_raised{ @abs_path.find{} }
 
-    Pathname.new(Dir.pwd).find{ |f|
+    Pathname2.new(Dir.pwd).find{ |f|
       Find.prune if f.match('CVS')
-      assert_kind_of(Pathname, f)
+      assert_kind_of(Pathname2, f)
     }
   end
 
   # Ensures that subclasses return the subclass as the class, not a hard
-  # coded Pathname.
+  # coded Pathname2.
   #
   def test_subclasses
-    assert_kind_of(MyPathname, @mypath)
-    assert_kind_of(MyPathname, @mypath + MyPathname.new('foo'))
-    assert_kind_of(MyPathname, @mypath.realpath)
-    assert_kind_of(MyPathname, @mypath.children.first)
+    assert_kind_of(MyPathname2, @mypath)
+    assert_kind_of(MyPathname2, @mypath + MyPathname2.new('foo'))
+    assert_kind_of(MyPathname2, @mypath.realpath)
+    assert_kind_of(MyPathname2, @mypath.children.first)
   end
 
   # Test to ensure that the pn{ } shortcut works
@@ -440,21 +444,21 @@ class TC_Pathname < Test::Unit::TestCase
   def test_kernel_method
     assert_respond_to(Kernel, :pn)
     assert_nothing_raised{ pn{'/foo'} }
-    assert_kind_of(Pathname, pn{'/foo'})
+    assert_kind_of(Pathname2, pn{'/foo'})
     assert_equal('/foo', pn{'/foo'})
   end
 
   def test_pwd_singleton_method
-    assert_respond_to(Pathname, :pwd)
-    assert_kind_of(String, Pathname.pwd)
-    assert_equal(@@pwd, Pathname.pwd)
+    assert_respond_to(Pathname2, :pwd)
+    assert_kind_of(String, Pathname2.pwd)
+    assert_equal(@@pwd, Pathname2.pwd)
   end
 
   test "String#to_path instance method is implemented" do
     string = "/usr/local/bin"
     assert_respond_to(string, :to_path)
     assert_nothing_raised{ string.to_path }
-    assert_kind_of(Pathname, string.to_path)
+    assert_kind_of(Pathname2, string.to_path)
   end
 
   def teardown
