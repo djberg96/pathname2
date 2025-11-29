@@ -1,7 +1,7 @@
 [![Ruby](https://github.com/djberg96/pathname2/actions/workflows/ruby.yml/badge.svg)](https://github.com/djberg96/pathname2/actions/workflows/ruby.yml)
 
 ## Description
-A drop-in replacement for the current Pathname class.
+An alternative for the Pathname class in the Ruby stdlib.
 
 ## Prerequisites
 * facade
@@ -20,8 +20,8 @@ A drop-in replacement for the current Pathname class.
 require 'pathname2'
 
 # Unix
-path1 = Pathname.new("/foo/bar/baz")
-path2 = Pathname.new("../zap")
+path1 = Pathname2.new("/foo/bar/baz")
+path2 = Pathname2.new("../zap")
 
 path1 + path2 # "/foo/bar/zap"
 path1 / path2 # "/foo/bar/zap" (same as +)
@@ -30,8 +30,8 @@ path1.dirname # "/foo/bar"
 path1.to_a    # ['foo','bar','baz']
 
 # Windows
-path1 = Pathname.new("C:/foo/bar/baz")
-path2 = Pathname.new("../zap")
+path1 = Pathname2.new("C:/foo/bar/baz")
+path2 = Pathname2.new("../zap")
 
 path1 + path2 # "C:\\foo\\bar\\zap"
 path1.root    # "C:\\"
@@ -39,11 +39,11 @@ path1.to_a    # ['C:','foo','bar','baz']
 ```
 
 ## Windows Notes
-All forward slashes are converted to backslashes for Pathname objects.
+All forward slashes are converted to backslashes for Pathname2 objects.
 
 ## Differences between Unix and Windows
   If your pathname consists solely of ".", or "..", the return
-  value for Pathname#clean will be different. On Win32, "\\" is returned,
+  value for `Pathname2#clean` will be different. On Win32, "\\" is returned,
   while on Unix "." is returned.  I consider this an extreme edge case and
   will not worry myself with it.
 
@@ -53,15 +53,15 @@ All forward slashes are converted to backslashes for Pathname objects.
 * It works on Windows and Unix. The current implementation does not work
   with Windows path names very well, and not at all when it comes to UNC
   paths.
-* The `Pathname#cleanpath` method works differently - it always returns
+* The `Pathname2#cleanpath` method works differently - it always returns
   a canonical pathname. In addition, there is no special consideration
   for symlinks (yet), though I'm not sure it warrants it.
-* The `Pathname#+` method auto cleans.
+* The `Pathname2#+` method auto cleans.
 * It uses a facade for all File and Dir methods, as well as most FileUtils
   methods.
-* `Pathname#clean` works slightly differently. In the stdlib version,
+* `Pathname2#clean` works slightly differently. In the stdlib version,
   `Pathname#clean("../a")` returns "../a". In this version, it returns "a".
-  This affects other methods, such as `Pathname#relative_path_from`.
+  This affects other methods, such as `Pathname2#relative_path_from`.
 * Accepts file urls and converts them to paths automatically, e.g.
   file:///foo%20bar/baz becomes '/foo/bar/baz'.
 * Adds a Kernel level `pn` method as a shortcut.
@@ -92,7 +92,7 @@ None at this time. Suggestions welcome.
 Apache-2.0
    
 ## Copyright
-(C) 2003-2021 Daniel J. Berger
+(C) 2003-2025 Daniel J. Berger
 All rights reserved.
 
 ## Warranty
