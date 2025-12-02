@@ -363,8 +363,8 @@ class Pathname2 < String
   # Examples:
   #
   #    path = Pathname2.new('/home/john/source/ruby')
-  #    path[0]    # => 'home'
-  #    path[1]    # => 'john'
+  #    path[0]    # => '/home'
+  #    path[1]    # => '/john'
   #    path[0, 3] # => '/home/john/source'
   #    path[0..1] # => '/home/john'
   #
@@ -381,11 +381,13 @@ class Pathname2 < String
       else
         path = to_a[index]
       end
+      path = "/" + path if index == 0 && !@win && absolute?
     elsif index.is_a?(Range)
       if length
         warn 'Length argument ignored'
       end
       path = File.join(to_a[index])
+      path = "/" + path if index.first == 0 && !@win && absolute?
     else
       raise TypeError, 'Only Numerics and Ranges allowed as first argument'
     end
