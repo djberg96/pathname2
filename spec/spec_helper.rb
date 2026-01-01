@@ -3,6 +3,15 @@ require 'fileutils'
 require 'rbconfig'
 
 RSpec.configure do |config|
+  # Platform-specific filtering
+  if File::ALT_SEPARATOR
+    # Windows platform - exclude Unix specs
+    config.filter_run_excluding :unix => true
+  else
+    # Unix platform - exclude Windows specs
+    config.filter_run_excluding :windows => true
+  end
+
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
