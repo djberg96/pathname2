@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency('facade', '~> 1.2')
   spec.add_dependency('addressable', '~> 2.8')
-  spec.add_development_dependency('test-unit', '~> 3.4')
+  spec.add_development_dependency('rspec', '~> 3.12')
   spec.add_development_dependency('rake')
 
   spec.metadata = {
@@ -30,10 +30,10 @@ Gem::Specification.new do |spec|
 
   if File::ALT_SEPARATOR
     spec.add_dependency('ffi')
-    spec.test_files = Dir['test/windows/*.rb', 'test/test_version.rb']
+    spec.test_files = Dir['spec/windows/*.rb', 'spec/version_spec.rb']
     spec.platform = Gem::Platform.new(['universal', 'mingw32'])
   else
-    spec.test_files = Dir['test/test_pathname.rb', 'test/test_version.rb']
+    spec.test_files = Dir['spec/unix/*.rb', 'spec/version_spec.rb']
   end
 
   spec.description = <<-EOF
