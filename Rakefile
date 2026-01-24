@@ -27,7 +27,7 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   else
     t.pattern = 'spec/unix/**/*_spec.rb,spec/version_spec.rb'
   end
-  t.rspec_opts = ['--color', '--format documentation']
+  t.rspec_opts = ['--color', '--format documentation', '-w']
 end
 
 task :test => :spec
